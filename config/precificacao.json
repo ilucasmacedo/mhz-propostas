@@ -1,0 +1,317 @@
+{
+  "meta": {
+    "versao": "1.0",
+    "atualizado_em": "2026-05-29",
+    "descricao": "Fonte única de dados para cálculos de precificação solar MHZ",
+    "fonte_codigo": "src/pricing.js",
+    "unidade_moeda": "BRL",
+    "unidade_potencia": "kWp",
+    "unidade_distancia": "km"
+  },
+
+  "entradas": [
+    {
+      "codigo": "kwp",
+      "nome": "Potência da usina",
+      "tipo": "decimal",
+      "unidade": "kWp",
+      "obrigatorio": true,
+      "default": 8.5,
+      "min": 0.1,
+      "max": 500,
+      "campo_ui": "usina-kwp",
+      "usado_em": ["mensalidade", "faixa_kwp"]
+    },
+    {
+      "codigo": "plano",
+      "nome": "Plano selecionado",
+      "tipo": "enum",
+      "opcoes": ["NENHUM", "ACESSO", "PADRAO", "PREMIUM"],
+      "default": "NENHUM",
+      "campo_ui": "plano-selecionado",
+      "usado_em": ["mensalidade", "desconto_avulso"]
+    },
+    {
+      "codigo": "distancia_km",
+      "nome": "Distância usina → base",
+      "tipo": "decimal",
+      "unidade": "km",
+      "obrigatorio": true,
+      "default": 35,
+      "campo_ui": "usina-distancia",
+      "usado_em": ["deslocamento"]
+    },
+    {
+      "codigo": "qtd_placas",
+      "nome": "Quantidade de placas",
+      "tipo": "inteiro",
+      "obrigatorio": false,
+      "default": 16,
+      "campo_ui": "usina-placas",
+      "usado_em": ["servico_MANUT_PREVENTIVA"]
+    },
+    {
+      "codigo": "valor_contrato",
+      "nome": "Valor do contrato (seguro)",
+      "tipo": "decimal",
+      "unidade": "R$",
+      "obrigatorio": false,
+      "default": 0,
+      "campo_ui": "usina-contrato",
+      "usado_em": ["servico_SEGURO"]
+    },
+    {
+      "codigo": "valor_investimento",
+      "nome": "Valor do investimento da usina",
+      "tipo": "decimal",
+      "unidade": "R$",
+      "obrigatorio": false,
+      "default": 0,
+      "campo_ui": "usina-investimento",
+      "usado_em": ["taxa_investimento"]
+    },
+    {
+      "codigo": "servicos_selecionados",
+      "nome": "Serviços avulsos selecionados",
+      "tipo": "lista",
+      "obrigatorio": false,
+      "default": [],
+      "campo_ui": "servico-check",
+      "usado_em": ["servicos_avulsos"]
+    },
+    {
+      "codigo": "tem_plano_ativo",
+      "nome": "Cliente já possui plano ativo",
+      "tipo": "booleano",
+      "obrigatorio": false,
+      "default": false,
+      "campo_ui": null,
+      "usado_em": ["desconto_avulso"],
+      "observacao": "Não exposto na UI atual; desconto vem da seleção de Padrão/Premium"
+    },
+    {
+      "codigo": "percentual_investimento",
+      "nome": "Percentual sobre investimento",
+      "tipo": "decimal",
+      "unidade": "%",
+      "obrigatorio": false,
+      "default": 4.5,
+      "min": 4,
+      "max": 5,
+      "campo_ui": null,
+      "usado_em": ["taxa_investimento"],
+      "observacao": "Fixo no código; futuro módulo admin"
+    },
+    {
+      "codigo": "incluir_deslocamento_global",
+      "nome": "Incluir deslocamento como item global",
+      "tipo": "booleano",
+      "obrigatorio": false,
+      "default": true,
+      "campo_ui": null,
+      "usado_em": ["deslocamento"]
+    }
+  ],
+
+  "constantes": {
+    "sem_plano": "NENHUM",
+    "validade_proposta_dias": 15,
+    "percentual_investimento_padrao": 4.5,
+    "percentual_investimento_min": 4,
+    "percentual_investimento_max": 5,
+    "raio_base_km": 50,
+    "kwp_maximo_automatico": 50,
+    "kwp_maximo_formulario": 500,
+    "distancia_maxima_automatica": 600,
+    "reajuste_deslocamento_multiplicador": 1.6,
+    "reajuste_deslocamento_percentual": 60,
+    "casas_decimais_moeda": 2,
+    "numero_proposta_seq_min": 1000,
+    "numero_proposta_seq_max": 9999
+  },
+
+  "limites": [
+    {
+      "codigo": "KWP_ACIMA_50",
+      "condicao": "kwp > 50",
+      "valor_limite": 50,
+      "efeito": "Mensalidade sob consulta",
+      "bloqueia_calculo": true
+    },
+    {
+      "codigo": "DISTANCIA_ACIMA_600",
+      "condicao": "distancia_km > 600",
+      "valor_limite": 600,
+      "efeito": "Taxa R$ 4,00/km (mesma faixa 401+)",
+      "bloqueia_calculo": false
+    },
+    {
+      "codigo": "DESLOCAMENTO_ISENTO",
+      "condicao": "distancia_km <= 50",
+      "valor_limite": 50,
+      "efeito": "Deslocamento = R$ 0",
+      "bloqueia_calculo": false
+    }
+  ],
+
+  "planos": {
+    "ACESSO": {
+      "codigo": "ACESSO",
+      "nome": "Plano Acesso",
+      "alias": "Basic",
+      "tagline": "Monitoramento essencial",
+      "desconto_avulso": false
+    },
+    "PADRAO": {
+      "codigo": "PADRAO",
+      "nome": "Plano Padrão",
+      "tagline": "Gestão completa da usina",
+      "desconto_avulso": true
+    },
+    "PREMIUM": {
+      "codigo": "PREMIUM",
+      "nome": "Plano Premium",
+      "tagline": "Prioridade e suporte ampliado",
+      "desconto_avulso": true
+    }
+  },
+
+  "faixas_kwp": [
+    { "kwp_min": 0,  "kwp_max": 5,  "precos": { "ACESSO": 9.9,  "PADRAO": 39.9,  "PREMIUM": 59.9  }, "sob_consulta": false },
+    { "kwp_min": 5,  "kwp_max": 10, "precos": { "ACESSO": 14.9, "PADRAO": 49.9,  "PREMIUM": 89.9  }, "sob_consulta": false },
+    { "kwp_min": 10, "kwp_max": 15, "precos": { "ACESSO": 19.9, "PADRAO": 59.9,  "PREMIUM": 119.9 }, "sob_consulta": false },
+    { "kwp_min": 15, "kwp_max": 20, "precos": { "ACESSO": 24.9, "PADRAO": 69.9,  "PREMIUM": 149.9 }, "sob_consulta": false },
+    { "kwp_min": 20, "kwp_max": 25, "precos": { "ACESSO": 29.9, "PADRAO": 79.9,  "PREMIUM": 179.9 }, "sob_consulta": false },
+    { "kwp_min": 25, "kwp_max": 30, "precos": { "ACESSO": 34.9, "PADRAO": 89.9,  "PREMIUM": 209.9 }, "sob_consulta": false },
+    { "kwp_min": 30, "kwp_max": 35, "precos": { "ACESSO": 39.9, "PADRAO": 99.9,  "PREMIUM": 239.9 }, "sob_consulta": false },
+    { "kwp_min": 35, "kwp_max": 40, "precos": { "ACESSO": 44.9, "PADRAO": 109.9, "PREMIUM": 269.9 }, "sob_consulta": false },
+    { "kwp_min": 40, "kwp_max": 45, "precos": { "ACESSO": 49.9, "PADRAO": 119.9, "PREMIUM": 299.9 }, "sob_consulta": false },
+    { "kwp_min": 45, "kwp_max": 50, "precos": { "ACESSO": 54.9, "PADRAO": 129.9, "PREMIUM": 329.9 }, "sob_consulta": false },
+    { "kwp_min": 50, "kwp_max": null, "precos": null, "sob_consulta": true }
+  ],
+
+  "faixas_deslocamento": [
+    { "km_min": 0,   "km_max": 50,  "taxa_por_km": 0,   "observacao": "Isento — incluído no raio base dos planos" },
+    { "km_min": 50,  "km_max": 200, "taxa_por_km": 2.4, "base_referencia": 1.5, "reajuste": "+60%" },
+    { "km_min": 200, "km_max": 400, "taxa_por_km": 3.2, "base_referencia": 2.0, "reajuste": "+60%" },
+    { "km_min": 400, "km_max": 600, "taxa_por_km": 4.0, "base_referencia": 2.5, "reajuste": "+60%" },
+    { "km_min": 600, "km_max": null, "taxa_por_km": 4.0, "observacao": "Acima de 600 km — R$ 4,00/km" }
+  ],
+
+  "servicos_avulsos": [
+    { "codigo": "MANUT_PREVENTIVA",     "descricao": "Manutenção preventiva",              "fora_plano": 32,    "com_plano": 25,    "tipo_calculo": "POR_PLACA",   "presencial": true  },
+    { "codigo": "SEGURO",               "descricao": "Seguro",                             "fora_plano": 0.02,  "com_plano": 0.015, "tipo_calculo": "PERCENTUAL",  "presencial": false },
+    { "codigo": "MANUT_CORRETIVA",      "descricao": "Manutenção corretiva",               "fora_plano": 320,   "com_plano": 290,   "tipo_calculo": "FIXO",        "presencial": true  },
+    { "codigo": "TROCA_TITULARIDADE",   "descricao": "Troca de titularidade",              "fora_plano": 150,   "com_plano": 130,   "tipo_calculo": "FIXO",        "presencial": true  },
+    { "codigo": "ALTERACAO_PERCENTUAL", "descricao": "Alteração de percentual",            "fora_plano": 120,   "com_plano": 100,   "tipo_calculo": "FIXO",        "presencial": false },
+    { "codigo": "WIFI_PRESENCIAL",      "descricao": "Configuração Wi-Fi presencial",      "fora_plano": 320,   "com_plano": 290,   "tipo_calculo": "FIXO",        "presencial": true  },
+    { "codigo": "WIFI_REMOTA",          "descricao": "Configuração Wi-Fi remota",          "fora_plano": 150,   "com_plano": 130,   "tipo_calculo": "FIXO",        "presencial": false },
+    { "codigo": "VISITA_LAUDO",         "descricao": "Visita técnica para laudo",          "fora_plano": 350,   "com_plano": 310,   "tipo_calculo": "FIXO",        "presencial": true  },
+    { "codigo": "VISITA_GARANTIA",      "descricao": "Visita para acionamento de garantia","fora_plano": 480,   "com_plano": 430,   "tipo_calculo": "FIXO",        "presencial": true  }
+  ],
+
+  "formulas": [
+    {
+      "codigo": "ARREDONDAR",
+      "nome": "Arredondamento monetário",
+      "expressao": "round((valor + EPSILON) × 100) / 100",
+      "saida": "decimal",
+      "casas_decimais": 2,
+      "metodo": "half-up"
+    },
+    {
+      "codigo": "FAIXA_KWP",
+      "nome": "Busca de faixa por kWp",
+      "expressao": "SE kwp > 50 → sob_consulta; SENÃO faixa onde kwp > kwp_min E kwp <= kwp_max",
+      "regra_intervalo": "(min, max] — limite inferior exclusivo, superior inclusivo",
+      "entradas": ["kwp"],
+      "saida": "faixa_kwp"
+    },
+    {
+      "codigo": "MENSALIDADE",
+      "nome": "Mensalidade do plano",
+      "expressao": "faixas_kwp[faixa(kwp)].precos[plano]",
+      "entradas": ["kwp", "plano"],
+      "saida": "R$/mês",
+      "condicoes_sob_consulta": ["kwp > 50", "plano = NENHUM → null"]
+    },
+    {
+      "codigo": "DESLOCAMENTO",
+      "nome": "Taxa de deslocamento",
+      "expressao": "km = ceil(distancia_km); km_excedente = max(0, km - 50); valor = km_excedente × taxa_faixa(km)",
+      "entradas": ["distancia_km"],
+      "saida": "R$",
+      "condicoes": ["km <= 50 → valor = 0", "km > 400 → taxa = R$ 4,00/km"]
+    },
+    {
+      "codigo": "SERVICO_FIXO",
+      "nome": "Serviço avulso — valor fixo",
+      "expressao": "preco = tem_desconto ? com_plano : fora_plano",
+      "entradas": ["codigo_servico", "tem_plano_ativo_ou_desconto"],
+      "saida": "R$"
+    },
+    {
+      "codigo": "SERVICO_POR_PLACA",
+      "nome": "Serviço avulso — por placa",
+      "expressao": "preco = (tem_desconto ? com_plano : fora_plano) × qtd_placas",
+      "entradas": ["codigo_servico", "qtd_placas", "tem_plano_ativo_ou_desconto"],
+      "saida": "R$"
+    },
+    {
+      "codigo": "SERVICO_PERCENTUAL",
+      "nome": "Serviço avulso — percentual (seguro)",
+      "expressao": "preco = valor_contrato × (tem_desconto ? com_plano : fora_plano)",
+      "entradas": ["codigo_servico", "valor_contrato", "tem_plano_ativo_ou_desconto"],
+      "saida": "R$",
+      "observacao": "com_plano = 0.015 (1,5%); fora_plano = 0.02 (2%)"
+    },
+    {
+      "codigo": "TAXA_INVESTIMENTO",
+      "nome": "Taxa sobre investimento",
+      "expressao": "valor = valor_investimento × (percentual_investimento / 100)",
+      "entradas": ["valor_investimento", "percentual_investimento"],
+      "saida": "R$",
+      "default_percentual": 4.5
+    },
+    {
+      "codigo": "DESCONTO_AVULSO",
+      "nome": "Regra de desconto em serviços avulsos",
+      "expressao": "usar_preco_com_plano = plano.desconto_avulso AND (tem_plano_ativo OR (plano_contratado AND mensalidade_calculavel))",
+      "entradas": ["plano", "tem_plano_ativo", "mensalidade_sob_consulta"],
+      "observacao": "Acesso e sem plano = preço cheio (fora_plano)"
+    },
+    {
+      "codigo": "TOTAL_AVULSOS",
+      "nome": "Total de itens avulsos",
+      "expressao": "total = Σ servicos + deslocamento_global + taxa_investimento",
+      "entradas": ["servicos_selecionados", "distancia_km", "valor_investimento"],
+      "saida": "R$"
+    },
+    {
+      "codigo": "PRIMEIRA_COBRANCA",
+      "nome": "Primeira cobrança da proposta",
+      "expressao": "primeira = (mensalidade || 0) + total_avulsos",
+      "entradas": ["mensalidade", "total_avulsos"],
+      "saida": "R$",
+      "condicoes": ["mensalidade sob consulta E deslocamento a combinar → null"]
+    },
+    {
+      "codigo": "NUMERO_PROPOSTA",
+      "nome": "Geração do número da proposta",
+      "expressao": "numero = ano_atual + '-' + random(1000..9999)",
+      "saida": "string"
+    }
+  ],
+
+  "casos_teste": [
+    { "id": 1, "kwp": 4,  "plano": "ACESSO",  "km": 30,  "plano_ativo": false, "mensalidade_esperada": 9.9,   "deslocamento_esperado": 0    },
+    { "id": 2, "kwp": 7,  "plano": "PADRAO",  "km": 100, "plano_ativo": false, "mensalidade_esperada": 49.9,  "deslocamento_esperado": 120  },
+    { "id": 3, "kwp": 25, "plano": "PREMIUM", "km": 250, "plano_ativo": true,  "mensalidade_esperada": 179.9, "deslocamento_esperado": 640  },
+    { "id": 4, "kwp": 55, "plano": "PADRAO",  "km": 40,  "plano_ativo": false, "mensalidade_esperada": null,  "deslocamento_esperado": 0    },
+    { "id": 5, "kwp": 10, "plano": "ACESSO",  "km": 650, "plano_ativo": false, "mensalidade_esperada": 19.9,  "deslocamento_esperado": 2400 },
+    { "id": 6, "servico": "MANUT_PREVENTIVA", "placas": 20, "com_plano": false, "esperado": 640 },
+    { "id": 7, "servico": "MANUT_PREVENTIVA", "placas": 20, "com_plano": true,  "esperado": 500 },
+    { "id": 8, "servico": "SEGURO", "valor_contrato": 50000, "com_plano": false, "esperado": 1000 },
+    { "id": 9, "servico": "SEGURO", "valor_contrato": 50000, "com_plano": true,  "esperado": 750 }
+  ]
+}

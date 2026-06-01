@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "versao": "2.0",
+    "atualizado_em": "2026-05-29",
+    "descricao": "Campos CRM alinhados 1:1 com index.html + pricing.js",
+    "fonte_oficial": "config/precificacao.json"
+  },
+
+  "ordem_criacao": [
+    "Campos de entrada",
+    "CampoMensalidade",
+    "CampoTemDescontoAvulso",
+    "CampoDeslocamento",
+    "CampoTotalServicosAvulsos",
+    "CampoTaxaInvestimento",
+    "CampoTotalAvulsos",
+    "CampoPrimeiraCobranca"
+  ],
+
+  "campos_entrada": [
+    { "nome": "Potência (kWp)", "codigo": "Kwp", "variavel": "[[CampoKwpProjeto]]", "tipo": "numero", "obrigatorio": true },
+    { "nome": "Nº de placas", "codigo": "QtdPlacas", "variavel": "[[CampoQtdPlacasProjeto]]", "tipo": "numero", "obrigatorio": false },
+    { "nome": "Distância da base (km)", "codigo": "Km", "variavel": "[[CampoKmProjeto]]", "tipo": "numero", "obrigatorio": true },
+    { "nome": "Plano", "codigo": "Plano", "variavel": "[[CampoPlanoProjeto]]", "tipo": "radio", "opcoes": ["NENHUM", "ACESSO", "PADRAO", "PREMIUM"], "obrigatorio": true },
+    { "nome": "Valor do investimento (R$)", "codigo": "ValorInvestimento", "variavel": "[[CampoValorInvestimentoProjeto]]", "tipo": "moeda", "obrigatorio": false },
+    { "nome": "Valor do contrato p/ seguro (R$)", "codigo": "ValorContrato", "variavel": "[[CampoValorContratoProjeto]]", "tipo": "moeda", "obrigatorio": false },
+    { "nome": "Serviços adicionais", "codigo": "ServicosChecklist", "variavel": "[[CampoServicosChecklistProjeto]]", "tipo": "checklist", "obrigatorio": false }
+  ],
+
+  "campos_calculados": [
+    {
+      "nome": "Mensalidade recorrente",
+      "codigo": "Mensalidade",
+      "variavel": "[[CampoMensalidadeProjeto]]",
+      "ordem": 1,
+      "formula_ncalc": "if([[CampoKwpProjeto]] > 50, 0, if([[CampoPlanoProjeto]] LIKE '%NENHUM%', 0, if([[CampoPlanoProjeto]] LIKE '%ACESSO%', if([[CampoKwpProjeto]] <= 5, 9.9, if([[CampoKwpProjeto]] <= 10, 14.9, if([[CampoKwpProjeto]] <= 15, 19.9, if([[CampoKwpProjeto]] <= 20, 24.9, if([[CampoKwpProjeto]] <= 25, 29.9, if([[CampoKwpProjeto]] <= 30, 34.9, if([[CampoKwpProjeto]] <= 35, 39.9, if([[CampoKwpProjeto]] <= 40, 44.9, if([[CampoKwpProjeto]] <= 45, 49.9, if([[CampoKwpProjeto]] <= 50, 54.9, 0)))))))))), if([[CampoPlanoProjeto]] LIKE '%PADRAO%', if([[CampoKwpProjeto]] <= 5, 39.9, if([[CampoKwpProjeto]] <= 10, 49.9, if([[CampoKwpProjeto]] <= 15, 59.9, if([[CampoKwpProjeto]] <= 20, 69.9, if([[CampoKwpProjeto]] <= 25, 79.9, if([[CampoKwpProjeto]] <= 30, 89.9, if([[CampoKwpProjeto]] <= 35, 99.9, if([[CampoKwpProjeto]] <= 40, 109.9, if([[CampoKwpProjeto]] <= 45, 119.9, if([[CampoKwpProjeto]] <= 50, 129.9, 0)))))))))), if([[CampoPlanoProjeto]] LIKE '%PREMIUM%', if([[CampoKwpProjeto]] <= 5, 59.9, if([[CampoKwpProjeto]] <= 10, 89.9, if([[CampoKwpProjeto]] <= 15, 119.9, if([[CampoKwpProjeto]] <= 20, 149.9, if([[CampoKwpProjeto]] <= 25, 179.9, if([[CampoKwpProjeto]] <= 30, 209.9, if([[CampoKwpProjeto]] <= 35, 239.9, if([[CampoKwpProjeto]] <= 40, 269.9, if([[CampoKwpProjeto]] <= 45, 299.9, if([[CampoKwpProjeto]] <= 50, 329.9, 0)))))))))), 0)))))"
+    },
+    {
+      "nome": "Tem desconto avulso",
+      "codigo": "TemDescontoAvulso",
+      "variavel": "[[CampoTemDescontoAvulsoProjeto]]",
+      "ordem": 2,
+      "formula_ncalc": "if([[CampoKwpProjeto]] > 50, 0, if([[CampoPlanoProjeto]] LIKE '%PADRAO%', 1, if([[CampoPlanoProjeto]] LIKE '%PREMIUM%', 1, 0)))"
+    },
+    {
+      "nome": "Taxa de deslocamento",
+      "codigo": "Deslocamento",
+      "variavel": "[[CampoDeslocamentoProjeto]]",
+      "ordem": 3,
+      "formula_ncalc": "if([[CampoKmProjeto]] <= 50, 0, Round((Ceiling([[CampoKmProjeto]]) - 50) * if([[CampoKmProjeto]] <= 200, 2.4, if([[CampoKmProjeto]] <= 400, 3.2, 4)), 2))"
+    },
+    {
+      "nome": "Total serviços avulsos",
+      "codigo": "TotalServicosAvulsos",
+      "variavel": "[[CampoTotalServicosAvulsosProjeto]]",
+      "ordem": 4,
+      "formula_ncalc": "GERADA_DINAMICAMENTE_NO_PAINEL"
+    },
+    {
+      "nome": "Taxa sobre investimento",
+      "codigo": "TaxaInvestimento",
+      "variavel": "[[CampoTaxaInvestimentoProjeto]]",
+      "ordem": 5,
+      "formula_ncalc": "if([[CampoValorInvestimentoProjeto]] > 0, Round([[CampoValorInvestimentoProjeto]] * 0.045, 2), 0)"
+    },
+    {
+      "nome": "Total avulsos",
+      "codigo": "TotalAvulsos",
+      "variavel": "[[CampoTotalAvulsosProjeto]]",
+      "ordem": 6,
+      "formula_ncalc": "[[CampoTotalServicosAvulsosProjeto]] + [[CampoDeslocamentoProjeto]] + [[CampoTaxaInvestimentoProjeto]]"
+    },
+    {
+      "nome": "Primeira cobrança",
+      "codigo": "PrimeiraCobranca",
+      "variavel": "[[CampoPrimeiraCobrancaProjeto]]",
+      "ordem": 7,
+      "formula_ncalc": "[[CampoMensalidadeProjeto]] + [[CampoTotalAvulsosProjeto]]"
+    }
+  ]
+}

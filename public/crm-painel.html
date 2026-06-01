@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CRM — Variáveis MHZ (espelho index.html)</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --verde: #0a7c5c; --verde-claro: #e6f4ef; --amarelo-claro: #fffbeb;
+      --cinza-bg: #f8fafc; --cinza-borda: #e2e8f0; --cinza-texto: #64748b;
+      --texto: #0f172a; --sombra: 0 1px 3px rgba(0,0,0,.08);
+      --sombra-md: 0 4px 6px -1px rgba(0,0,0,.1);
+      --laranja: #ea580c; --laranja-claro: #fff7ed;
+      --roxo: #7c3aed; --azul: #2563eb;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--cinza-bg); color: var(--texto);
+      font-size: 13px; line-height: 1.5;
+      display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+    }
+    header {
+      background: var(--verde); color: white; padding: 11px 16px;
+      flex-shrink: 0; display: flex; align-items: center; gap: 10px;
+      box-shadow: var(--sombra-md);
+    }
+    header h1 { font-size: 14px; font-weight: 700; }
+    header p { font-size: 11px; opacity: .85; }
+    .tabs {
+      display: flex; background: white; border-bottom: 2px solid var(--cinza-borda);
+      flex-shrink: 0; padding: 0 10px; overflow-x: auto;
+    }
+    .tab {
+      padding: 8px 10px; border: none; background: none; cursor: pointer;
+      font-size: 11px; font-weight: 600; color: var(--cinza-texto);
+      border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap;
+    }
+    .tab:hover { color: var(--verde); }
+    .tab.active { color: var(--verde); border-bottom-color: var(--verde); }
+    .tab.t-servico.active { color: var(--laranja); border-bottom-color: var(--laranja); }
+    .badge {
+      background: var(--cinza-bg); border: 1px solid var(--cinza-borda);
+      border-radius: 20px; padding: 1px 5px; font-size: 10px; font-weight: 700; margin-left: 4px;
+    }
+    .search-bar {
+      padding: 8px 12px; background: white; border-bottom: 1px solid var(--cinza-borda); flex-shrink: 0;
+    }
+    .search-bar input {
+      width: 100%; padding: 6px 10px; border: 1px solid var(--cinza-borda);
+      border-radius: 6px; font-size: 12px; background: var(--cinza-bg); outline: none;
+    }
+    .scroll { flex: 1; overflow-y: auto; padding: 10px 12px 24px; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .section-label {
+      font-size: 10px; font-weight: 700; letter-spacing: .8px;
+      text-transform: uppercase; color: var(--cinza-texto); padding: 8px 0 6px;
+    }
+    .banner {
+      background: var(--verde-claro); border: 1px solid #86efac;
+      border-radius: 8px; padding: 10px 12px; margin-bottom: 10px;
+      font-size: 11.5px; color: #14532d; line-height: 1.6;
+    }
+    .banner-warn {
+      background: var(--amarelo-claro); border-color: #fde68a; color: #78350f;
+    }
+    .banner code, .banner strong { font-weight: 700; }
+    .banner code {
+      background: rgba(255,255,255,.6); border-radius: 3px; padding: 1px 4px;
+      font-family: monospace; font-size: 11px;
+    }
+    .card {
+      background: white; border: 1px solid var(--cinza-borda);
+      border-radius: 8px; margin-bottom: 6px; overflow: hidden; box-shadow: var(--sombra);
+    }
+    .card.card-total { border-color: var(--verde); }
+    .card-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 8px; padding: 10px 12px; cursor: pointer; user-select: none;
+    }
+    .card-header:hover { background: var(--cinza-bg); }
+    .card-left { flex: 1; min-width: 0; }
+    .card-nome { font-weight: 600; font-size: 12.5px; }
+    .card-sub { font-size: 10.5px; color: var(--cinza-texto); margin-top: 1px; font-family: monospace; }
+    .card-badges { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+    .pill {
+      display: inline-flex; padding: 1px 7px; border-radius: 20px;
+      font-size: 10px; font-weight: 600;
+    }
+    .pill-entrada { background: #fef3c7; color: #92400e; }
+    .pill-calc { background: #dbeafe; color: #1e40af; }
+    .pill-var { background: #ede9fe; color: #5b21b6; }
+    .pill-req { background: #dcfce7; color: #166534; }
+    .pill-opt { background: #f1f5f9; color: #475569; }
+    .pill-moeda { background: #f0fdf4; color: #166534; }
+    .pill-radio { background: #eff6ff; color: #1d4ed8; }
+    .pill-total { background: var(--verde-claro); color: #065f46; }
+    .chevron { width: 16px; height: 16px; flex-shrink: 0; color: var(--cinza-texto); transition: transform .2s; }
+    .card.open .chevron { transform: rotate(180deg); }
+    .card-body { display: none; padding: 0 12px 12px; border-top: 1px solid var(--cinza-borda); }
+    .card.open .card-body { display: block; }
+    .desc-text { font-size: 11.5px; color: var(--cinza-texto); margin-top: 8px; line-height: 1.5; }
+    .ordem-circle {
+      width: 20px; height: 20px; border-radius: 50%; background: var(--azul);
+      color: white; font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .ordem-circle.total { background: var(--verde); }
+    .copy-rows { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .copy-row { display: flex; flex-direction: column; gap: 3px; }
+    .copy-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--cinza-texto); }
+    .copy-box {
+      display: flex; border: 1px solid var(--cinza-borda); border-radius: 6px;
+      overflow: hidden; background: var(--cinza-bg);
+    }
+    .copy-value {
+      flex: 1; padding: 6px 8px; font-family: Consolas, monospace;
+      font-size: 11px; word-break: break-all; white-space: pre-wrap; line-height: 1.4;
+    }
+    .copy-value.formula { color: #0e7490; }
+    .copy-value.variavel { color: var(--roxo); font-weight: 600; }
+    .copy-value.codigo { color: var(--verde); font-weight: 600; }
+    .btn-copy {
+      padding: 0 10px; border: none; border-left: 1px solid var(--cinza-borda);
+      background: white; cursor: pointer; font-size: 11px; font-weight: 600;
+      color: var(--verde); flex-shrink: 0;
+    }
+    .btn-copy:hover { background: var(--verde-claro); }
+    .btn-copy.copied { color: white; background: var(--verde); }
+    .deps-label { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--cinza-texto); margin: 8px 0 4px; }
+    .deps { display: flex; flex-wrap: wrap; gap: 4px; }
+    .dep-chip { background: var(--cinza-bg); border: 1px solid var(--cinza-borda); border-radius: 4px; padding: 2px 6px; font-size: 10px; font-family: monospace; }
+    .price-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+    .price-box { flex: 1; min-width: 70px; background: var(--cinza-bg); border: 1px solid var(--cinza-borda); border-radius: 6px; padding: 6px 10px; font-size: 11px; }
+    .price-box .price-label { font-size: 9px; font-weight: 700; text-transform: uppercase; color: var(--cinza-texto); }
+    .price-box .price-value { font-size: 12px; font-weight: 700; margin-top: 2px; }
+    .giant-box { background: #0f172a; border-radius: 8px; padding: 12px; margin-top: 8px; overflow-x: auto; }
+    .giant-box pre { font-family: Consolas, monospace; font-size: 10.5px; color: #7dd3fc; white-space: pre-wrap; word-break: break-all; line-height: 1.6; }
+    .giant-btn-copy {
+      margin-top: 8px; padding: 7px 14px; border-radius: 6px; border: none;
+      background: var(--verde); color: white; font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .giant-btn-copy.copied { background: #065f46; }
+    .table-ref { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 8px; }
+    .table-ref th, .table-ref td { border: 1px solid var(--cinza-borda); padding: 5px 8px; text-align: left; }
+    .table-ref th { background: var(--cinza-bg); font-weight: 700; }
+    .test-ok { color: #166534; font-weight: 700; }
+    .test-fail { color: #dc2626; font-weight: 700; }
+    .toast {
+      position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%) translateY(60px);
+      background: var(--texto); color: white; padding: 8px 16px; border-radius: 20px;
+      font-size: 12px; font-weight: 600; transition: transform .25s; z-index: 999;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .hidden { display: none !important; }
+    .empty { text-align: center; padding: 40px; color: var(--cinza-texto); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>MHZ — CRM espelho do index.html</h1>
+    <p>Fonte: pricing.js + precificacao.json · Planos: Acesso, Padrão, Premium</p>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-tab="entrada" onclick="switchTab('entrada',this)">Entrada <span class="badge" id="badge-entrada">8</span></button>
+  <button class="tab" data-tab="calculado" onclick="switchTab('calculado',this)">Calculados <span class="badge" id="badge-calc">7</span></button>
+  <button class="tab t-servico" data-tab="servico" onclick="switchTab('servico',this)">Checklist <span class="badge">9</span></button>
+  <button class="tab" data-tab="proposta" onclick="switchTab('proposta',this)">Proposta</button>
+  <button class="tab" data-tab="tabelas" onclick="switchTab('tabelas',this)">Tabelas</button>
+  <button class="tab" data-tab="validador" onclick="switchTab('validador',this)">Validador</button>
+</div>
+
+<div class="search-bar">
+  <input id="busca" type="text" placeholder="Buscar nome, código ou variável…" oninput="filtrar()" />
+</div>
+
+<div class="scroll">
+  <div class="panel active" id="panel-entrada">
+    <div class="banner">
+      <strong>Alinhado ao index.html.</strong> Campos iguais ao formulário de proposta.
+      Planos oficiais: <code>NENHUM</code>, <code>ACESSO</code>, <code>PADRAO</code>, <code>PREMIUM</code>.
+      Removidos: Plano Basic/Essencial, Limpeza Base, Monitoramento Base, Serviço Técnico Base.
+    </div>
+    <div class="section-label">Campos de entrada — usuário preenche</div>
+    <div id="lista-entrada"></div>
+  </div>
+
+  <div class="panel" id="panel-calculado">
+    <div class="banner banner-warn">
+      Crie nesta ordem. Fórmulas geradas a partir de <code>config/precificacao.json</code> — mesma lógica de <code>src/pricing.js</code>.
+    </div>
+    <div class="section-label">Campos calculados (Fórmula NCalc)</div>
+    <div id="lista-calculado"></div>
+  </div>
+
+  <div class="panel" id="panel-servico">
+    <div class="banner">
+      <strong>Radio/checklist retornam string completa.</strong> Use <code>[[Campo]] LIKE '%palavra%'</code> — a palavra deve existir no texto que o CRM devolve (ex.: <code>%Acesso%</code>, <code>%Padrão%</code>).
+      Desconto automático via <code>[[CampoTemDescontoAvulsoProjeto]]</code> (Padrão/Premium residencial, kWp ≤ 50).
+    </div>
+    <div id="lista-checklist"></div>
+  </div>
+
+  <div class="panel" id="panel-proposta">
+    <div class="section-label">Variáveis para templates de proposta PDF/e-mail</div>
+    <div id="lista-proposta"></div>
+  </div>
+
+  <div class="panel" id="panel-tabelas">
+    <div id="lista-tabelas"></div>
+  </div>
+
+  <div class="panel" id="panel-validador">
+    <div class="banner">Compara fórmulas JS (espelho pricing.js) com casos oficiais do catálogo.</div>
+    <div id="lista-validador"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Copiado!</div>
+
+<script>
+// ═══ Dados oficiais (espelho precificacao.json) ═══
+const FAIXAS_KWP = [
+  { max: 5,  ACESSO: 9.9,  PADRAO: 39.9,  PREMIUM: 59.9  },
+  { max: 10, ACESSO: 14.9, PADRAO: 49.9,  PREMIUM: 89.9  },
+  { max: 15, ACESSO: 19.9, PADRAO: 59.9,  PREMIUM: 119.9 },
+  { max: 20, ACESSO: 24.9, PADRAO: 69.9,  PREMIUM: 149.9 },
+  { max: 25, ACESSO: 29.9, PADRAO: 79.9,  PREMIUM: 179.9 },
+  { max: 30, ACESSO: 34.9, PADRAO: 89.9,  PREMIUM: 209.9 },
+  { max: 35, ACESSO: 39.9, PADRAO: 99.9,  PREMIUM: 239.9 },
+  { max: 40, ACESSO: 44.9, PADRAO: 109.9, PREMIUM: 269.9 },
+  { max: 45, ACESSO: 49.9, PADRAO: 119.9, PREMIUM: 299.9 },
+  { max: 50, ACESSO: 54.9, PADRAO: 129.9, PREMIUM: 329.9 },
+];
+
+const ENTRADA = [
+  { nome: 'Potência (kWp)', codigo: 'Kwp', variavel: '[[CampoKwpProjeto]]', tipo: 'numero', obrigatorio: true, descricao: 'Potência da usina — usina-kwp no index.html. Usado na mensalidade (faixa kWp × plano)' },
+  { nome: 'Nº de placas', codigo: 'QtdPlacas', variavel: '[[CampoQtdPlacasProjeto]]', tipo: 'numero', obrigatorio: false, descricao: 'Usado em Manutenção preventiva (R$/placa)' },
+  { nome: 'Distância da base (km)', codigo: 'Km', variavel: '[[CampoKmProjeto]]', tipo: 'numero', obrigatorio: true, descricao: 'Isento até 50 km; acima cobra km excedente × taxa da faixa' },
+  { nome: 'Plano', codigo: 'Plano', variavel: '[[CampoPlanoProjeto]]', tipo: 'radio', obrigatorio: true, opcoes: ['NENHUM', 'ACESSO', 'PADRAO', 'PREMIUM'], descricao: 'Retorna texto completo da opção (ex.: "Plano Acesso"). Fórmulas usam LIKE para buscar palavra-chave dentro do valor.' },
+  { nome: 'Valor do investimento (R$)', codigo: 'ValorInvestimento', variavel: '[[CampoValorInvestimentoProjeto]]', tipo: 'moeda', obrigatorio: false, descricao: 'Preenchido manualmente quando aplicável. Base da taxa 4,5%' },
+  { nome: 'Valor do contrato p/ seguro (R$)', codigo: 'ValorContrato', variavel: '[[CampoValorContratoProjeto]]', tipo: 'moeda', obrigatorio: false, descricao: 'Preenchido manualmente quando contratar seguro. Base: 2% ou 1,5%' },
+  { nome: 'Serviços adicionais', codigo: 'ServicosChecklist', variavel: '[[CampoServicosChecklistProjeto]]', tipo: 'checklist', obrigatorio: false, descricao: 'Checklist com 9 opções — aba Checklist' },
+];
+
+const PLANO_TEXTO = {
+  NENHUM: ['NENHUM', 'Nenhum', 'Sem plano'],
+  ACESSO: ['ACESSO', 'Acesso', 'Basic'],
+  PADRAO: ['PADRAO', 'Padrao', 'Padrão'],
+  PREMIUM: ['PREMIUM', 'Premium'],
+};
+
+function buildIfsKwp(plano) {
+  let result = '0';
+  for (let i = FAIXAS_KWP.length - 1; i >= 0; i--) {
+    const f = FAIXAS_KWP[i];
+    result = `if([[CampoKwpProjeto]] <= ${f.max}, ${f[plano]}, ${result})`;
+  }
+  return result;
+}
+
+/** Radio/checklist retornam string completa — busca palavra-chave dentro do valor de [[Campo...]] */
+function matchPlano(codigo) {
+  let expr = '0';
+  for (const texto of PLANO_TEXTO[codigo]) {
+    expr = `if([[CampoPlanoProjeto]] LIKE '%${texto}%', 1, ${expr})`;
+  }
+  return expr;
+}
+
+const FORMULA_MENSALIDADE = `if([[CampoKwpProjeto]] > 50, 0, if(${matchPlano('NENHUM')}, 0, if(${matchPlano('ACESSO')}, ${buildIfsKwp('ACESSO')}, if(${matchPlano('PADRAO')}, ${buildIfsKwp('PADRAO')}, if(${matchPlano('PREMIUM')}, ${buildIfsKwp('PREMIUM')}, 0)))))`;
+
+const FORMULA_TEM_DESCONTO = `if([[CampoKwpProjeto]] > 50, 0, if(${matchPlano('PADRAO')}, 1, if(${matchPlano('PREMIUM')}, 1, 0)))`;
+
+const FORMULA_DESLOCAMENTO = `if([[CampoKmProjeto]] <= 50, 0, Round((Ceiling([[CampoKmProjeto]]) - 50) * if([[CampoKmProjeto]] <= 200, 2.4, if([[CampoKmProjeto]] <= 400, 3.2, 4)), 2))`;
+
+const FORMULA_TAXA_INVEST = `if([[CampoValorInvestimentoProjeto]] > 0, Round([[CampoValorInvestimentoProjeto]] * 0.045, 2), 0)`;
+
+const FORMULA_TOTAL_AVULSOS = '[[CampoTotalServicosAvulsosProjeto]] + [[CampoDeslocamentoProjeto]] + [[CampoTaxaInvestimentoProjeto]]';
+const FORMULA_PRIMEIRA_COBRANCA = '[[CampoMensalidadeProjeto]] + [[CampoTotalAvulsosProjeto]]';
+
+const CHECKLIST_VAR = '[[CampoServicosChecklistProjeto]]';
+
+const SERVICOS = [
+  { ordem: 1, nome: 'Manutenção preventiva', opcao: 'Manutenção preventiva', keyword: 'preventiva', fora: '[[CampoQtdPlacasProjeto]] * 32', com: '[[CampoQtdPlacasProjeto]] * 25', preco_fora: 'R$ 32/placa', preco_com: 'R$ 25/placa' },
+  { ordem: 2, nome: 'Seguro', opcao: 'Seguro', keyword: 'Seguro', fora: '[[CampoValorContratoProjeto]] * 0.02', com: '[[CampoValorContratoProjeto]] * 0.015', preco_fora: '2%', preco_com: '1,5%' },
+  { ordem: 3, nome: 'Manutenção corretiva', opcao: 'Manutenção corretiva', keyword: 'corretiva', fora: '320', com: '290', preco_fora: 'R$ 320', preco_com: 'R$ 290' },
+  { ordem: 4, nome: 'Troca de titularidade', opcao: 'Troca de titularidade', keyword: 'titularidade', fora: '150', com: '130', preco_fora: 'R$ 150', preco_com: 'R$ 130' },
+  { ordem: 5, nome: 'Alteração de percentual', opcao: 'Alteração de percentual', keyword: 'percentual', fora: '120', com: '100', preco_fora: 'R$ 120', preco_com: 'R$ 100' },
+  { ordem: 6, nome: 'Wi-Fi presencial', opcao: 'Configuração Wi-Fi presencial', keyword: 'presencial', fora: '320', com: '290', preco_fora: 'R$ 320', preco_com: 'R$ 290' },
+  { ordem: 7, nome: 'Wi-Fi remota', opcao: 'Configuração Wi-Fi remota', keyword: 'remota', fora: '150', com: '130', preco_fora: 'R$ 150', preco_com: 'R$ 130' },
+  { ordem: 8, nome: 'Visita laudo', opcao: 'Visita técnica para laudo', keyword: 'laudo', fora: '350', com: '310', preco_fora: 'R$ 350', preco_com: 'R$ 310' },
+  { ordem: 9, nome: 'Visita garantia', opcao: 'Visita para acionamento de garantia', keyword: 'garantia', fora: '480', com: '430', preco_fora: 'R$ 480', preco_com: 'R$ 430' },
+];
+
+function ifChecklist(keyword, valor) {
+  return `if(${CHECKLIST_VAR} LIKE '%${keyword}%', ${valor}, 0)`;
+}
+
+function buildGiantFormulaServicos() {
+  return SERVICOS.map((s, i) => {
+    const val = `if([[CampoTemDescontoAvulsoProjeto]] == 1, ${s.com}, ${s.fora})`;
+    const linha = ifChecklist(s.keyword, val);
+    return i === 0 ? linha : `+ ${linha}`;
+  }).join('\n');
+}
+
+const FORMULA_TOTAL_SERVICOS = buildGiantFormulaServicos();
+
+const CALCULADO = [
+  { ordem: 1, nome: 'Mensalidade recorrente', codigo: 'Mensalidade', variavel: '[[CampoMensalidadeProjeto]]', depende: ['[[CampoKwpProjeto]]', '[[CampoPlanoProjeto]]'], descricao: 'Tabela faixas kWp × plano. kWp>50 ou NENHUM = 0.', formula: FORMULA_MENSALIDADE },
+  { ordem: 2, nome: 'Tem desconto avulso', codigo: 'TemDescontoAvulso', variavel: '[[CampoTemDescontoAvulsoProjeto]]', depende: ['[[CampoPlanoProjeto]]', '[[CampoKwpProjeto]]'], descricao: '1 = Padrão ou Premium + kWp≤50.', formula: FORMULA_TEM_DESCONTO },
+  { ordem: 3, nome: 'Taxa de deslocamento', codigo: 'Deslocamento', variavel: '[[CampoDeslocamentoProjeto]]', depende: ['[[CampoKmProjeto]]'], descricao: 'ceil(km)-50 × taxa. Isento ≤50 km.', formula: FORMULA_DESLOCAMENTO, faixas: [['≤50 km', 'R$ 0'], ['51-200', 'R$ 2,40/km'], ['201-400', 'R$ 3,20/km'], ['401+', 'R$ 4,00/km']] },
+  { ordem: 4, nome: 'Total serviços avulsos', codigo: 'TotalServicosAvulsos', variavel: '[[CampoTotalServicosAvulsosProjeto]]', depende: [CHECKLIST_VAR, '[[CampoTemDescontoAvulsoProjeto]]', '[[CampoQtdPlacasProjeto]]', '[[CampoValorContratoProjeto]]'], descricao: 'Soma dos 9 serviços do checklist.', formula: FORMULA_TOTAL_SERVICOS },
+  { ordem: 5, nome: 'Taxa sobre investimento', codigo: 'TaxaInvestimento', variavel: '[[CampoTaxaInvestimentoProjeto]]', depende: ['[[CampoValorInvestimentoProjeto]]'], descricao: '4,5% sobre valor do investimento.', formula: FORMULA_TAXA_INVEST },
+  { ordem: 6, nome: 'Total avulsos', codigo: 'TotalAvulsos', variavel: '[[CampoTotalAvulsosProjeto]]', depende: ['[[CampoTotalServicosAvulsosProjeto]]', '[[CampoDeslocamentoProjeto]]', '[[CampoTaxaInvestimentoProjeto]]'], descricao: 'Serviços + deslocamento + taxa investimento.', formula: FORMULA_TOTAL_AVULSOS },
+  { ordem: 7, nome: 'Primeira cobrança', codigo: 'PrimeiraCobranca', variavel: '[[CampoPrimeiraCobrancaProjeto]]', depende: ['[[CampoMensalidadeProjeto]]', '[[CampoTotalAvulsosProjeto]]'], descricao: 'Mensalidade + total avulsos.', formula: FORMULA_PRIMEIRA_COBRANCA, total: true },
+];
+
+const PROPOSTA_VARS = [
+  { nome: 'Mensalidade', variavel: '[[CampoMensalidadeProjeto]]', descricao: 'Valor recorrente mensal do plano' },
+  { nome: 'Deslocamento', variavel: '[[CampoDeslocamentoProjeto]]', descricao: 'Taxa de deslocamento (item avulso global)' },
+  { nome: 'Total avulsos', variavel: '[[CampoTotalAvulsosProjeto]]', descricao: 'Serviços + deslocamento + taxa investimento' },
+  { nome: 'Primeira cobrança', variavel: '[[CampoPrimeiraCobrancaProjeto]]', descricao: 'Total da 1ª cobrança na proposta' },
+  { nome: 'Taxa investimento', variavel: '[[CampoTaxaInvestimentoProjeto]]', descricao: '4,5% sobre valor do investimento' },
+];
+
+// ═══ Engine validação (espelho pricing.js) ═══
+function arredondar(v) { return Math.round((v + Number.EPSILON) * 100) / 100; }
+
+function calcDeslocamento(km) {
+  const k = Math.ceil(Number(km) || 0);
+  if (k <= 50) return 0;
+  const taxa = k <= 200 ? 2.4 : k <= 400 ? 3.2 : 4;
+  return arredondar((k - 50) * taxa);
+}
+
+function calcMensalidade(kwp, plano) {
+  if (!plano || plano === 'NENHUM') return null;
+  if (kwp > 50) return null;
+  const faixa = FAIXAS_KWP.find(f => kwp <= f.max);
+  return faixa ? faixa[plano] : null;
+}
+
+function calcProposta({ kwp, plano, km, servicos = [], placas = 0, valorContrato = 0, valorInvestimento = 0 }) {
+  const mens = calcMensalidade(kwp, plano) || 0;
+  const desconto = (plano === 'PADRAO' || plano === 'PREMIUM') && kwp <= 50;
+  let totalServ = 0;
+  for (const s of SERVICOS) {
+    if (!servicos.includes(s.keyword)) continue;
+    const preco = desconto ? eval(s.com.replace(/\[\[CampoQtdPlacasProjeto\]\]/g, placas).replace(/\[\[CampoValorContratoProjeto\]\]/g, valorContrato)) : eval(s.fora.replace(/\[\[CampoQtdPlacasProjeto\]\]/g, placas).replace(/\[\[CampoValorContratoProjeto\]\]/g, valorContrato));
+    totalServ += arredondar(preco);
+  }
+  const desl = calcDeslocamento(km);
+  const taxaInv = valorInvestimento > 0 ? arredondar(valorInvestimento * 0.045) : 0;
+  const avulsos = arredondar(totalServ + desl + taxaInv);
+  return { mensalidade: mens, deslocamento: desl, avulsos, primeira: arredondar(mens + avulsos) };
+}
+
+const CASOS_TESTE = [
+  { nome: '8,5 kWp Acesso 80 km', kwp: 8.5, plano: 'ACESSO', km: 80, expMens: 14.9, expDesl: 72, expPrimeira: 86.9 },
+  { nome: '7 kWp Padrão 100 km', kwp: 7, plano: 'PADRAO', km: 100, expMens: 49.9, expDesl: 120 },
+  { nome: '25 kWp Premium 250 km', kwp: 25, plano: 'PREMIUM', km: 250, expMens: 179.9, expDesl: 640 },
+  { nome: '4 kWp Acesso 30 km', kwp: 4, plano: 'ACESSO', km: 30, expMens: 9.9, expDesl: 0 },
+  { nome: '55 kWp Padrão (sob consulta)', kwp: 55, plano: 'PADRAO', km: 40, expMens: 0, expDesl: 0 },
+];
+
+// ═══ Render ═══
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function copyRow(label, value, cls) {
+  const id = 'b' + Math.random().toString(36).slice(2, 9);
+  const vcls = cls ? cls : '';
+  return `<div class="copy-row"><span class="copy-label">${label}</span><div class="copy-box"><span class="copy-value ${vcls}">${escHtml(value)}</span><button class="btn-copy" id="${id}" onclick="copiar('${id}',${JSON.stringify(value)})">Copiar</button></div></div>`;
+}
+
+function chevron() { return `<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>`; }
+
+function cardEntrada(it, i) {
+  const tipoPill = it.tipo === 'radio' ? 'radio' : it.tipo === 'checklist' ? 'entrada' : it.tipo === 'moeda' ? 'moeda' : 'numero';
+  const opcoes = it.opcoes ? `<div class="deps-label">Opções</div><div class="deps">${it.opcoes.map(o => `<span class="dep-chip">${o}</span>`).join('')}</div>` : '';
+  return `<div class="card" id="ce-${i}"><div class="card-header" onclick="toggleCard('ce-${i}')"><div class="card-left"><div class="card-nome">${it.nome}</div><div class="card-sub">${it.variavel}</div><div class="card-badges"><span class="pill pill-entrada">${it.tipo}</span><span class="pill pill-${tipoPill}">${it.tipo}</span><span class="pill ${it.obrigatorio?'pill-req':'pill-opt'}">${it.obrigatorio?'Obrigatório':'Opcional'}</span></div></div>${chevron()}</div><div class="card-body"><p class="desc-text">${it.descricao}</p>${opcoes}<div class="copy-rows">${copyRow('Nome', it.nome)}${copyRow('Código', it.codigo, 'codigo')}${copyRow('Variável', it.variavel, 'variavel')}</div></div></div>`;
+}
+
+function cardCalculado(it) {
+  const faixas = it.faixas ? `<div class="price-row">${it.faixas.map(([a,b]) => `<div class="price-box"><div class="price-label">${a}</div><div class="price-value">${b}</div></div>`).join('')}</div>` : '';
+  const formulaDisplay = it.ordem === 4 ? it.formula : it.formula;
+  const giant = it.ordem === 4 ? `<div class="giant-box"><pre>${escHtml(it.formula)}</pre></div><button class="giant-btn-copy" id="giant-serv" onclick="copiarGiant('giant-serv', ${JSON.stringify(it.formula.replace(/\n/g,' '))})">Copiar fórmula serviços</button>` : '';
+  return `<div class="card ${it.total?'card-total':''}" id="cc-${it.ordem}"><div class="card-header" onclick="toggleCard('cc-${it.ordem}')"><div class="ordem-circle ${it.total?'total':''}">${it.total?'Σ':it.ordem}</div><div class="card-left"><div class="card-nome">${it.nome}</div><div class="card-sub">${it.variavel}</div><div class="card-badges"><span class="pill pill-calc">Calculado</span></div></div>${chevron()}</div><div class="card-body"><p class="desc-text">${it.descricao}</p>${faixas}<div class="deps-label">Depende de</div><div class="deps">${it.depende.map(d=>`<span class="dep-chip">${d}</span>`).join('')}</div><div class="copy-rows">${copyRow('Nome', it.nome)}${copyRow('Código', it.codigo, 'codigo')}${copyRow('Variável', it.variavel, 'variavel')}${it.ordem !== 4 ? copyRow('Fórmula NCalc', formulaDisplay, 'formula') : ''}</div>${giant}</div></div>`;
+}
+
+function renderChecklist() {
+  const opcoes = SERVICOS.map(s => s.opcao);
+  document.getElementById('lista-checklist').innerHTML = `
+    <div class="card open" id="cl-campo"><div class="card-header" onclick="toggleCard('cl-campo')"><div class="card-left"><div class="card-nome">Serviços adicionais (Checklist)</div><div class="card-sub">${CHECKLIST_VAR}</div></div>${chevron()}</div><div class="card-body"><div class="deps-label">9 opções — copie exatamente</div>${opcoes.map((o,i)=>`<div class="dep-chip" style="display:block;margin:4px 0">${i+1}. ${o}</div>`).join('')}<div class="copy-rows">${copyRow('Código', 'ServicosChecklist', 'codigo')}${copyRow('Variável', CHECKLIST_VAR, 'variavel')}</div></div></div>
+    <div class="section-label" style="margin-top:10px">Referência por serviço</div>
+    ${SERVICOS.map(s => `<div class="card" id="cs-${s.ordem}"><div class="card-header" onclick="toggleCard('cs-${s.ordem}')"><div class="card-left"><div class="card-nome">${s.nome}</div><div class="card-sub">LIKE '%${s.keyword}%'</div></div>${chevron()}</div><div class="card-body"><div class="price-row"><div class="price-box"><div class="price-label">Fora plano</div><div class="price-value">${s.preco_fora}</div></div><div class="price-box"><div class="price-label">Com plano</div><div class="price-value">${s.preco_com}</div></div></div><div class="copy-rows">${copyRow('Trecho NCalc', ifChecklist(s.keyword, `if([[CampoTemDescontoAvulsoProjeto]]==1,${s.com},${s.fora})`), 'formula')}</div></div></div>`).join('')}
+  `;
+}
+
+function renderTabelas() {
+  let kwpRows = FAIXAS_KWP.map(f => `<tr><td>até ${f.max} kWp</td><td>R$ ${f.ACESSO.toFixed(2).replace('.',',')}</td><td>R$ ${f.PADRAO.toFixed(2).replace('.',',')}</td><td>R$ ${f.PREMIUM.toFixed(2).replace('.',',')}</td></tr>`).join('');
+  document.getElementById('lista-tabelas').innerHTML = `
+    <div class="section-label">Faixas kWp × plano (mensalidade R$/mês)</div>
+    <table class="table-ref"><thead><tr><th>Faixa</th><th>Acesso</th><th>Padrão</th><th>Premium</th></tr></thead><tbody>${kwpRows}<tr><td>&gt; 50 kWp</td><td colspan="3">Sob consulta</td></tr></tbody></table>
+    <div class="section-label" style="margin-top:14px">Deslocamento (km excedente após 50 km)</div>
+    <table class="table-ref"><thead><tr><th>Distância</th><th>Taxa/km</th></tr></thead><tbody><tr><td>≤ 50 km</td><td>R$ 0</td></tr><tr><td>51 – 200 km</td><td>R$ 2,40</td></tr><tr><td>201 – 400 km</td><td>R$ 3,20</td></tr><tr><td>401 km ou mais</td><td>R$ 4,00</td></tr></tbody></table>
+  `;
+}
+
+function renderValidador() {
+  const rows = CASOS_TESTE.map(c => {
+    const r = calcProposta(c);
+    const okM = r.mensalidade === c.expMens;
+    const okD = r.deslocamento === c.expDesl;
+    const okP = c.expPrimeira == null || r.primeira === c.expPrimeira;
+    const ok = okM && okD && okP;
+    return `<tr><td>${c.nome}</td><td>${r.mensalidade}</td><td class="${okM?'test-ok':'test-fail'}">${c.expMens ?? '—'}</td><td>${r.deslocamento}</td><td class="${okD?'test-ok':'test-fail'}">${c.expDesl ?? '—'}</td><td>${r.primeira}</td><td class="${ok?'test-ok':'test-fail'}">${ok?'OK':'ERRO'}</td></tr>`;
+  }).join('');
+  document.getElementById('lista-validador').innerHTML = `<table class="table-ref"><thead><tr><th>Caso</th><th>Mens.</th><th>Esperado</th><th>Desl.</th><th>Esperado</th><th>1ª cobrança</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function renderAll() {
+  document.getElementById('lista-entrada').innerHTML = ENTRADA.map((it,i) => cardEntrada(it,i)).join('');
+  document.getElementById('lista-calculado').innerHTML = CALCULADO.map(it => cardCalculado(it)).join('');
+  document.getElementById('lista-proposta').innerHTML = PROPOSTA_VARS.map((it,i) => `<div class="card" id="cp-${i}"><div class="card-header" onclick="toggleCard('cp-${i}')"><div class="card-left"><div class="card-nome">${it.nome}</div><div class="card-sub">${it.variavel}</div><span class="pill pill-var">Template</span></div>${chevron()}</div><div class="card-body"><p class="desc-text">${it.descricao}</p><div class="copy-rows">${copyRow('Usar no template', it.variavel, 'variavel')}</div></div></div>`).join('');
+  renderChecklist();
+  renderTabelas();
+  renderValidador();
+}
+
+let tabAtiva = 'entrada';
+function switchTab(tab, el) {
+  tabAtiva = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.getElementById('busca').value = '';
+  filtrar();
+}
+function toggleCard(id) { document.getElementById(id)?.classList.toggle('open'); }
+function copiar(btnId, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById(btnId);
+    if (btn) { btn.classList.add('copied'); btn.textContent = 'Copiado!'; showToast('Copiado!'); setTimeout(() => { btn.classList.remove('copied'); btn.textContent = 'Copiar'; }, 2000); }
+  });
+}
+function copiarGiant(btnId, text) { copiar(btnId, text); }
+function showToast(msg) {
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+function filtrar() {
+  const q = document.getElementById('busca').value.toLowerCase().trim();
+  const panel = document.getElementById('panel-' + tabAtiva);
+  if (!panel) return;
+  panel.querySelectorAll('.card').forEach(card => {
+    card.classList.toggle('hidden', q && !card.textContent.toLowerCase().includes(q));
+  });
+}
+
+renderAll();
+</script>
+</body>
+</html>

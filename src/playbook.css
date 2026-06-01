@@ -1,0 +1,451 @@
+.playbook {
+  --pb-success-bg: rgba(61, 214, 140, 0.12);
+  --pb-success-text: var(--success);
+  --pb-success-border: rgba(61, 214, 140, 0.35);
+  --pb-warning-bg: rgba(255, 176, 32, 0.12);
+  --pb-warning-text: var(--warning);
+  --pb-warning-border: rgba(255, 176, 32, 0.35);
+  --pb-info-bg: rgba(96, 165, 250, 0.12);
+  --pb-info-text: #60a5fa;
+  --pb-info-border: rgba(96, 165, 250, 0.35);
+  --pb-danger-bg: rgba(255, 107, 107, 0.12);
+  --pb-danger-text: var(--danger);
+  --pb-danger-border: rgba(255, 107, 107, 0.35);
+}
+
+.playbook .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.playbook-container {
+  max-width: 820px;
+}
+
+.playbook-intro-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.playbook-intro-sub {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 1.5rem;
+}
+
+.playbook .tab-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.playbook .tab {
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+  font-family: inherit;
+}
+
+.playbook .tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.playbook .tab:hover:not(.active) {
+  color: var(--text);
+}
+
+.playbook .panel {
+  display: none;
+}
+
+.playbook .panel.active {
+  display: block;
+}
+
+.playbook .stage {
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  overflow: hidden;
+}
+
+.playbook .stage-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.playbook .stage-header:hover {
+  background: var(--bg-input);
+}
+
+.playbook .stage-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.playbook .stage-title {
+  font-size: 14px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.playbook .stage-tag {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.playbook .chevron {
+  font-size: 12px;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+}
+
+.playbook .stage.open .chevron {
+  transform: rotate(90deg);
+}
+
+.playbook .stage-body {
+  display: none;
+  padding: 0 14px 14px;
+}
+
+.playbook .stage.open .stage-body {
+  display: block;
+}
+
+.playbook .s-blue .stage-num {
+  background: var(--pb-info-bg);
+  color: var(--pb-info-text);
+}
+
+.playbook .s-blue .stage-tag {
+  background: var(--pb-info-bg);
+  color: var(--pb-info-text);
+}
+
+.playbook .s-green .stage-num {
+  background: var(--pb-success-bg);
+  color: var(--pb-success-text);
+}
+
+.playbook .s-green .stage-tag {
+  background: var(--pb-success-bg);
+  color: var(--pb-success-text);
+}
+
+.playbook .s-amber .stage-num {
+  background: var(--pb-warning-bg);
+  color: var(--pb-warning-text);
+}
+
+.playbook .s-amber .stage-tag {
+  background: var(--pb-warning-bg);
+  color: var(--pb-warning-text);
+}
+
+.playbook .s-red .stage-num {
+  background: var(--pb-danger-bg);
+  color: var(--pb-danger-text);
+}
+
+.playbook .s-red .stage-tag {
+  background: var(--pb-danger-bg);
+  color: var(--pb-danger-text);
+}
+
+.playbook .divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+
+.playbook .task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.playbook .task-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.playbook .task-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.playbook .t-task {
+  background: var(--pb-warning-bg);
+  color: var(--pb-warning-text);
+}
+
+.playbook .t-msg {
+  background: var(--pb-info-bg);
+  color: var(--pb-info-text);
+}
+
+.playbook .t-alert {
+  background: var(--pb-danger-bg);
+  color: var(--pb-danger-text);
+}
+
+.playbook .t-ok {
+  background: var(--pb-success-bg);
+  color: var(--pb-success-text);
+}
+
+.playbook .task-text {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.playbook .task-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+.playbook .task-label {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  margin-right: 4px;
+  font-weight: 600;
+}
+
+.playbook .lbl-wpp {
+  background: rgba(46, 125, 50, 0.2);
+  color: #81c784;
+}
+
+.playbook .lbl-email {
+  background: rgba(21, 101, 192, 0.2);
+  color: #64b5f6;
+}
+
+.playbook .lbl-tel {
+  background: rgba(230, 81, 0, 0.2);
+  color: #ffb74d;
+}
+
+.playbook .lbl-crm {
+  background: rgba(106, 27, 154, 0.2);
+  color: #ce93d8;
+}
+
+.playbook .lbl-sys {
+  background: var(--bg-input);
+  color: var(--text-muted);
+}
+
+.playbook .msg-bubble {
+  background: var(--bg-input);
+  border-left: 3px solid var(--pb-info-text);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 14px;
+  margin: 8px 0;
+  font-size: 13px;
+  line-height: 1.6;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.playbook .msg-bubble:hover {
+  background: var(--bg-card);
+  border-left-color: var(--primary);
+}
+
+.playbook .msg-bubble.copied {
+  border-left-color: var(--success);
+  background: var(--pb-success-bg);
+}
+
+.playbook .msg-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.playbook .msg-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.playbook .month-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.playbook .month-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: var(--bg-card);
+}
+
+.playbook .month-num {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.playbook .month-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.playbook .month-tasks {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.playbook .month-special {
+  border-color: var(--pb-warning-border);
+}
+
+.playbook .month-special .month-num {
+  color: var(--pb-warning-text);
+}
+
+.playbook .month-renewal {
+  border-color: var(--pb-success-border);
+}
+
+.playbook .month-renewal .month-num {
+  color: var(--pb-success-text);
+}
+
+.playbook .pipeline {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+}
+
+.playbook .pip-stage {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.playbook .pip-box {
+  padding: 8px 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.playbook .pip-bar {
+  height: 4px;
+}
+
+.playbook .pip-count {
+  font-size: 18px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.playbook .pip-label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.playbook .arrow-right::after {
+  content: '›';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: var(--text-muted);
+  z-index: 1;
+}
+
+.playbook .section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 16px 0 8px;
+}
+
+.playbook .section-label:first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .playbook .month-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .playbook .pipeline {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .playbook .pip-stage {
+    flex: 1 1 30%;
+  }
+
+  .playbook .arrow-right::after {
+    display: none;
+  }
+
+  .playbook .tab {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .playbook .month-grid {
+    grid-template-columns: 1fr;
+  }
+}

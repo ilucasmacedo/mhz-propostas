@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MHZ — Nova Proposta Comercial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-logo">MHZ</div>
+          <div>
+            <strong>Propostas</strong>
+            <span>Gestão Solar</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <a class="nav-tab active" href="#" data-view="proposta">Nova proposta</a>
+          <a class="nav-tab" href="#" data-view="playbook">Playbook</a>
+          <a class="nav-tab" href="#" data-view="admin">Administração</a>
+          <a href="#" class="disabled">Histórico</a>
+          <a href="#" class="disabled">Clientes</a>
+        </nav>
+        <div class="sidebar-footer">
+          <p>Precificação v1.0</p>
+        </div>
+      </aside>
+
+      <main class="main">
+        <div id="view-proposta" class="view active">
+        <header class="page-header">
+          <div>
+            <h1>Nova Proposta Comercial</h1>
+            <p>Preencha os dados, escolha o plano e gere a proposta em PDF para o cliente.</p>
+          </div>
+          <div class="header-actions">
+            <span class="badge" id="badge-numero">Rascunho</span>
+          </div>
+        </header>
+
+        <form id="form-proposta" class="form-grid" novalidate>
+          <!-- Cliente -->
+          <section class="card">
+            <div class="card-header">
+              <h2>Cliente</h2>
+            </div>
+            <div class="fields">
+              <label class="field span-2">
+                <span>Nome completo / Razão social *</span>
+                <input type="text" id="cliente-nome" required placeholder="Ex: João Silva ou Empresa Solar Ltda" />
+              </label>
+              <label class="field">
+                <span>CPF / CNPJ</span>
+                <input type="text" id="cliente-documento" placeholder="000.000.000-00" />
+              </label>
+              <label class="field">
+                <span>E-mail</span>
+                <input type="email" id="cliente-email" placeholder="cliente@email.com" />
+              </label>
+              <label class="field">
+                <span>Telefone</span>
+                <input type="tel" id="cliente-telefone" placeholder="(00) 00000-0000" />
+              </label>
+            </div>
+          </section>
+
+          <!-- Usina -->
+          <section class="card">
+            <div class="card-header">
+              <h2>Usina</h2>
+            </div>
+            <div class="fields">
+              <label class="field">
+                <span>Potência (kWp) *</span>
+                <input type="number" id="usina-kwp" required min="0.1" max="500" step="0.01" value="8.5" />
+              </label>
+              <label class="field">
+                <span>Nº de placas</span>
+                <input type="number" id="usina-placas" min="1" step="1" value="16" />
+              </label>
+              <label class="field">
+                <span>Distância da base (km) *</span>
+                <input type="number" id="usina-distancia" required min="0" step="1" value="35" />
+              </label>
+              <label class="field span-2">
+                <span>Endereço da usina</span>
+                <input type="text" id="usina-endereco" placeholder="Rua, número — Cidade/UF" />
+              </label>
+              <label class="field">
+                <span>Valor do investimento (R$)</span>
+                <input type="number" id="usina-investimento" min="0" step="100" value="0" />
+              </label>
+              <label class="field">
+                <span>Valor do contrato p/ seguro (R$)</span>
+                <input type="number" id="usina-contrato" min="0" step="100" value="0" />
+              </label>
+            </div>
+          </section>
+
+          <!-- Planos -->
+          <section class="card span-full">
+            <div class="card-header">
+              <h2>Escolha o plano</h2>
+              <p class="hint">Opcional — selecione um plano ou escolha "Sem plano" para contratar só serviços avulsos. Desconto em avulsos vale para Padrão e Premium.</p>
+            </div>
+            <div id="planos-grid" class="planos-grid"></div>
+            <input type="hidden" id="plano-selecionado" value="NENHUM" />
+          </section>
+
+          <!-- Serviços opcionais -->
+          <section class="card span-full">
+            <div class="card-header">
+              <h2>Serviços adicionais</h2>
+              <p class="hint">Opcional — inclua serviços avulsos na proposta.</p>
+            </div>
+            <div id="servicos-grid" class="servicos-grid"></div>
+          </section>
+
+          <!-- Resumo -->
+          <section class="card resumo-card span-full">
+            <div class="card-header">
+              <h2>Resumo da proposta</h2>
+            </div>
+            <div id="alertas" class="alertas"></div>
+            <div id="resumo-conteudo" class="resumo-conteudo"></div>
+            <div class="resumo-actions">
+              <button type="button" id="btn-preview" class="btn btn-secondary">Visualizar proposta</button>
+              <button type="submit" id="btn-gerar" class="btn btn-primary">
+                Gerar proposta em PDF
+              </button>
+            </div>
+          </section>
+        </form>
+        </div>
+
+        <div id="view-playbook" class="view hidden">
+          <header class="page-header">
+            <div>
+              <h1>Playbook comercial + operacional</h1>
+              <p>Processo completo: do primeiro contato aos 12 meses de monitoramento.</p>
+            </div>
+          </header>
+          <div id="playbook-root"></div>
+        </div>
+
+        <div id="view-admin" class="view hidden">
+          <div id="admin-root"></div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modal preview -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Pré-visualização da proposta</h2>
+          <button type="button" id="btn-fechar-modal" class="btn-icon" aria-label="Fechar">×</button>
+        </div>
+        <div class="modal-body">
+          <div id="preview-container"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btn-fechar" class="btn btn-secondary">Fechar</button>
+          <button type="button" id="btn-baixar-pdf" class="btn btn-primary">Baixar PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
