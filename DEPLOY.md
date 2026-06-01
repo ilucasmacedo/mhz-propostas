@@ -1,29 +1,26 @@
-# Deploy via GitHub Pages
+# Deploy — GitHub Pages + Vercel
+
+O mesmo repositório pode publicar nos **dois** lugares. Cada push no `main` atualiza os dois (se estiverem conectados).
+
+| Onde | URL | Observação |
+|------|-----|------------|
+| **GitHub Pages** | `https://ilucasmacedo.github.io/mhz-propostas/` | Usa subpasta `/mhz-propostas/` (automático no Actions) |
+| **Vercel** | `https://mhz-propostas.vercel.app` (ou domínio próprio) | Build na raiz `/` — sem `BASE_PATH` |
+
+---
+
+## GitHub Pages
 
 O site é publicado automaticamente a cada push na branch `main` (ou `master`).
 
-## Configuração inicial (uma vez)
+### Configuração inicial (uma vez)
 
-1. Crie um repositório no GitHub (ex.: `mhz-propostas`).
-2. Envie o código:
-
-   ```bash
-   git init
-   git add .
-   git commit -m "Sistema de propostas MHZ"
-   git branch -M main
-   git remote add origin https://github.com/SEU_USUARIO/NOME_DO_REPO.git
-   git push -u origin main
-   ```
-
-3. No GitHub: **Settings → Pages → Build and deployment**
+1. Repositório: [github.com/ilucasmacedo/mhz-propostas](https://github.com/ilucasmacedo/mhz-propostas)
+2. No GitHub: **Settings → Pages → Build and deployment**
    - Source: **GitHub Actions**
-4. O workflow `.github/workflows/deploy.yml` roda sozinho no primeiro push.
-5. URL do site: `https://SEU_USUARIO.github.io/NOME_DO_REPO/`
+3. O workflow `.github/workflows/deploy.yml` roda sozinho a cada push.
 
-## Atualizar o site
-
-Basta commitar e dar push — o deploy roda automaticamente.
+### Atualizar
 
 ```bash
 git add .
@@ -33,12 +30,41 @@ git push
 
 Acompanhe em **Actions** no GitHub.
 
+---
+
+## Vercel
+
+### Configuração inicial (uma vez)
+
+1. Acesse [vercel.com](https://vercel.com) e entre com a conta GitHub.
+2. **Add New → Project** → importe `ilucasmacedo/mhz-propostas`.
+3. Deixe as opções padrão (Vite detectado automaticamente):
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+   - **Não** defina `BASE_PATH` — na Vercel o site roda na raiz.
+4. Clique em **Deploy**.
+
+Pronto. Cada `git push` no `main` dispara deploy na Vercel e no GitHub Pages.
+
+### Deploy manual (opcional)
+
+Com a [CLI da Vercel](https://vercel.com/docs/cli) instalada:
+
+```bash
+npm i -g vercel
+vercel --prod
+```
+
+---
+
 ## URLs úteis
 
 | Página | Caminho |
 |--------|---------|
-| Propostas + Admin | `/` (index) |
+| Propostas + Admin | `/` |
 | CRM (fórmulas) | `/crm-painel.html` |
+
+---
 
 ## Desenvolvimento local
 
@@ -47,19 +73,26 @@ npm install
 npm run dev
 ```
 
-## Simular build de produção (com subpasta do GitHub Pages)
+## Simular build do GitHub Pages (com subpasta)
 
-No PowerShell, substitua `NOME_DO_REPO` pelo nome real do repositório:
+No PowerShell:
 
 ```powershell
-$env:BASE_PATH="/NOME_DO_REPO/"
+$env:BASE_PATH="/mhz-propostas/"
 npm run build
 npm run preview
 ```
 
+Na Vercel, use `npm run build` sem `BASE_PATH`.
+
+---
+
 ## Domínio próprio (opcional)
 
-Em **Settings → Pages → Custom domain**, configure o domínio e altere o workflow para usar `BASE_PATH: /` em vez de `/${{ github.event.repository.name }}/`.
+- **GitHub Pages:** Settings → Pages → Custom domain (e altere o workflow para `BASE_PATH: /`).
+- **Vercel:** Project → Settings → Domains.
+
+---
 
 ## Config do admin no servidor
 
