@@ -1,12 +1,9 @@
-import { gronerApiHeaders } from './groner-api.js';
-
 const API_BASE = import.meta.env.VITE_API_BASE || '';
 
 async function enviarPdfGroner({ projetoId, pdfBlob, nomeArquivo }) {
   const res = await fetch(`${API_BASE}/api/groner/upload-pdf`, {
     method: 'POST',
     headers: {
-      ...gronerApiHeaders(),
       'Content-Type': 'application/pdf',
       'X-Projeto-Id': String(projetoId),
       'X-Nome-Arquivo': encodeURIComponent(nomeArquivo || 'proposta.pdf'),
@@ -33,10 +30,7 @@ export async function sincronizarDescricaoPropostaGroner({
 }) {
   const res = await fetch(`${API_BASE}/api/groner/sincronizar-proposta`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...gronerApiHeaders(),
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ projetoId, proposta, meta }),
   });
 

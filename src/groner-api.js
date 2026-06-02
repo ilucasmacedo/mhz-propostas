@@ -1,11 +1,4 @@
 const API_BASE = import.meta.env.VITE_API_BASE || '';
-const API_KEY = import.meta.env.VITE_MHZ_API_KEY || '';
-
-export function gronerApiHeaders(extra = {}) {
-  const headers = { ...extra };
-  if (API_KEY) headers['X-MHZ-Key'] = API_KEY;
-  return headers;
-}
 
 export async function gronerApiFetch(path, { method = 'POST', json, body, headers = {} } = {}) {
   const url = path.startsWith('http') ? path : `${API_BASE}${path}`;
@@ -13,7 +6,7 @@ export async function gronerApiFetch(path, { method = 'POST', json, body, header
     method,
     headers: {
       ...(json != null ? { 'Content-Type': 'application/json' } : {}),
-      ...gronerApiHeaders(headers),
+      ...headers,
     },
     body: json != null ? JSON.stringify(json) : body,
   });
