@@ -82,12 +82,21 @@ export function initGronerBusca({
     try {
       const res = await fetch(`${API_BASE}/api/groner/status`);
       const data = await res.json();
-      configurado = Boolean(data.configurado);
+      configurado = Boolean(data.configurado && data.tenantOk && data.conexao?.ok);
       if (statusEl) {
-        statusEl.textContent = configurado
-          ? 'Groner conectada — busca Lead + Projetos'
-          : 'Groner: configure GRONER_TENANT e GRONER_TOKEN na Vercel';
-        statusEl.dataset.state = configurado ? 'ok' : 'warn';
+        if (!data.configurado) {
+          statusEl.textContent = 'Groner: configure GRONER_TENANT e GRONER_TOKEN na Vercel';
+          statusEl.dataset.state = 'warn';
+        } else if (!data.tenantOk) {
+          statusEl.textContent = data.tenantHint || 'GRONER_TENANT incorreto (use mhzenergiasolar)';
+          statusEl.dataset.state = 'err';
+        } else if (data.conexao && !data.conexao.ok) {
+          statusEl.textContent = data.conexao.message || 'Falha na conexão Groner';
+          statusEl.dataset.state = 'err';
+        } else {
+          statusEl.textContent = 'Groner conectada — busca Lead + Projetos';
+          statusEl.dataset.state = 'ok';
+        }
       }
       const disabled = !configurado;
       if (btnBuscar) btnBuscar.disabled = disabled;
