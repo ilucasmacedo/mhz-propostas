@@ -18,7 +18,7 @@ Copie o `accessToken` retornado.
 
 | Variável | Onde | Descrição |
 |----------|------|-----------|
-| `GRONER_TENANT` | `.env` / Vercel | Subdomínio da empresa (ex.: `mhz`) |
+| `GRONER_TENANT` | `.env` / Vercel | Subdomínio da empresa (ex.: `mhzenergiasolar`) |
 | `GRONER_TOKEN` | `.env` / Vercel | JWT Bearer — **somente no servidor** |
 
 ```powershell
@@ -71,7 +71,10 @@ O botão **Buscar na Groner** no card Cliente usa os mesmos campos já preenchid
 | CPF / CNPJ | `GET /api/Lead/VerificarDocumento/{documento}` |
 | E-mail | `GET /api/Lead/Verificar/{email}` |
 | Telefone | `GET /api/Lead/VerificarCelular/{celular}/55` |
-| Nome | `GET /api/Lead?query={nome}` |
+| Nome do Lead | `GET /api/Lead?query={nome}` |
+| Nome do Projeto | `GET /api/Projeto/Pesquisar?query={nome}&criterio=Todos&ordenarPor=DataCadastro_DESC&pageSize=20` |
+
+O tenant da MHZ é **`mhzenergiasolar`** (URL: `https://mhzenergiasolar.groner.app`).
 
 Ao carregar: `GET /api/Lead/{id}` + `GET /api/Projeto/{id}`.
 
