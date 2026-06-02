@@ -1156,6 +1156,16 @@ body {
   font-family: inherit;
 }
 
+.groner-projeto-pick .groner-carregar-btn {
+  margin-top: 0.35rem;
+  width: 100%;
+}
+
+.groner-carregar-btn.loading {
+  opacity: 0.65;
+  pointer-events: none;
+}
+
 .groner-sem-projeto {
   font-size: 0.82rem;
   color: var(--text-muted);

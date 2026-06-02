@@ -113,9 +113,18 @@ export function initGronerBusca({
     }
   }
 
+  function limparResultadosBusca() {
+    clearTimeout(debounceTimer);
+    debounceTimer = null;
+    for (const el of [sugestoesEntrada, resultadosEl]) {
+      if (!el) continue;
+      el.innerHTML = '';
+      el.classList.add('hidden');
+    }
+  }
+
   function fecharSugestoes() {
-    sugestoesEntrada?.classList.add('hidden');
-    resultadosEl?.classList.add('hidden');
+    limparResultadosBusca();
   }
 
   function renderLista(leads, container, { compacto = false } = {}) {
@@ -135,24 +144,22 @@ export function initGronerBusca({
           .map((lead) => {
             const projetosHtml =
               lead.projetos?.length > 0
-                ? `<ul class="groner-projetos">
-                    ${lead.projetos
-                      .map(
-                        (p) => `
-                      <li>
-                        <button
-                          type="button"
-                          class="groner-projeto-btn"
-                          data-lead-id="${lead.id}"
-                          data-projeto-id="${p.id}"
-                        >
-                          <span class="groner-projeto-nome">${esc(p.nome)}</span>
-                          ${p.consumo ? `<span class="groner-projeto-meta">${p.consumo} kWh</span>` : ''}
-                        </button>
-                      </li>`,
-                      )
-                      .join('')}
-                  </ul>`
+                ? `<div class="groner-projeto-pick">
+                    <span>Negócio (Projeto)</span>
+                    <select class="groner-projeto-select" data-lead-id="${lead.id}">
+                      ${lead.projetos
+                        .map(
+                          (p) =>
+                            `<option value="${p.id}">${esc(p.nome)}${p.consumo ? ` (${p.consumo} kWh)` : ''}</option>`,
+                        )
+                        .join('')}
+                    </select>
+                    <button
+                      type="button"
+                      class="btn btn-primary groner-carregar-btn"
+                      data-lead-id="${lead.id}"
+                    >Carregar dados</button>
+                  </div>`
                 : '<p class="groner-sem-projeto">Nenhum negócio (projeto) vinculado a este lead.</p>';
 
             return `
@@ -172,17 +179,26 @@ export function initGronerBusca({
           .join('')}
       </ul>`;
 
-    container.querySelectorAll('.groner-projeto-btn').forEach((btn) => {
-      btn.addEventListener('click', () =>
-        carregarProjeto(Number(btn.dataset.leadId), Number(btn.dataset.projetoId), btn),
-      );
+    container.querySelectorAll('.groner-carregar-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const leadId = Number(btn.dataset.leadId);
+        const card = btn.closest('.groner-item');
+        const select = card?.querySelector('.groner-projeto-select');
+        const projetoId = Number(select?.value);
+        if (!leadId || !projetoId) return;
+        carregarProjeto(leadId, projetoId, btn);
+      });
     });
 
     container.classList.remove('hidden');
   }
 
   async function carregarProjeto(leadId, projetoId, btn) {
-    const label = btn?.querySelector('.groner-projeto-nome')?.textContent ?? 'projeto';
+    const card = btn?.closest('.groner-item');
+    const select = card?.querySelector('.groner-projeto-select');
+    const label = select?.selectedOptions?.[0]?.textContent?.trim() ?? 'projeto';
+
+    limparResultadosBusca();
 
     if (btn) {
       btn.disabled = true;
@@ -193,7 +209,6 @@ export function initGronerBusca({
       const data = await apiPost('/api/groner/carregar-contato', { leadId, projetoId });
       aplicarFormularioGroner(data);
       onAplicado?.(data);
-      fecharSugestoes();
 
       const lead = data.lead;
       if (inputEntrada && lead?.nome) {
