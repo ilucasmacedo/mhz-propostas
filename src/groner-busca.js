@@ -1,6 +1,5 @@
 import gronerConfig from '../config/groner-integracao.json';
-
-const API_BASE = import.meta.env.VITE_API_BASE || '';
+import { gronerApiFetch } from './groner-api.js';
 const DEBOUNCE_MS = 450;
 const MIN_BUSCA = 3;
 
@@ -27,16 +26,7 @@ function esc(text) {
 }
 
 async function apiPost(path, body) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  const data = await res.json();
-  if (!res.ok || !data.ok) {
-    throw new Error(data.erro || 'Falha na comunicação com a Groner.');
-  }
-  return data;
+  return gronerApiFetch(path, { json: body });
 }
 
 export function ocultarLinkNegocioGroner() {
@@ -132,8 +122,7 @@ export function initGronerBusca({
 
   async function checarStatus() {
     try {
-      const res = await fetch(`${API_BASE}/api/groner/status`);
-      const data = await res.json();
+      const data = await gronerApiFetch('/api/groner/status', { method: 'GET' });
       configurado = Boolean(data.configurado && data.tenantOk && data.conexao?.ok);
       if (statusEl) {
         if (!data.configurado) {

@@ -6,6 +6,7 @@ import { handleSincronizarProposta } from '../lib/groner/handlers/sincronizar-pr
 import { handleUploadPdf } from '../lib/groner/handlers/upload-pdf.js';
 import { handleGarantirContatoProposta } from '../lib/groner/handlers/garantir-contato.js';
 import { handleCriarProjetoLead } from '../lib/groner/handlers/criar-projeto-lead.js';
+import { handleGronerDiagnostico } from '../lib/groner/handlers/diagnostico.js';
 
 config();
 
@@ -46,6 +47,11 @@ const server = http.createServer(async (req, res) => {
 
   if (pathname === '/api/groner/upload-pdf') {
     await handleUploadPdf(req, res);
+    return;
+  }
+
+  if (pathname === '/api/groner/diagnostico') {
+    await handleGronerDiagnostico(req, res);
     return;
   }
 
