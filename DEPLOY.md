@@ -68,7 +68,7 @@ vercel --prod
 
 ## Escalar para outro cliente (novo tenant Groner)
 
-Pasta base em **`template/`** + script de cópia:
+Pasta base em **`cliente-base/`** (só configs padrão) + script de cópia:
 
 ```bash
 npm run novo-cliente -- \
@@ -82,7 +82,7 @@ npm run novo-cliente -- \
 
 Depois: edite `config/groner-integracao.json`, `config/precificacao.json`, `.env` e faça deploy em **repositório + Vercel separados**.
 
-Guia completo: [`template/README.md`](template/README.md) · Checklist: [`template/CHECKLIST-NOVO-CLIENTE.md`](template/CHECKLIST-NOVO-CLIENTE.md)
+Guia: [`cliente-base/LEIA-ME.md`](cliente-base/LEIA-ME.md) · Checklist: [`cliente-base/CHECKLIST.md`](cliente-base/CHECKLIST.md)
 
 Cada cliente usa **`config/cliente.json`** (marca, textos) — a MHZ já está configurada nesse arquivo.
 

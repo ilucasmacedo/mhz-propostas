@@ -17,6 +17,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
+const CLIENTE_BASE = path.join(ROOT, 'cliente-base');
 
 const IGNORE = new Set([
   'node_modules',
@@ -66,8 +67,8 @@ function copyDir(src, dest, rel = '') {
   }
 }
 
-function loadJsonExample(file) {
-  return JSON.parse(fs.readFileSync(path.join(ROOT, 'template/config', file), 'utf8'));
+function loadTemplateJson(name) {
+  return JSON.parse(fs.readFileSync(path.join(CLIENTE_BASE, 'config', name), 'utf8'));
 }
 
 function writeJson(file, data) {
@@ -106,7 +107,7 @@ Uso:
   console.log(`Copiando projeto para ${dest}...`);
   copyDir(ROOT, dest);
 
-  const cliente = loadJsonExample('cliente.json.example');
+  const cliente = loadTemplateJson('cliente.json');
   cliente.id = id;
   cliente.nome = nome;
   cliente.nomeCurto = nomeCurto;
@@ -121,15 +122,15 @@ Uso:
 
   writeJson(path.join(dest, 'config/cliente.json'), cliente);
 
-  const groner = loadJsonExample('groner-integracao.json.example');
+  const groner = loadTemplateJson('groner-integracao.json');
   groner.tenant = tenant;
   writeJson(path.join(dest, 'config/groner-integracao.json'), groner);
 
-  const precificacao = loadJsonExample('precificacao.json.example');
+  const precificacao = loadTemplateJson('precificacao.json');
   precificacao.meta.descricao = `Precificação ${nomeCurto}`;
   writeJson(path.join(dest, 'config/precificacao.json'), precificacao);
 
-  const envExample = fs.readFileSync(path.join(ROOT, 'template/.env.example'), 'utf8');
+  const envExample = fs.readFileSync(path.join(CLIENTE_BASE, '.env.example'), 'utf8');
   fs.writeFileSync(
     path.join(dest, '.env.example'),
     envExample.replace(/SUBSTITUA_TENANT_GRONER/g, tenant),
@@ -152,7 +153,7 @@ Próximos passos:
   5. npm install && npm run dev:all
   6. git init && repositório + Vercel separados para este cliente
 
-Veja template/CHECKLIST-NOVO-CLIENTE.md
+Veja cliente-base/CHECKLIST.md
 `);
 }
 
