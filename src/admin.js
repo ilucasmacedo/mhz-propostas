@@ -1,3 +1,4 @@
+import { CLIENTE } from './cliente-config.js';
 import {
   cloneConfig,
   downloadConfigJson,
@@ -327,7 +328,7 @@ export function mountAdmin(root) {
 
     root.querySelector('#adm-export')?.addEventListener('click', () => {
       syncDraftFromDom();
-      downloadConfigJson(draft, `precificacao-mhz-${Date.now()}.json`);
+      downloadConfigJson(draft, `precificacao-${CLIENTE.id || 'cliente'}-${Date.now()}.json`);
       toast('JSON exportado.');
     });
 

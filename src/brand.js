@@ -1,3 +1,1 @@
-/** Logo oficial Grupo MHZ */
-export const MHZ_LOGO_URL =
-  'https://arquivos-groner.s3.us-east-2.amazonaws.com/safeleadsfiles/mhzenergiasolar/1_37ca.png';
+export { LOGO_URL as MHZ_LOGO_URL, LOGO_URL, LOGO_ALT } from './cliente-config.js';

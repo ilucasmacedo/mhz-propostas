@@ -1,5 +1,5 @@
 import html2pdf from 'html2pdf.js';
-import { MHZ_LOGO_URL } from './brand.js';
+import { LOGO_URL, LOGO_ALT, getRodapePdf, getVendedorPadrao, getNomeCurto } from './cliente-config.js';
 
 const PDF_RENDER_ID = 'pdf-render-host';
 
@@ -126,7 +126,7 @@ export function montarHtmlProposta(dados) {
     <div class="pdf-proposta">
       <header class="pdf-header">
         <div class="pdf-brand">
-          <img class="pdf-logo-img" src="${MHZ_LOGO_URL}" alt="Grupo MHZ" crossorigin="anonymous" />
+          <img class="pdf-logo-img" src="${LOGO_URL}" alt="${LOGO_ALT}" crossorigin="anonymous" />
           <div>
             <h1>Proposta Comercial</h1>
             <p>Monitoramento e Gestão Solar</p>
@@ -211,8 +211,8 @@ export function montarHtmlProposta(dados) {
       </section>
 
       <footer class="pdf-footer">
-        <p>Vendedor: ${vendedor || 'Equipe Comercial MHZ'}</p>
-        <p>mhzenergia.com.br · contato@mhzenergia.com.br</p>
+        <p>Vendedor: ${vendedor || getVendedorPadrao()}</p>
+        <p>${getRodapePdf()}</p>
       </footer>
     </div>
   `;

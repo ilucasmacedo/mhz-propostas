@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'mhz-precificacao-v1';
+import { getEventoConfigAtualizada, getStorageKeyPrecificacao } from './cliente-config.js';
 
 export function cloneConfig(config) {
   return JSON.parse(JSON.stringify(config));
@@ -6,7 +6,7 @@ export function cloneConfig(config) {
 
 export function loadStoredConfig(defaultConfig) {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(getStorageKeyPrecificacao());
     if (raw) return JSON.parse(raw);
   } catch {
     /* usa padrão */
@@ -15,15 +15,15 @@ export function loadStoredConfig(defaultConfig) {
 }
 
 export function saveStoredConfig(config) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+  localStorage.setItem(getStorageKeyPrecificacao(), JSON.stringify(config));
 }
 
 export function clearStoredConfig() {
-  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(getStorageKeyPrecificacao());
 }
 
 export function hasStoredConfig() {
-  return Boolean(localStorage.getItem(STORAGE_KEY));
+  return Boolean(localStorage.getItem(getStorageKeyPrecificacao()));
 }
 
 export function downloadConfigJson(config, filename = 'precificacao.json') {
@@ -51,7 +51,7 @@ export function readConfigFile(file) {
   });
 }
 
-export const CONFIG_UPDATED_EVENT = 'mhz-config-updated';
+export const CONFIG_UPDATED_EVENT = getEventoConfigAtualizada();
 
 export function notifyConfigUpdated() {
   window.dispatchEvent(new CustomEvent(CONFIG_UPDATED_EVENT));

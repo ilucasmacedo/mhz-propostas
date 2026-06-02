@@ -1,0 +1,31 @@
+{
+  "id": "mhz",
+  "nome": "Grupo MHZ",
+  "nomeCurto": "MHZ",
+  "slug": "mhz-propostas",
+  "produto": {
+    "tituloSidebar": "Propostas",
+    "subtituloSidebar": "Gestão Solar",
+    "sistemaNome": "MHZ Propostas"
+  },
+  "marca": {
+    "logoUrl": "https://arquivos-groner.s3.us-east-2.amazonaws.com/safeleadsfiles/mhzenergiasolar/1_37ca.png",
+    "logoAlt": "Grupo MHZ",
+    "site": "mhzenergia.com.br",
+    "email": "contato@mhzenergia.com.br",
+    "vendedorPadrao": "Equipe Comercial MHZ"
+  },
+  "ui": {
+    "tituloProposta": "Nova Proposta Comercial",
+    "tituloPlaybook": "Playbook Comercial + Operacional",
+    "tituloAdmin": "Administração"
+  },
+  "localStorage": {
+    "precificacaoKey": "mhz-precificacao-v1",
+    "eventoConfig": "mhz-config-updated"
+  },
+  "groner": {
+    "notaCadastroLead": "Cadastro automático — MHZ Propostas (Pré-venda)",
+    "notaProjetoPrefixo": "Proposta MHZ"
+  }
+}

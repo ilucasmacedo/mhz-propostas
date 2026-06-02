@@ -1,0 +1,31 @@
+{
+  "id": "SUBSTITUA_ID",
+  "nome": "Nome Completo da Empresa",
+  "nomeCurto": "SIGLA",
+  "slug": "sigla-propostas",
+  "produto": {
+    "tituloSidebar": "Propostas",
+    "subtituloSidebar": "Gestão Solar",
+    "sistemaNome": "SIGLA Propostas"
+  },
+  "marca": {
+    "logoUrl": "https://url-da-logo.png",
+    "logoAlt": "Nome da Empresa",
+    "site": "empresa.com.br",
+    "email": "contato@empresa.com.br",
+    "vendedorPadrao": "Equipe Comercial SIGLA"
+  },
+  "ui": {
+    "tituloProposta": "Nova Proposta Comercial",
+    "tituloPlaybook": "Playbook Comercial + Operacional",
+    "tituloAdmin": "Administração"
+  },
+  "localStorage": {
+    "precificacaoKey": "SUBSTITUA_ID-precificacao-v1",
+    "eventoConfig": "SUBSTITUA_ID-config-updated"
+  },
+  "groner": {
+    "notaCadastroLead": "Cadastro automático — SIGLA Propostas (Pré-venda)",
+    "notaProjetoPrefixo": "Proposta SIGLA"
+  }
+}

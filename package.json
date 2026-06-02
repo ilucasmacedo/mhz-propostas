@@ -9,6 +9,7 @@
     "dev:all": "npx concurrently -n api,web -c blue,green \"npm run dev:api\" \"npm run dev\"",
     "test:groner": "node scripts/test-groner-busca.mjs",
     "groner:funil-pos-vendas": "node scripts/groner-criar-funil-pos-vendas.mjs",
+    "novo-cliente": "node scripts/criar-projeto-cliente.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },

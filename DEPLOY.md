@@ -66,6 +66,28 @@ vercel --prod
 
 ---
 
+## Escalar para outro cliente (novo tenant Groner)
+
+Pasta base em **`template/`** + script de cópia:
+
+```bash
+npm run novo-cliente -- \
+  --dest "../OutroCliente/sistema" \
+  --id acme \
+  --nome "ACME Energia Solar" \
+  --nome-curto ACME \
+  --tenant acmeenergiasolar \
+  --slug acme-propostas
+```
+
+Depois: edite `config/groner-integracao.json`, `config/precificacao.json`, `.env` e faça deploy em **repositório + Vercel separados**.
+
+Guia completo: [`template/README.md`](template/README.md) · Checklist: [`template/CHECKLIST-NOVO-CLIENTE.md`](template/CHECKLIST-NOVO-CLIENTE.md)
+
+Cada cliente usa **`config/cliente.json`** (marca, textos) — a MHZ já está configurada nesse arquivo.
+
+---
+
 ## Desenvolvimento local
 
 ```bash

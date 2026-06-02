@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "versao": "1.0",
+    "descricao": "Precificação starter — ajuste planos, faixas e serviços por cliente",
+    "unidade_moeda": "BRL"
+  },
+  "constantes": {
+    "sem_plano": "NENHUM",
+    "validade_proposta_dias": 15,
+    "percentual_investimento_padrao": 4.5,
+    "raio_base_km": 50,
+    "kwp_maximo_automatico": 50,
+    "kwp_maximo_formulario": 500,
+    "distancia_maxima_automatica": 600,
+    "casas_decimais_moeda": 2,
+    "numero_proposta_seq_min": 1000,
+    "numero_proposta_seq_max": 9999
+  },
+  "limites": [
+    {
+      "codigo": "KWP_ACIMA_MAX",
+      "condicao": "kwp > 50",
+      "valor_limite": 50,
+      "efeito": "Mensalidade sob consulta",
+      "bloqueia_calculo": true
+    }
+  ],
+  "planos": {
+    "BASICO": {
+      "codigo": "BASICO",
+      "nome": "Plano Básico",
+      "tagline": "Monitoramento essencial",
+      "desconto_avulso": false,
+      "coberturas": ["Monitoramento online", "App do cliente"]
+    },
+    "COMPLETO": {
+      "codigo": "COMPLETO",
+      "nome": "Plano Completo",
+      "tagline": "Gestão completa",
+      "desconto_avulso": true,
+      "coberturas": ["Monitoramento", "Suporte", "Desconto em serviços avulsos"]
+    }
+  },
+  "faixas_kwp": [
+    {
+      "kwp_min": 0,
+      "kwp_max": 10,
+      "precos": { "BASICO": 19.9, "COMPLETO": 59.9 },
+      "sob_consulta": false
+    },
+    {
+      "kwp_min": 10,
+      "kwp_max": 20,
+      "precos": { "BASICO": 29.9, "COMPLETO": 89.9 },
+      "sob_consulta": false
+    },
+    {
+      "kwp_min": 20,
+      "kwp_max": null,
+      "precos": null,
+      "sob_consulta": true
+    }
+  ],
+  "faixas_deslocamento": [
+    { "km_min": 0, "km_max": 50, "taxa_por_km": 0 },
+    { "km_min": 50, "km_max": 200, "taxa_por_km": 2.4 },
+    { "km_min": 200, "km_max": null, "taxa_por_km": 3.2 }
+  ],
+  "servicos_avulsos": [
+    {
+      "codigo": "LIMPEZA",
+      "descricao": "Limpeza de placas",
+      "fora_plano": 180,
+      "com_plano": 150,
+      "tipo_calculo": "FIXO",
+      "presencial": true
+    },
+    {
+      "codigo": "VISITA_TECNICA",
+      "descricao": "Visita técnica",
+      "fora_plano": 350,
+      "com_plano": 300,
+      "tipo_calculo": "FIXO",
+      "presencial": true
+    }
+  ],
+  "formulas": []
+}

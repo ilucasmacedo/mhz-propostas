@@ -1,0 +1,22 @@
+{
+  "tenant": "SUBSTITUA_TENANT_GRONER",
+  "origemId": null,
+  "tipoProjetoId": null,
+  "preVenda": {
+    "origemId": 0,
+    "tipoProjetoId": 0,
+    "notas": "Preencha origem e tipo Pré-venda do CRM deste cliente"
+  },
+  "abaDinamicaId": 2,
+  "camposPersonalizados": {
+    "kwp": 0,
+    "qtdPlacas": 0,
+    "pdfProposta": 0,
+    "descricaoProposta": 0,
+    "valorTotalProposta": 0,
+    "valorTotalSistema": 0,
+    "plano": 0,
+    "mensalidade": 0
+  },
+  "notas": "Substitua os IDs pelos campos personalizados do negócio na Groner deste tenant"
+}

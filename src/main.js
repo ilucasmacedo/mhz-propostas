@@ -21,6 +21,7 @@ import { sincronizarDescricaoPropostaGroner } from './groner-sync.js';
 import { garantirContatoPropostaGroner } from './groner-garantir-contato.js';
 import { criarProjetoLeadGroner } from './groner-criar-projeto.js';
 import { MHZ_LOGO_URL } from './brand.js';
+import { tituloPagina, getVendedorPadrao, CLIENTE, LOGO_ALT } from './cliente-config.js';
 
 const getValidadeDias = () => CONFIG_PRECIFICACAO.constantes.validade_proposta_dias;
 
@@ -52,9 +53,9 @@ const els = {
 };
 
 const VIEW_TITLES = {
-  proposta: 'MHZ — Nova Proposta Comercial',
-  playbook: 'MHZ — Playbook Comercial + Operacional',
-  admin: 'MHZ — Administração',
+  proposta: tituloPagina('proposta'),
+  playbook: tituloPagina('playbook'),
+  admin: tituloPagina('admin'),
 };
 
 function switchView(view) {
@@ -291,7 +292,7 @@ function montarDadosProposta() {
       faixa: planoInfo.faixa,
     },
     resultado,
-    vendedor: 'Equipe Comercial MHZ',
+    vendedor: getVendedorPadrao(),
   };
 }
 
@@ -542,7 +543,19 @@ function init() {
   const brandLogo = document.querySelector('.brand-logo-img');
   if (brandLogo) {
     brandLogo.src = MHZ_LOGO_URL;
+    brandLogo.alt = LOGO_ALT;
   }
+
+  const brandStrong = document.querySelector('.brand strong');
+  const brandSpan = document.querySelector('.brand span');
+  if (brandStrong && CLIENTE.produto?.tituloSidebar) {
+    brandStrong.textContent = CLIENTE.produto.tituloSidebar;
+  }
+  if (brandSpan && CLIENTE.produto?.subtituloSidebar) {
+    brandSpan.textContent = CLIENTE.produto.subtituloSidebar;
+  }
+
+  document.title = tituloPagina('proposta');
 
   mountPlaybook(els.playbookRoot);
   mountAdmin(els.adminRoot);

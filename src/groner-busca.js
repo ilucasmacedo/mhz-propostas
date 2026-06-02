@@ -6,7 +6,7 @@ const MIN_BUSCA = 3;
 export function montarUrlNegocioGroner(projetoId) {
   const pid = Number(projetoId);
   if (!pid) return null;
-  const tenant = gronerConfig.tenant || 'mhzenergiasolar';
+  const tenant = gronerConfig.tenant;
   const aba = gronerConfig.abaDinamicaId ?? 2;
   return `https://${tenant}.groner.app/negocio/${pid}/aba/${aba}`;
 }
@@ -129,7 +129,7 @@ export function initGronerBusca({
           statusEl.textContent = 'Groner: configure GRONER_TENANT e GRONER_TOKEN na Vercel';
           statusEl.dataset.state = 'warn';
         } else if (!data.tenantOk) {
-          statusEl.textContent = data.tenantHint || 'GRONER_TENANT incorreto (use mhzenergiasolar)';
+          statusEl.textContent = data.tenantHint || `GRONER_TENANT incorreto (use ${gronerConfig.tenant})`;
           statusEl.dataset.state = 'err';
         } else if (data.conexao && !data.conexao.ok) {
           statusEl.textContent = data.conexao.message || 'Falha na conexão Groner';
