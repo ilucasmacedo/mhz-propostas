@@ -194,16 +194,16 @@ Em `config/groner-integracao.json`:
 
 ```json
 "preVenda": {
-  "origemId": 123,
-  "tipoProjetoId": 456
+  "origemId": 57,
+  "tipoProjetoId": 223
 }
 ```
 
 Ou no `.env` / Vercel:
 
 ```
-GRONER_ORIGEM_PRE_VENDA_ID=123
-GRONER_TIPO_PROJETO_PRE_VENDA_ID=456
+GRONER_ORIGEM_PRE_VENDA_ID=57
+GRONER_TIPO_PROJETO_PRE_VENDA_ID=223
 ```
 
 ### Endpoint MHZ
