@@ -1,4 +1,5 @@
 import html2pdf from 'html2pdf.js';
+import { MHZ_LOGO_URL } from './brand.js';
 
 const PDF_RENDER_ID = 'pdf-render-host';
 
@@ -28,7 +29,27 @@ async function aguardarRender() {
   });
 }
 
-export async function exportarPropostaPdf(elemento, nomeArquivo) {
+function pdfOptions(nomeArquivo) {
+  return {
+    margin: [10, 10, 10, 10],
+    filename: nomeArquivo,
+    image: { type: 'jpeg', quality: 0.92 },
+    html2canvas: {
+      scale: 1.5,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      scrollX: 0,
+      scrollY: 0,
+      width: 794,
+      logging: false,
+    },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['css', 'legacy'] },
+  };
+}
+
+/** Gera PDF em memória (para enviar à Groner) */
+export async function gerarPropostaPdfBlob(elemento) {
   if (!elemento) {
     throw new Error('Elemento da proposta não encontrado.');
   }
@@ -47,28 +68,21 @@ export async function exportarPropostaPdf(elemento, nomeArquivo) {
     throw new Error('Biblioteca de PDF indisponível.');
   }
 
-  const opt = {
-    margin: [10, 10, 10, 10],
-    filename: nomeArquivo,
-    image: { type: 'jpeg', quality: 0.92 },
-    html2canvas: {
-      scale: 1.5,
-      useCORS: true,
-      backgroundColor: '#ffffff',
-      scrollX: 0,
-      scrollY: 0,
-      width: 794,
-      logging: false,
-    },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['css', 'legacy'] },
-  };
-
   try {
-    await gerarPdf().set(opt).from(clone).save();
+    return await gerarPdf().set(pdfOptions('proposta.pdf')).from(clone).outputPdf('blob');
   } finally {
     host.innerHTML = '';
   }
+}
+
+export async function exportarPropostaPdf(elemento, nomeArquivo) {
+  const blob = await gerarPropostaPdfBlob(elemento);
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = nomeArquivo;
+  link.click();
+  URL.revokeObjectURL(url);
 }
 
 export function montarHtmlProposta(dados) {
@@ -112,7 +126,7 @@ export function montarHtmlProposta(dados) {
     <div class="pdf-proposta">
       <header class="pdf-header">
         <div class="pdf-brand">
-          <div class="pdf-logo">MHZ</div>
+          <img class="pdf-logo-img" src="${MHZ_LOGO_URL}" alt="Grupo MHZ" crossorigin="anonymous" />
           <div>
             <h1>Proposta Comercial</h1>
             <p>Monitoramento e Gestão Solar</p>

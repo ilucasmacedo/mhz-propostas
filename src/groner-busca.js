@@ -29,6 +29,25 @@ async function apiPost(path, body) {
   return data;
 }
 
+export function ocultarLinkNegocioGroner() {
+  const el = document.getElementById('groner-link-negocio');
+  if (el) {
+    el.innerHTML = '';
+    el.classList.add('hidden');
+  }
+}
+
+export function mostrarLinkNegocioGroner(url, projetoId) {
+  const el = document.getElementById('groner-link-negocio');
+  if (!el || !url) return;
+
+  el.innerHTML = `
+    <a href="${url}" target="_blank" rel="noopener noreferrer" class="groner-link-btn">
+      Abrir negócio #${projetoId} na Groner (aba 2)
+    </a>`;
+  el.classList.remove('hidden');
+}
+
 export function aplicarFormularioGroner(payload) {
   const { cliente, usina, groner } = payload.formulario ?? payload;
 
@@ -53,7 +72,11 @@ export function aplicarFormularioGroner(payload) {
   if (groner) {
     set('groner-lead-id', groner.leadId);
     set('groner-projeto-id', groner.projetoId ?? '');
+    set('groner-preco-simulacao', groner.precoSimulacao ?? '');
+    set('groner-qtd-placas-projeto', groner.qtdPlacasProjeto ?? '');
   }
+
+  ocultarLinkNegocioGroner();
 
   const badge = document.getElementById('badge-groner');
   if (badge && groner) {

@@ -12,11 +12,13 @@ import {
   formatarMoeda,
   gerarNumeroProposta,
 } from './pricing.js';
-import { exportarPropostaPdf, montarHtmlProposta } from './pdf.js';
+import { gerarPropostaPdfBlob, montarHtmlProposta } from './pdf.js';
 import { mountPlaybook } from './playbook.js';
 import { mountAdmin } from './admin.js';
 import { CONFIG_UPDATED_EVENT } from './config-store.js';
-import { initGronerBusca } from './groner-busca.js';
+import { initGronerBusca, mostrarLinkNegocioGroner } from './groner-busca.js';
+import { sincronizarDescricaoPropostaGroner } from './groner-sync.js';
+import { MHZ_LOGO_URL } from './brand.js';
 
 const getValidadeDias = () => CONFIG_PRECIFICACAO.constantes.validade_proposta_dias;
 
@@ -281,6 +283,7 @@ function montarDadosProposta() {
     cliente: data.cliente,
     usina: data.usina,
     plano: {
+      codigo: data.plano,
       nome: planoInfo.nome,
       faixa: planoInfo.faixa,
     },
@@ -299,36 +302,138 @@ function fecharModal() {
   els.modal.classList.add('hidden');
 }
 
-async function baixarPdf() {
-  const dados = montarDadosProposta();
-  els.preview.innerHTML = montarHtmlProposta(dados);
+async function sincronizarComGroner(dados, pdfBlob, nomeArquivo) {
+  const projetoId = Number(document.getElementById('groner-projeto-id')?.value);
+  if (!projetoId) {
+    return { ok: true, skipped: true, motivo: 'Nenhum negócio (projeto) Groner vinculado.' };
+  }
 
+  const meta = {
+    precoSimulacao: document.getElementById('groner-preco-simulacao')?.value || null,
+    qtdPlacasProjeto: document.getElementById('groner-qtd-placas-projeto')?.value || null,
+  };
+
+  try {
+    return await sincronizarDescricaoPropostaGroner({
+      projetoId,
+      proposta: dados,
+      pdfBlob,
+      nomeArquivo,
+      meta,
+    });
+  } catch (err) {
+    console.warn('[groner] sincronizar proposta:', err);
+    return { ok: false, erro: err.message };
+  }
+}
+
+function nomeArquivoProposta(dados) {
+  const nomeCliente = dados.cliente.nome.replace(/[^\w\s-]/g, '').replace(/\s+/g, '_').slice(0, 40);
+  return `Proposta_${dados.numeroProposta}_${nomeCliente || 'cliente'}.pdf`;
+}
+
+async function gerarPdfBlob(dados) {
+  els.preview.innerHTML = montarHtmlProposta(dados);
   const elemento = els.preview.querySelector('.pdf-proposta');
   if (!elemento) {
-    alert('Não foi possível montar a proposta para PDF.');
+    throw new Error('Não foi possível montar a proposta para PDF.');
+  }
+  const blob = await gerarPropostaPdfBlob(elemento);
+  return { blob, nomeArquivo: nomeArquivoProposta(dados) };
+}
+
+async function exportarPdfProposta(dados, { baixar = true } = {}) {
+  const { blob, nomeArquivo } = await gerarPdfBlob(dados);
+  if (baixar) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = nomeArquivo;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+  return { blob, nomeArquivo };
+}
+
+/** Clique em "Gerar proposta em PDF": PDF + descrição no campo personalizado Groner */
+async function gerarPropostaPdf() {
+  if (!els.form.checkValidity()) {
+    els.form.reportValidity();
     return;
   }
 
-  const nomeCliente = dados.cliente.nome.replace(/[^\w\s-]/g, '').replace(/\s+/g, '_').slice(0, 40);
-  const nomeArquivo = `Proposta_${dados.numeroProposta}_${nomeCliente || 'cliente'}.pdf`;
+  const dados = montarDadosProposta();
+  abrirPreview();
 
+  const labelOriginal = els.btnGerar.textContent;
+  els.btnGerar.disabled = true;
+  els.btnBaixarPdf.disabled = true;
+
+  try {
+    els.btnGerar.textContent = 'Gerando PDF...';
+    const { blob, nomeArquivo } = await exportarPdfProposta(dados);
+
+    els.btnGerar.textContent = 'Salvando na Groner...';
+    const sync = await sincronizarComGroner(dados, blob, nomeArquivo);
+
+    if (sync?.ok && !sync?.skipped) {
+      const badge = document.getElementById('badge-groner');
+      if (badge) {
+        const extras = [];
+        if (sync.descricao?.ok) extras.push('descrição');
+        if (sync.pdf?.ok) extras.push('PDF');
+        const camposOk = sync.campos?.filter((c) => c.ok).length ?? 0;
+        if (camposOk) extras.push(`${camposOk} campo(s)`);
+        if (extras.length && !badge.textContent.includes('enviados ao CRM')) {
+          badge.textContent += ` · ${extras.join(' + ')} enviados ao CRM`;
+        }
+      }
+
+      const projetoId = Number(document.getElementById('groner-projeto-id')?.value);
+      if (sync.urlNegocio) {
+        mostrarLinkNegocioGroner(sync.urlNegocio, projetoId);
+      }
+    } else if (sync?.ok === false) {
+      alert(
+        `O PDF foi gerado, mas a descrição não foi gravada na Groner:\n\n${sync.erro}`,
+      );
+    }
+  } catch (err) {
+    console.error('Erro ao gerar proposta:', err);
+    alert(`Erro ao gerar proposta: ${err?.message || 'Tente novamente.'}`);
+  } finally {
+    els.btnGerar.textContent = labelOriginal;
+    els.btnGerar.disabled = false;
+    els.btnBaixarPdf.disabled = false;
+  }
+}
+
+/** Só PDF (modal "Baixar PDF" — não grava na Groner) */
+async function baixarPdf(dadosExistentes) {
+  const dados = dadosExistentes ?? montarDadosProposta();
   els.btnBaixarPdf.disabled = true;
   els.btnGerar.disabled = true;
+  const labelOriginal = els.btnBaixarPdf.textContent;
   els.btnBaixarPdf.textContent = 'Gerando PDF...';
 
   try {
-    await exportarPropostaPdf(elemento, nomeArquivo);
+    await exportarPdfProposta(dados);
   } catch (err) {
     console.error('Erro ao gerar PDF:', err);
     alert(`Erro ao gerar PDF: ${err?.message || 'Tente novamente.'}`);
   } finally {
     els.btnBaixarPdf.disabled = false;
     els.btnGerar.disabled = false;
-    els.btnBaixarPdf.textContent = 'Baixar PDF';
+    els.btnBaixarPdf.textContent = labelOriginal;
   }
 }
 
 function init() {
+  const brandLogo = document.querySelector('.brand-logo-img');
+  if (brandLogo) {
+    brandLogo.src = MHZ_LOGO_URL;
+  }
+
   mountPlaybook(els.playbookRoot);
   mountAdmin(els.adminRoot);
 
@@ -390,17 +495,22 @@ function init() {
     abrirPreview();
   });
 
-  els.form.addEventListener('submit', async (e) => {
+  els.form.addEventListener('submit', (e) => {
     e.preventDefault();
+    gerarPropostaPdf();
+  });
+
+  els.btnBaixarPdf.addEventListener('click', () => {
     if (!els.form.checkValidity()) {
       els.form.reportValidity();
       return;
     }
-    abrirPreview();
-    await baixarPdf();
+    const dados = montarDadosProposta();
+    if (!els.preview.querySelector('.pdf-proposta')) {
+      els.preview.innerHTML = montarHtmlProposta(dados);
+    }
+    baixarPdf(dados);
   });
-
-  els.btnBaixarPdf.addEventListener('click', baixarPdf);
   els.btnFechar.addEventListener('click', fecharModal);
   els.btnFecharModal.addEventListener('click', fecharModal);
   els.modal.addEventListener('click', (e) => {

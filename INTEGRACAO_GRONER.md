@@ -114,13 +114,76 @@ curl -X POST http://localhost:3001/api/groner/buscar-contato `
 
 ---
 
-## 5. Próximo passo (orçamento + PDF)
+## 5. Descrição da proposta no CRM (implementado)
 
-Fluxo planejado após busca do contato:
+Ao clicar **Gerar proposta em PDF**, após o PDF o sistema envia um texto organizado para o campo personalizado do **Projeto** na Groner.
+
+### Configurar o campo
+
+1. No CRM Groner, abra o campo personalizado tipo **texto** (resumo da proposta).
+2. Copie o **ID** do campo (na URL ao editar, ou via `GET /api/CampoPersonalizado`).
+3. Preencha em `config/groner-integracao.json`:
+
+```json
+"descricaoProposta": 123
+```
+
+Ou na Vercel / `.env`:
+
+```
+GRONER_CAMPO_DESCRICAO_PROPOSTA_ID=123
+```
+
+### Endpoint MHZ
+
+`POST /api/groner/sincronizar-proposta` — body: `{ "projetoId": 456, "proposta": { ... } }`
+
+Usa internamente: `POST /api/CampoPersonalizado/{id}/Responder` com body igual ao CRM:
+
+```json
+{ "projetoId": 1105091, "resposta": "<p>PROPOSTA COMERCIAL — MHZ</p>..." }
+```
+
+Campo de descrição da MHZ: **ID 172** (`descricaoProposta` em `config/groner-integracao.json`).
+
+### PDF no campo personalizado (campo 171)
+
+Igual ao CRM — um único request:
+
+```
+POST /api/arquivo?campoId=171&projetoId={id}&comprimir=false&abaDinamicaId=2
+Content-Type: multipart/form-data
+file: Proposta_2026-xxxx.pdf (application/pdf)
+```
+
+O PDF enviado é o **mesmo gerado** ao clicar em **Gerar proposta em PDF**.
+
+Config em `config/groner-integracao.json`: `pdfProposta: 171`, `abaDinamicaId: 2`.
+
+Requisitos: cliente carregado da Groner (campo oculto `groner-projeto-id` preenchido). Sem ID do campo configurado, o PDF é gerado normalmente e a sincronização é ignorada.
+
+### Exemplo do texto gerado
+
+```
+PROPOSTA COMERCIAL — MHZ
+Nº da proposta: 2026-45231
+...
+── PLANO SELECIONADO ──
+Plano Padrão — R$ 39,90/mês
+── DETALHAMENTO ──
+• Plano Padrão — faixa 0 a 5 kWp — R$ 39,90
+• Configuração Wi-Fi presencial — R$ 290,00
+── TOTAIS ──
+Total 1ª cobrança: R$ 639,90
+```
+
+---
+
+## 6. Próximo passo (orçamento + PDF arquivo)
 
 1. `POST /api/Orcamento` — criar orçamento no Projeto
 2. `POST /api/Orcamento/{id}/ItensEmLote` — itens da proposta MHZ
 3. Upload PDF → `POST /api/Arquivo` → `PUT /api/Projeto/{id}/AdicionarArquivo/{arquivoId}`
 4. Campo personalizado tipo Arquivo → `POST /api/CampoPersonalizado/{id}/Responder`
 
-IDs dos campos personalizados ficam em `config/groner-integracao.json` (a configurar no CRM).
+Demais IDs em `config/groner-integracao.json` (`kwp`, `plano`, `mensalidade`, `pdfProposta`).

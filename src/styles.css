@@ -56,16 +56,13 @@ body {
   padding: 0 0.5rem;
 }
 
-.brand-logo {
-  width: 42px;
-  height: 42px;
-  background: linear-gradient(135deg, var(--primary), #e8871e);
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  font-size: 0.85rem;
-  color: #1a1200;
+.brand-logo-img {
+  height: 44px;
+  width: auto;
+  max-width: 150px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
 }
 
 .brand strong {
@@ -644,16 +641,12 @@ body {
   align-items: center;
 }
 
-.pdf-logo {
-  width: 48px;
-  height: 48px;
-  background: #f5a623;
-  border-radius: 8px;
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  font-size: 14px;
-  color: #1a1200;
+.pdf-logo-img {
+  height: 52px;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
+  display: block;
 }
 
 .pdf-brand h1 {
@@ -1186,6 +1179,30 @@ body {
   margin: 0.75rem 0 0;
   font-size: 0.8rem;
   color: var(--primary);
+}
+
+.groner-link-negocio {
+  margin: 0.65rem 0 0;
+}
+
+.groner-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  background: rgba(0, 180, 216, 0.12);
+  border: 1px solid rgba(0, 180, 216, 0.45);
+  color: #7dd3fc;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.groner-link-btn:hover {
+  background: rgba(0, 180, 216, 0.2);
+  border-color: rgba(0, 180, 216, 0.7);
 }
 
 .groner-label {

@@ -1,12 +1,17 @@
 {
-  "tenant": "preencher-no-env",
+  "tenant": "mhzenergiasolar",
   "origemId": null,
   "tipoProjetoId": 1,
+  "abaDinamicaId": 2,
   "camposPersonalizados": {
-    "kwp": null,
-    "plano": null,
-    "mensalidade": null,
-    "pdfProposta": null
+    "kwp": 169,
+    "qtdPlacas": 170,
+    "pdfProposta": 171,
+    "descricaoProposta": 172,
+    "valorTotalProposta": 173,
+    "valorTotalSistema": 174,
+    "plano": 175,
+    "mensalidade": 176
   },
-  "notas": "IDs dos campos personalizados do Projeto na Groner — preencher conforme seu CRM"
+  "notas": "169=kWp | 170=placas | 171=PDF | 172=descrição | 173=valor proposta | 174=valor sistema | 175=plano (radio) | 176=mensalidade"
 }
