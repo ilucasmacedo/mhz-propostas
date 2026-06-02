@@ -77,7 +77,6 @@ export function initGronerBusca({
 }) {
   let configurado = null;
   let debounceTimer = null;
-  let ultimosContatos = [];
 
   async function checarStatus() {
     try {
@@ -86,7 +85,7 @@ export function initGronerBusca({
       configurado = Boolean(data.configurado);
       if (statusEl) {
         statusEl.textContent = configurado
-          ? 'Groner conectada'
+          ? 'Groner conectada — busca Lead + Projetos'
           : 'Groner: configure GRONER_TENANT e GRONER_TOKEN na Vercel';
         statusEl.dataset.state = configurado ? 'ok' : 'warn';
       }
@@ -97,7 +96,7 @@ export function initGronerBusca({
     } catch {
       configurado = false;
       if (statusEl) {
-        statusEl.textContent = 'API indisponível — use a URL da Vercel com variáveis configuradas';
+        statusEl.textContent = 'API indisponível — use a URL da Vercel';
         statusEl.dataset.state = 'err';
       }
       if (btnBuscar) btnBuscar.disabled = true;
@@ -110,65 +109,76 @@ export function initGronerBusca({
     resultadosEl?.classList.add('hidden');
   }
 
-  function renderLista(contatos, container, { compacto = false } = {}) {
+  function renderLista(leads, container, { compacto = false } = {}) {
     if (!container) return;
 
-    if (!contatos.length) {
-      container.innerHTML = '<p class="groner-empty">Nenhum contato encontrado na Groner.</p>';
+    if (!leads.length) {
+      container.innerHTML =
+        '<p class="groner-empty">Nenhum contato encontrado. Tente o <strong>nome do Lead</strong> (ex.: LV CAUSA ANIMAL LTDA) ou o <strong>nome do Projeto</strong> (ex.: BICHO LEGAL).</p>';
       container.classList.remove('hidden');
       return;
     }
 
     container.innerHTML = `
-      ${compacto ? '' : `<p class="groner-resultados-head">${contatos.length} contato(s) encontrado(s)</p>`}
+      ${compacto ? '' : `<p class="groner-resultados-head">${leads.length} contato(s) — selecione o negócio (projeto)</p>`}
       <ul class="groner-lista ${compacto ? 'groner-lista-compact' : ''}">
-        ${contatos
-          .map((c) => {
-            const projeto = c.projetos?.[0];
-            const projetoOpts =
-              c.projetos?.length > 0
-                ? c.projetos
-                    .map(
-                      (p) =>
-                        `<option value="${p.id}" ${p.id === projeto?.id ? 'selected' : ''}>${esc(p.nome)}${p.consumo ? ` — ${p.consumo} kWh` : ''}</option>`,
-                    )
-                    .join('')
-                : '';
+        ${leads
+          .map((lead) => {
+            const projetosHtml =
+              lead.projetos?.length > 0
+                ? `<ul class="groner-projetos">
+                    ${lead.projetos
+                      .map(
+                        (p) => `
+                      <li>
+                        <button
+                          type="button"
+                          class="groner-projeto-btn"
+                          data-lead-id="${lead.id}"
+                          data-projeto-id="${p.id}"
+                        >
+                          <span class="groner-projeto-nome">${esc(p.nome)}</span>
+                          ${p.consumo ? `<span class="groner-projeto-meta">${p.consumo} kWh</span>` : ''}
+                        </button>
+                      </li>`,
+                      )
+                      .join('')}
+                  </ul>`
+                : '<p class="groner-sem-projeto">Nenhum negócio (projeto) vinculado a este lead.</p>';
 
             return `
-          <li class="groner-item" data-lead-id="${c.id}">
-            <div class="groner-item-main">
-              <strong>${esc(c.nome || 'Sem nome')}</strong>
-              <span>${esc(c.email || '—')} · ${esc(c.documento || '—')} · ${esc(formatTelefone(c.telefone) || '—')}</span>
-              ${c.endereco ? `<span class="groner-item-end">${esc(c.endereco)}</span>` : ''}
+          <li class="groner-item" data-lead-id="${lead.id}">
+            <div class="groner-item-lead">
+              <span class="groner-label">Contato (Lead)</span>
+              <strong>${esc(lead.nome || 'Sem nome')}</strong>
+              <span class="groner-item-meta">${esc(lead.email || '—')} · ${esc(lead.documento || '—')} · ${esc(formatTelefone(lead.telefone) || '—')}</span>
+              ${lead.endereco ? `<span class="groner-item-end">${esc(lead.endereco)}</span>` : ''}
             </div>
-            ${
-              projetoOpts
-                ? `<label class="groner-projeto-pick"><span>Negócio (Projeto)</span><select class="groner-projeto-select">${projetoOpts}</select></label>`
-                : '<span class="groner-sem-projeto">Sem negócio vinculado</span>'
-            }
-            <button type="button" class="btn btn-primary btn-sm groner-usar">Carregar dados</button>
+            <div class="groner-item-projetos">
+              <span class="groner-label">Negócios (Projetos) — ${lead.projetos?.length ?? 0}</span>
+              ${projetosHtml}
+            </div>
           </li>`;
           })
           .join('')}
       </ul>`;
 
-    container.querySelectorAll('.groner-usar').forEach((btn) => {
-      btn.addEventListener('click', () => selecionarContato(btn, contatos));
+    container.querySelectorAll('.groner-projeto-btn').forEach((btn) => {
+      btn.addEventListener('click', () =>
+        carregarProjeto(Number(btn.dataset.leadId), Number(btn.dataset.projetoId), btn),
+      );
     });
 
     container.classList.remove('hidden');
   }
 
-  async function selecionarContato(btn, contatos) {
-    const item = btn.closest('.groner-item');
-    const leadId = Number(item.dataset.leadId);
-    const contato = contatos.find((c) => c.id === leadId);
-    const select = item.querySelector('.groner-projeto-select');
-    const projetoId = select ? Number(select.value) : contato?.projetos?.[0]?.id ?? null;
+  async function carregarProjeto(leadId, projetoId, btn) {
+    const label = btn?.querySelector('.groner-projeto-nome')?.textContent ?? 'projeto';
 
-    btn.disabled = true;
-    btn.textContent = 'Carregando...';
+    if (btn) {
+      btn.disabled = true;
+      btn.classList.add('loading');
+    }
 
     try {
       const data = await apiPost('/api/groner/carregar-contato', { leadId, projetoId });
@@ -176,14 +186,17 @@ export function initGronerBusca({
       onAplicado?.(data);
       fecharSugestoes();
 
-      if (inputEntrada && contato?.nome) {
-        inputEntrada.value = contato.nome;
+      const lead = data.lead;
+      if (inputEntrada && lead?.nome) {
+        inputEntrada.value = lead.nome;
       }
     } catch (err) {
-      alert(err.message);
+      alert(`Erro ao carregar ${label}: ${err.message}`);
     } finally {
-      btn.disabled = false;
-      btn.textContent = 'Carregar dados';
+      if (btn) {
+        btn.disabled = false;
+        btn.classList.remove('loading');
+      }
     }
   }
 
@@ -193,23 +206,18 @@ export function initGronerBusca({
       filtros.nome || filtros.email || filtros.documento || filtros.telefone;
 
     if (!temFiltro) {
-      if (inputEntrada) {
-        alert('Digite pelo menos 3 caracteres do nome (ou e-mail, CPF ou telefone).');
-      } else {
-        alert('Preencha ao menos um campo do cliente para buscar na Groner.');
-      }
+      alert('Digite pelo menos 3 caracteres (nome do Lead ou do Projeto).');
       return;
     }
 
     if (destino) {
-      destino.innerHTML = '<p class="groner-empty">Consultando Groner...</p>';
+      destino.innerHTML = '<p class="groner-empty">Buscando Lead e Projetos na Groner...</p>';
       destino.classList.remove('hidden');
     }
 
     try {
       const data = await apiPost('/api/groner/buscar-contato', filtros);
-      ultimosContatos = data.contatos ?? [];
-      renderLista(ultimosContatos, destino, { compacto: destino === sugestoesEntrada });
+      renderLista(data.contatos ?? [], destino, { compacto: destino === sugestoesEntrada });
     } catch (err) {
       if (destino) {
         destino.innerHTML = `<p class="groner-empty groner-erro">${esc(err.message)}</p>`;
@@ -221,11 +229,16 @@ export function initGronerBusca({
   function buscarEntrada() {
     const termo = inputEntrada?.value.trim() ?? '';
     if (termo.length < MIN_BUSCA) {
-      alert(`Digite pelo menos ${MIN_BUSCA} caracteres para buscar.`);
+      alert(`Digite pelo menos ${MIN_BUSCA} caracteres.`);
       return;
     }
     buscar(
-      { nome: termo, email: termo.includes('@') ? termo : '', documento: '', telefone: '' },
+      {
+        nome: termo,
+        email: termo.includes('@') ? termo : '',
+        documento: '',
+        telefone: '',
+      },
       sugestoesEntrada,
     );
   }
@@ -278,19 +291,4 @@ export function initGronerBusca({
   checarStatus();
 
   return { buscar, checarStatus, aplicarFormularioGroner };
-}
-
-/** @deprecated use aplicarFormularioGroner */
-export function preencherClienteDaGroner(contato, projetoId) {
-  aplicarFormularioGroner({
-    formulario: {
-      cliente: {
-        nome: contato.nome,
-        documento: contato.documento,
-        email: contato.email,
-        telefone: contato.telefone,
-      },
-      groner: { leadId: contato.id, projetoId },
-    },
-  });
 }
