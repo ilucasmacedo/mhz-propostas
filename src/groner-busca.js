@@ -132,7 +132,7 @@ export function initGronerBusca({
 
     if (!leads.length) {
       container.innerHTML =
-        '<p class="groner-empty">Nenhum contato encontrado. Tente o <strong>nome do Lead</strong> (ex.: LV CAUSA ANIMAL LTDA) ou o <strong>nome do Projeto</strong> (ex.: BICHO LEGAL).</p>';
+        '<p class="groner-empty">Nenhum contato encontrado. Tente o <strong>nome do cliente</strong> ou o <strong>nome do negócio</strong> (ex.: João da Silva ou Empresa do João).</p>';
       container.classList.remove('hidden');
       return;
     }
