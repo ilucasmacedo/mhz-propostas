@@ -3,9 +3,9 @@
   "origemId": null,
   "tipoProjetoId": 1,
   "preVenda": {
-    "origemId": null,
-    "tipoProjetoId": null,
-    "notas": "Preencha os IDs da origem e tipo Pré-venda da Groner (ou use GRONER_ORIGEM_PRE_VENDA_ID e GRONER_TIPO_PROJETO_PRE_VENDA_ID no .env)"
+    "origemId": 35,
+    "tipoProjetoId": 223,
+    "notas": "Origem Pré-venda (id 35) e tipo de projeto Pré-venda (id 223)"
   },
   "abaDinamicaId": 2,
   "camposPersonalizados": {
