@@ -16,8 +16,9 @@ import { gerarPropostaPdfBlob, montarHtmlProposta } from './pdf.js';
 import { mountPlaybook } from './playbook.js';
 import { mountAdmin } from './admin.js';
 import { CONFIG_UPDATED_EVENT } from './config-store.js';
-import { initGronerBusca, mostrarLinkNegocioGroner, montarUrlNegocioGroner } from './groner-busca.js';
+import { initGronerBusca, mostrarLinkNegocioGroner, montarUrlNegocioGroner, aplicarFormularioGroner } from './groner-busca.js';
 import { sincronizarDescricaoPropostaGroner } from './groner-sync.js';
+import { garantirContatoPropostaGroner } from './groner-garantir-contato.js';
 import { MHZ_LOGO_URL } from './brand.js';
 
 const getValidadeDias = () => CONFIG_PRECIFICACAO.constantes.validade_proposta_dias;
@@ -303,7 +304,44 @@ function fecharModal() {
 }
 
 async function sincronizarComGroner(dados, pdfBlob, nomeArquivo) {
-  const projetoId = Number(document.getElementById('groner-projeto-id')?.value);
+  let projetoId = Number(document.getElementById('groner-projeto-id')?.value);
+  let leadId = Number(document.getElementById('groner-lead-id')?.value);
+
+  if (!projetoId) {
+    try {
+      els.btnGerar.textContent = 'Cadastrando na Groner...';
+      const vinculo = await garantirContatoPropostaGroner({
+        leadId: leadId || null,
+        projetoId: null,
+        cliente: dados.cliente,
+        usina: dados.usina,
+      });
+
+      if (vinculo.formulario) {
+        aplicarFormularioGroner(vinculo);
+      }
+
+      projetoId = Number(vinculo.projetoId);
+      leadId = Number(vinculo.leadId);
+
+      const badge = document.getElementById('badge-groner');
+      if (badge && vinculo.criado) {
+        badge.textContent = `Groner: ${vinculo.formulario?.groner?.projetoNome || 'Pré-venda'} (#${projetoId}) · ${vinculo.acao}`;
+        badge.classList.remove('hidden');
+      }
+      if (vinculo.urlNegocio) {
+        mostrarLinkNegocioGroner(vinculo.urlNegocio, projetoId);
+      }
+    } catch (err) {
+      console.warn('[groner] garantir contato:', err);
+      return {
+        ok: false,
+        erro: err.message,
+        skipped: false,
+      };
+    }
+  }
+
   if (!projetoId) {
     return { ok: true, skipped: true, motivo: 'Nenhum negócio (projeto) Groner vinculado.' };
   }
@@ -405,7 +443,7 @@ async function gerarPropostaPdf() {
       );
     } else if (sync?.ok === false && !sync?.skipped) {
       alert(
-        `O PDF foi baixado, mas a Groner não recebeu os dados:\n\n${sync.erro}\n\nCarregue o negócio (Carregar dados) antes de gerar.`,
+        `O PDF foi baixado, mas a Groner não recebeu os dados:\n\n${sync.erro}\n\nVerifique origem/tipo Pré-venda em config/groner-integracao.json e o GRONER_TOKEN.`,
       );
     }
   } catch (err) {

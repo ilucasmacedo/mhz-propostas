@@ -179,7 +179,40 @@ Total 1ª cobrança: R$ 639,90
 
 ---
 
-## 6. Próximo passo (orçamento + PDF arquivo)
+## 6. Cadastro automático Pré-venda (novo)
+
+Se o cliente **não** foi carregado da busca Groner, ao clicar **Gerar proposta em PDF** o sistema:
+
+1. Busca contato existente (nome, e-mail, CPF, telefone)
+2. Se não achar → `POST /api/Lead` com **Origem Pré-venda**
+3. Cria negócio → `POST /api/Projeto` com **Tipo Pré-venda**
+4. Sincroniza PDF + campos no projeto criado
+
+### Configurar IDs
+
+Em `config/groner-integracao.json`:
+
+```json
+"preVenda": {
+  "origemId": 123,
+  "tipoProjetoId": 456
+}
+```
+
+Ou no `.env` / Vercel:
+
+```
+GRONER_ORIGEM_PRE_VENDA_ID=123
+GRONER_TIPO_PROJETO_PRE_VENDA_ID=456
+```
+
+### Endpoint MHZ
+
+`POST /api/groner/garantir-contato` — body: `{ "cliente": {...}, "usina": {...}, "leadId": null, "projetoId": null }`
+
+---
+
+## 7. Próximo passo (orçamento)
 
 1. `POST /api/Orcamento` — criar orçamento no Projeto
 2. `POST /api/Orcamento/{id}/ItensEmLote` — itens da proposta MHZ
