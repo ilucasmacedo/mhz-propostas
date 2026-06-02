@@ -1,0 +1,12 @@
+{
+  "tenant": "mhzenergiasolar",
+  "origemId": null,
+  "tipoProjetoId": 1,
+  "camposPersonalizados": {
+    "kwp": null,
+    "plano": null,
+    "mensalidade": null,
+    "pdfProposta": null
+  },
+  "notas": "IDs dos campos personalizados do Projeto na Groner — preencher conforme seu CRM"
+}

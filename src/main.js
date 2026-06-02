@@ -16,6 +16,7 @@ import { exportarPropostaPdf, montarHtmlProposta } from './pdf.js';
 import { mountPlaybook } from './playbook.js';
 import { mountAdmin } from './admin.js';
 import { CONFIG_UPDATED_EVENT } from './config-store.js';
+import { initGronerBusca, preencherClienteDaGroner } from './groner-busca.js';
 
 const getValidadeDias = () => CONFIG_PRECIFICACAO.constantes.validade_proposta_dias;
 
@@ -330,6 +331,24 @@ async function baixarPdf() {
 function init() {
   mountPlaybook(els.playbookRoot);
   mountAdmin(els.adminRoot);
+
+  initGronerBusca({
+    btnBuscar: document.getElementById('btn-groner-buscar'),
+    resultadosEl: document.getElementById('groner-resultados'),
+    statusEl: document.getElementById('groner-status'),
+    getFiltros: () => ({
+      nome: document.getElementById('cliente-nome').value.trim(),
+      email: document.getElementById('cliente-email').value.trim(),
+      documento: document.getElementById('cliente-documento').value.trim(),
+      telefone: document.getElementById('cliente-telefone').value.trim(),
+    }),
+    onSelecionar: ({ contato, projetoId }) => {
+      preencherClienteDaGroner(contato, projetoId);
+      renderPlanos();
+      renderServicos();
+      renderResumo();
+    },
+  });
 
   window.addEventListener(CONFIG_UPDATED_EVENT, refreshPropostaUi);
 

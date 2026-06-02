@@ -48,8 +48,12 @@
         <form id="form-proposta" class="form-grid" novalidate>
           <!-- Cliente -->
           <section class="card">
-            <div class="card-header">
+            <div class="card-header card-header-actions">
               <h2>Cliente</h2>
+              <div class="groner-toolbar">
+                <span id="groner-status" class="groner-status" data-state="warn">Verificando Groner...</span>
+                <button type="button" id="btn-groner-buscar" class="btn btn-secondary btn-sm">Buscar na Groner</button>
+              </div>
             </div>
             <div class="fields">
               <label class="field span-2">
@@ -68,7 +72,11 @@
                 <span>Telefone</span>
                 <input type="tel" id="cliente-telefone" placeholder="(00) 00000-0000" />
               </label>
+              <input type="hidden" id="groner-lead-id" />
+              <input type="hidden" id="groner-projeto-id" />
             </div>
+            <div id="groner-resultados" class="groner-resultados hidden" aria-live="polite"></div>
+            <p id="badge-groner" class="badge-groner hidden"></p>
           </section>
 
           <!-- Usina -->

@@ -1,0 +1,29 @@
+import http from 'node:http';
+import { config } from 'dotenv';
+import { handleBuscarContato, handleGronerStatus } from '../lib/groner/handlers/buscar-contato.js';
+
+config();
+
+const PORT = Number(process.env.API_PORT || 3001);
+
+const server = http.createServer(async (req, res) => {
+  const { pathname } = new URL(req.url, `http://${req.headers.host}`);
+
+  if (pathname === '/api/groner/buscar-contato') {
+    await handleBuscarContato(req, res);
+    return;
+  }
+
+  if (pathname === '/api/groner/status') {
+    await handleGronerStatus(req, res);
+    return;
+  }
+
+  res.statusCode = 404;
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify({ ok: false, erro: 'Rota não encontrada.' }));
+});
+
+server.listen(PORT, () => {
+  console.log(`[mhz-api] http://localhost:${PORT}`);
+});

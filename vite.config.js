@@ -15,4 +15,12 @@ export default defineConfig({
       include: [/html2pdf.js/, /node_modules/],
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
+  },
 });
