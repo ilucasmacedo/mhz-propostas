@@ -16,7 +16,7 @@ import { gerarPropostaPdfBlob, montarHtmlProposta } from './pdf.js';
 import { mountPlaybook } from './playbook.js';
 import { mountAdmin } from './admin.js';
 import { CONFIG_UPDATED_EVENT } from './config-store.js';
-import { initGronerBusca, mostrarLinkNegocioGroner } from './groner-busca.js';
+import { initGronerBusca, mostrarLinkNegocioGroner, montarUrlNegocioGroner } from './groner-busca.js';
 import { sincronizarDescricaoPropostaGroner } from './groner-sync.js';
 import { MHZ_LOGO_URL } from './brand.js';
 
@@ -375,27 +375,37 @@ async function gerarPropostaPdf() {
 
     els.btnGerar.textContent = 'Salvando na Groner...';
     const sync = await sincronizarComGroner(dados, blob, nomeArquivo);
+    const projetoId = Number(document.getElementById('groner-projeto-id')?.value);
+    const urlNegocio = sync?.urlNegocio || (projetoId ? montarUrlNegocioGroner(projetoId) : null);
 
-    if (sync?.ok && !sync?.skipped) {
+    if (!sync?.skipped) {
       const badge = document.getElementById('badge-groner');
-      if (badge) {
-        const extras = [];
-        if (sync.descricao?.ok) extras.push('descrição');
-        if (sync.pdf?.ok) extras.push('PDF');
-        const camposOk = sync.campos?.filter((c) => c.ok).length ?? 0;
-        if (camposOk) extras.push(`${camposOk} campo(s)`);
-        if (extras.length && !badge.textContent.includes('enviados ao CRM')) {
-          badge.textContent += ` · ${extras.join(' + ')} enviados ao CRM`;
-        }
+      const extras = [];
+      if (sync.descricao?.ok) extras.push('descrição');
+      if (sync.pdf?.ok) extras.push('PDF');
+      const camposOk = sync.campos?.filter((c) => c.ok).length ?? 0;
+      if (camposOk) extras.push(`${camposOk} campo(s)`);
+
+      if (badge && extras.length && !badge.textContent.includes('enviados ao CRM')) {
+        badge.textContent += ` · ${extras.join(' + ')} enviados ao CRM`;
       }
 
-      const projetoId = Number(document.getElementById('groner-projeto-id')?.value);
-      if (sync.urlNegocio) {
-        mostrarLinkNegocioGroner(sync.urlNegocio, projetoId);
+      if (urlNegocio) {
+        mostrarLinkNegocioGroner(urlNegocio, projetoId);
       }
-    } else if (sync?.ok === false) {
+    }
+
+    if (sync?.erro && !sync?.skipped) {
+      const partes = [];
+      if (sync.descricao?.ok === false) partes.push(`Descrição: ${sync.descricao.erro}`);
+      if (sync.pdf?.ok === false) partes.push(`PDF: ${sync.pdf.erro}`);
+      const msg = partes.length ? partes.join('\n\n') : sync.erro;
       alert(
-        `O PDF foi gerado, mas a descrição não foi gravada na Groner:\n\n${sync.erro}`,
+        `O PDF foi baixado, mas nem tudo foi gravado na Groner:\n\n${msg}\n\nConfira GRONER_TOKEN na Vercel e se carregou o negócio antes de gerar.`,
+      );
+    } else if (sync?.ok === false && !sync?.skipped) {
+      alert(
+        `O PDF foi baixado, mas a Groner não recebeu os dados:\n\n${sync.erro}\n\nCarregue o negócio (Carregar dados) antes de gerar.`,
       );
     }
   } catch (err) {

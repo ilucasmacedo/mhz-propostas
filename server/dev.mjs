@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import { handleBuscarContato, handleGronerStatus } from '../lib/groner/handlers/buscar-contato.js';
 import { handleCarregarContato } from '../lib/groner/handlers/carregar-contato.js';
 import { handleSincronizarProposta } from '../lib/groner/handlers/sincronizar-proposta.js';
+import { handleUploadPdf } from '../lib/groner/handlers/upload-pdf.js';
 
 config();
 
@@ -28,6 +29,11 @@ const server = http.createServer(async (req, res) => {
 
   if (pathname === '/api/groner/sincronizar-proposta') {
     await handleSincronizarProposta(req, res);
+    return;
+  }
+
+  if (pathname === '/api/groner/upload-pdf') {
+    await handleUploadPdf(req, res);
     return;
   }
 

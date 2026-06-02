@@ -1,6 +1,16 @@
+import gronerConfig from '../config/groner-integracao.json';
+
 const API_BASE = import.meta.env.VITE_API_BASE || '';
 const DEBOUNCE_MS = 450;
 const MIN_BUSCA = 3;
+
+export function montarUrlNegocioGroner(projetoId) {
+  const pid = Number(projetoId);
+  if (!pid) return null;
+  const tenant = gronerConfig.tenant || 'mhzenergiasolar';
+  const aba = gronerConfig.abaDinamicaId ?? 2;
+  return `https://${tenant}.groner.app/negocio/${pid}/aba/${aba}`;
+}
 
 function formatTelefone(valor) {
   const d = String(valor ?? '').replace(/\D/g, '');
@@ -74,9 +84,15 @@ export function aplicarFormularioGroner(payload) {
     set('groner-projeto-id', groner.projetoId ?? '');
     set('groner-preco-simulacao', groner.precoSimulacao ?? '');
     set('groner-qtd-placas-projeto', groner.qtdPlacasProjeto ?? '');
-  }
 
-  ocultarLinkNegocioGroner();
+    if (groner.projetoId) {
+      mostrarLinkNegocioGroner(montarUrlNegocioGroner(groner.projetoId), groner.projetoId);
+    } else {
+      ocultarLinkNegocioGroner();
+    }
+  } else {
+    ocultarLinkNegocioGroner();
+  }
 
   const badge = document.getElementById('badge-groner');
   if (badge && groner) {
