@@ -143,10 +143,17 @@ export function initGronerBusca({
       if (btnBuscar) btnBuscar.disabled = disabled;
       if (btnEntrada) btnEntrada.disabled = disabled;
       if (inputEntrada) inputEntrada.disabled = disabled;
-    } catch {
+    } catch (err) {
       configurado = false;
       if (statusEl) {
-        statusEl.textContent = 'API indisponível — use a URL da Vercel';
+        if (err.code === 'API_NOT_CONFIGURED') {
+          statusEl.textContent =
+            'API bloqueada — configure MHZ_API_SECRET + VITE_MHZ_API_KEY na Vercel';
+        } else if (err.code === 'UNAUTHORIZED') {
+          statusEl.textContent = 'Chave API inválida — verifique VITE_MHZ_API_KEY no build';
+        } else {
+          statusEl.textContent = 'API indisponível — use a URL da Vercel';
+        }
         statusEl.dataset.state = 'err';
       }
       if (btnBuscar) btnBuscar.disabled = true;
