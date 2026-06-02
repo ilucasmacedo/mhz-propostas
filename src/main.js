@@ -16,9 +16,10 @@ import { gerarPropostaPdfBlob, montarHtmlProposta } from './pdf.js';
 import { mountPlaybook } from './playbook.js';
 import { mountAdmin } from './admin.js';
 import { CONFIG_UPDATED_EVENT } from './config-store.js';
-import { initGronerBusca, mostrarLinkNegocioGroner, montarUrlNegocioGroner, aplicarFormularioGroner } from './groner-busca.js';
+import { initGronerBusca, mostrarLinkNegocioGroner, montarUrlNegocioGroner, aplicarFormularioGroner, atualizarBtnNovoProjetoGroner } from './groner-busca.js';
 import { sincronizarDescricaoPropostaGroner } from './groner-sync.js';
 import { garantirContatoPropostaGroner } from './groner-garantir-contato.js';
+import { criarProjetoLeadGroner } from './groner-criar-projeto.js';
 import { MHZ_LOGO_URL } from './brand.js';
 
 const getValidadeDias = () => CONFIG_PRECIFICACAO.constantes.validade_proposta_dias;
@@ -37,6 +38,7 @@ const els = {
   modal: document.getElementById('modal-overlay'),
   preview: document.getElementById('preview-container'),
   btnPreview: document.getElementById('btn-preview'),
+  btnGronerNovoProjeto: document.getElementById('btn-groner-novo-projeto'),
   btnGerar: document.getElementById('btn-gerar'),
   btnBaixarPdf: document.getElementById('btn-baixar-pdf'),
   btnFechar: document.getElementById('btn-fechar'),
@@ -303,6 +305,66 @@ function fecharModal() {
   els.modal.classList.add('hidden');
 }
 
+async function gerarNovoProjetoGroner() {
+  if (!els.form.checkValidity()) {
+    els.form.reportValidity();
+    return;
+  }
+
+  const leadId = Number(document.getElementById('groner-lead-id')?.value);
+  if (!leadId) {
+    alert('Carregue um contato na Groner (Buscar → Carregar dados) antes de gerar projeto novo.');
+    return;
+  }
+
+  const data = getFormData();
+  const btn = els.btnGronerNovoProjeto;
+  const labelOriginal = btn?.textContent ?? 'Gerar projeto novo';
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Criando projeto na Groner...';
+  }
+
+  try {
+    const result = await criarProjetoLeadGroner({
+      leadId,
+      cliente: data.cliente,
+      usina: data.usina,
+    });
+
+    if (result.formulario) {
+      aplicarFormularioGroner(result);
+    } else if (result.projetoId) {
+      document.getElementById('groner-projeto-id').value = result.projetoId;
+      mostrarLinkNegocioGroner(result.urlNegocio, result.projetoId);
+    }
+
+    const badge = document.getElementById('badge-groner');
+    if (badge) {
+      const nome = result.formulario?.groner?.projetoNome || result.projeto?.nome || 'Pré-venda';
+      badge.textContent = `Groner: ${nome} (#${result.projetoId}) · ${result.acao}`;
+      badge.classList.remove('hidden');
+    }
+
+    renderPlanos();
+    renderServicos();
+    renderResumo();
+
+    alert(
+      `Novo projeto criado na Groner (#${result.projetoId}).\n\nOrigem Pré-venda (${result.preVenda?.origemId}) · Tipo ${result.preVenda?.tipoProjetoId}.\n\nAjuste kWp/placas para outro modelo e gere o PDF quando quiser.`,
+    );
+  } catch (err) {
+    console.error('[groner] criar projeto:', err);
+    alert(`Erro ao criar projeto: ${err.message}`);
+  } finally {
+    if (btn) {
+      btn.textContent = labelOriginal;
+      atualizarBtnNovoProjetoGroner();
+    }
+  }
+}
+
 async function sincronizarComGroner(dados, pdfBlob, nomeArquivo) {
   let projetoId = Number(document.getElementById('groner-projeto-id')?.value);
   let leadId = Number(document.getElementById('groner-lead-id')?.value);
@@ -502,9 +564,12 @@ function init() {
       renderPlanos();
       renderServicos();
       renderResumo();
+      atualizarBtnNovoProjetoGroner();
       document.getElementById('cliente-nome')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     },
   });
+
+  atualizarBtnNovoProjetoGroner();
 
   window.addEventListener(CONFIG_UPDATED_EVENT, refreshPropostaUi);
 
@@ -541,6 +606,10 @@ function init() {
       return;
     }
     abrirPreview();
+  });
+
+  els.btnGronerNovoProjeto?.addEventListener('click', () => {
+    gerarNovoProjetoGroner();
   });
 
   els.form.addEventListener('submit', (e) => {

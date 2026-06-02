@@ -516,6 +516,7 @@ body {
 
 .resumo-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
   justify-content: flex-end;
 }

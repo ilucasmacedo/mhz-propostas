@@ -58,6 +58,17 @@ export function mostrarLinkNegocioGroner(url, projetoId) {
   el.classList.remove('hidden');
 }
 
+export function atualizarBtnNovoProjetoGroner() {
+  const btn = document.getElementById('btn-groner-novo-projeto');
+  const leadId = Number(document.getElementById('groner-lead-id')?.value);
+  if (!btn) return;
+
+  btn.disabled = !leadId;
+  btn.title = leadId
+    ? 'Novo negócio Pré-venda (origem 57, tipo 223) para o contato selecionado'
+    : 'Carregue um contato da Groner (Buscar → Carregar dados)';
+}
+
 export function aplicarFormularioGroner(payload) {
   const { cliente, usina, groner } = payload.formulario ?? payload;
 
@@ -102,6 +113,8 @@ export function aplicarFormularioGroner(payload) {
       : `Groner: Lead #${groner.leadId}${extra}`;
     badge.classList.remove('hidden');
   }
+
+  atualizarBtnNovoProjetoGroner();
 }
 
 export function initGronerBusca({

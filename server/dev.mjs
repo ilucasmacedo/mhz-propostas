@@ -5,6 +5,7 @@ import { handleCarregarContato } from '../lib/groner/handlers/carregar-contato.j
 import { handleSincronizarProposta } from '../lib/groner/handlers/sincronizar-proposta.js';
 import { handleUploadPdf } from '../lib/groner/handlers/upload-pdf.js';
 import { handleGarantirContatoProposta } from '../lib/groner/handlers/garantir-contato.js';
+import { handleCriarProjetoLead } from '../lib/groner/handlers/criar-projeto-lead.js';
 
 config();
 
@@ -35,6 +36,11 @@ const server = http.createServer(async (req, res) => {
 
   if (pathname === '/api/groner/garantir-contato') {
     await handleGarantirContatoProposta(req, res);
+    return;
+  }
+
+  if (pathname === '/api/groner/criar-projeto-lead') {
+    await handleCriarProjetoLead(req, res);
     return;
   }
 
