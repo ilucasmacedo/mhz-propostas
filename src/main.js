@@ -16,7 +16,7 @@ import { exportarPropostaPdf, montarHtmlProposta } from './pdf.js';
 import { mountPlaybook } from './playbook.js';
 import { mountAdmin } from './admin.js';
 import { CONFIG_UPDATED_EVENT } from './config-store.js';
-import { initGronerBusca, preencherClienteDaGroner } from './groner-busca.js';
+import { initGronerBusca } from './groner-busca.js';
 
 const getValidadeDias = () => CONFIG_PRECIFICACAO.constantes.validade_proposta_dias;
 
@@ -333,6 +333,9 @@ function init() {
   mountAdmin(els.adminRoot);
 
   initGronerBusca({
+    inputEntrada: document.getElementById('groner-busca-entrada'),
+    sugestoesEntrada: document.getElementById('groner-sugestoes'),
+    btnEntrada: document.getElementById('btn-groner-entrada'),
     btnBuscar: document.getElementById('btn-groner-buscar'),
     resultadosEl: document.getElementById('groner-resultados'),
     statusEl: document.getElementById('groner-status'),
@@ -342,11 +345,11 @@ function init() {
       documento: document.getElementById('cliente-documento').value.trim(),
       telefone: document.getElementById('cliente-telefone').value.trim(),
     }),
-    onSelecionar: ({ contato, projetoId }) => {
-      preencherClienteDaGroner(contato, projetoId);
+    onAplicado: () => {
       renderPlanos();
       renderServicos();
       renderResumo();
+      document.getElementById('cliente-nome')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     },
   });
 

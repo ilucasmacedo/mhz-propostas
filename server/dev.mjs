@@ -1,6 +1,7 @@
 import http from 'node:http';
 import { config } from 'dotenv';
 import { handleBuscarContato, handleGronerStatus } from '../lib/groner/handlers/buscar-contato.js';
+import { handleCarregarContato } from '../lib/groner/handlers/carregar-contato.js';
 
 config();
 
@@ -11,6 +12,11 @@ const server = http.createServer(async (req, res) => {
 
   if (pathname === '/api/groner/buscar-contato') {
     await handleBuscarContato(req, res);
+    return;
+  }
+
+  if (pathname === '/api/groner/carregar-contato') {
+    await handleCarregarContato(req, res);
     return;
   }
 

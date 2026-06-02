@@ -45,6 +45,27 @@
           </div>
         </header>
 
+        <!-- Busca Groner — entrada MHZ -->
+        <section class="card groner-acesso-card" id="groner-acesso">
+          <div class="card-header">
+            <h2>Buscar cliente na Groner</h2>
+            <p class="hint">Pesquise por nome e carregue cliente + usina automaticamente do CRM.</p>
+          </div>
+          <div class="groner-acesso-busca">
+            <label class="field groner-acesso-field">
+              <span>Nome, e-mail, CPF/CNPJ ou telefone</span>
+              <input
+                type="search"
+                id="groner-busca-entrada"
+                placeholder="Ex: João Silva, joao@email.com, 11999998888..."
+                autocomplete="off"
+              />
+            </label>
+            <button type="button" id="btn-groner-entrada" class="btn btn-primary">Buscar</button>
+          </div>
+          <div id="groner-sugestoes" class="groner-sugestoes hidden" aria-live="polite"></div>
+        </section>
+
         <form id="form-proposta" class="form-grid" novalidate>
           <!-- Cliente -->
           <section class="card">

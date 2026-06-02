@@ -1177,3 +1177,48 @@ body {
   font-size: 0.8rem;
   color: var(--primary);
 }
+
+/* ── Groner acesso / busca por nome ── */
+.groner-acesso-card {
+  border-color: rgba(0, 180, 216, 0.35);
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(0, 180, 216, 0.06) 100%);
+}
+
+.groner-acesso-card .hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.groner-acesso-busca {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.groner-acesso-field {
+  margin: 0;
+}
+
+.groner-sugestoes {
+  margin-top: 0.75rem;
+  position: relative;
+}
+
+.groner-lista-compact .groner-item {
+  padding: 0.65rem 0.85rem;
+}
+
+.groner-item-end {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+}
+
+@media (max-width: 640px) {
+  .groner-acesso-busca {
+    grid-template-columns: 1fr;
+  }
+}

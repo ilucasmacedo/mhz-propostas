@@ -7,6 +7,7 @@
     "dev": "vite",
     "dev:api": "node server/dev.mjs",
     "dev:all": "npx concurrently -n api,web -c blue,green \"npm run dev:api\" \"npm run dev\"",
+    "test:groner": "node scripts/test-groner-busca.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },

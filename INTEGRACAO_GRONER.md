@@ -32,20 +32,48 @@ Na **Vercel**: Project → Settings → Environment Variables → adicione as du
 
 ---
 
-## 2. Buscar contato (implementado)
+## 2. Buscar e carregar contato (implementado)
 
-No formulário **Cliente**, use **Buscar na Groner**. A busca usa **todos os campos preenchidos** em paralelo:
+### Busca na entrada MHZ
 
-| Campo no sistema | Endpoint Groner |
-|------------------|-----------------|
+No topo da **Nova Proposta**, use o card **Buscar cliente na Groner**:
+
+- Digite **nome** (mín. 3 letras) — sugestões automáticas enquanto digita
+- Ou e-mail, CPF/CNPJ, telefone + Enter / Botão Buscar
+- Clique **Carregar dados** → preenche **Cliente** e **Usina** a partir do CRM
+
+### Busca no card Cliente
+
+O botão **Buscar na Groner** no card Cliente usa os mesmos campos já preenchidos.
+
+### Endpoints da API MHZ (Vercel)
+
+| Rota | Função |
+|------|--------|
+| `POST /api/groner/buscar-contato` | Lista contatos (nome, e-mail, documento, telefone) |
+| `POST /api/groner/carregar-contato` | Carrega Lead + Projeto completos e monta o formulário |
+
+### Mapeamento Groner → formulário MHZ
+
+| Groner (API) | Campo MHZ |
+|--------------|-----------|
+| Lead.Nome | Nome |
+| Lead.Documento | CPF/CNPJ |
+| Lead.Email | E-mail |
+| Lead.Celular | Telefone |
+| Lead endereço (logradouro, cidade, UF) | Endereço da usina |
+| Projeto.Consumo | kWp estimado (consumo ÷ 130) |
+| Projeto.UsinaPotenciaKwp / PotenciaKwp | kWp (se existir) |
+| Projeto.QuantidadePlacas | Nº de placas |
+
+| Campo no sistema | Endpoint Groner (busca) |
+|------------------|---------------------------|
 | CPF / CNPJ | `GET /api/Lead/VerificarDocumento/{documento}` |
 | E-mail | `GET /api/Lead/Verificar/{email}` |
 | Telefone | `GET /api/Lead/VerificarCelular/{celular}/55` |
 | Nome | `GET /api/Lead?query={nome}` |
 
-Ao selecionar um contato:
-- Preenche nome, documento, e-mail e telefone
-- Guarda `Lead ID` e `Projeto ID` (se houver) para envio futuro do orçamento/PDF
+Ao carregar: `GET /api/Lead/{id}` + `GET /api/Projeto/{id}`.
 
 ---
 
