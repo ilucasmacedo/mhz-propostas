@@ -84,5 +84,19 @@
       "presencial": true
     }
   ],
+  "matriz_coberturas_planos": [
+    { "recurso": "Aplicativo de monitoramento", "ACESSO": true, "PADRAO": true, "PREMIUM": true },
+    { "recurso": "Alertas de falha via aplicativo", "ACESSO": true, "PADRAO": true, "PREMIUM": true },
+    { "recurso": "Relatórios de geração via app/e-mail", "ACESSO": true, "PADRAO": true, "PREMIUM": true },
+    { "recurso": "2ª via de fatura no APP", "ACESSO": true, "PADRAO": true, "PREMIUM": true },
+    { "recurso": "Monitoramento ativo da usina", "ACESSO": false, "PADRAO": true, "PREMIUM": true },
+    { "recurso": "Suporte técnico online", "ACESSO": false, "PADRAO": true, "PREMIUM": true },
+    { "recurso": "Configuração remota de inversor/Wi-Fi", "ACESSO": false, "PADRAO": true, "PREMIUM": true },
+    { "recurso": "Análise preliminar de falhas", "ACESSO": false, "PADRAO": true, "PREMIUM": true },
+    { "recurso": "Serviços junto à concessionária", "ACESSO": false, "PADRAO": true, "PREMIUM": true },
+    { "recurso": "Auditoria de relatório de geração", "ACESSO": false, "PADRAO": true, "PREMIUM": true },
+    { "recurso": "Manutenção preventiva anual", "ACESSO": false, "PADRAO": false, "PREMIUM": true },
+    { "recurso": "Limpeza técnica do sistema", "ACESSO": false, "PADRAO": false, "PREMIUM": true }
+  ],
   "formulas": []
 }

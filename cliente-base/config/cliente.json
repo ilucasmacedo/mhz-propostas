@@ -27,5 +27,13 @@
   "groner": {
     "notaCadastroLead": "Cadastro automático — SIGLA Propostas (Pré-venda)",
     "notaProjetoPrefixo": "Proposta SIGLA"
+  },
+  "pdf": {
+    "capaImagem": "/img/capa-empresa.png",
+    "capaParagrafos": [
+      "Texto institucional da empresa — parágrafo 1.",
+      "Texto institucional da empresa — parágrafo 2.",
+      "Texto institucional da empresa — parágrafo 3."
+    ]
   }
 }

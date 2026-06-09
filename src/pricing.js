@@ -333,3 +333,24 @@ export function precosComparativoPlanos(kwp) {
     };
   });
 }
+
+const ORDEM_PLANOS_PDF = ['ACESSO', 'PADRAO', 'PREMIUM'];
+
+/** Matriz de coberturas para página comparativa do PDF */
+export function getMatrizCoberturasPlanos() {
+  const matriz = activeConfig.matriz_coberturas_planos;
+  if (Array.isArray(matriz) && matriz.length) return matriz;
+  return [];
+}
+
+export function getOrdemPlanosPdf() {
+  return ORDEM_PLANOS_PDF.filter((c) => PLANOS[c]);
+}
+
+export function rotuloPlanoPdf(codigo) {
+  const p = PLANOS[codigo];
+  if (!p) return codigo;
+  if (codigo === 'ACESSO' && p.alias) return String(p.alias).toUpperCase();
+  if (codigo === 'PADRAO') return 'PADRÃO';
+  return (p.nome || codigo).replace(/^Plano\s+/i, '').toUpperCase();
+}

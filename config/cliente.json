@@ -15,6 +15,14 @@
     "email": "contato@mhzenergia.com.br",
     "vendedorPadrao": "Equipe Comercial MHZ"
   },
+  "pdf": {
+    "capaImagem": "/img/mhz-capa.png",
+    "capaParagrafos": [
+      "O GRUPO MHZ é sinônimo de liderança no mercado de energia, com mais de 1.500 projetos homologados nos setores industrial, comercial, residencial, rural, estações de recarga veicular, energia por assinatura e usinas de investimento. Presente em 3 estados e presente em 74 cidades, o Grupo MHZ é reconhecido por seu atendimento incomparável e suporte completo em todas as etapas dos projetos.",
+      "Conquistamos o prestigiado selo de TOP 1 em Melhor Pós-Venda do Centro-Oeste por três anos consecutivos (2022, 2023 e 2024), segundo a SolarZ Awards. Essa conquista reflete nosso compromisso com a excelência em atendimento, instalação, entrega e monitoramento.",
+      "Mais do que fornecer energia limpa e sustentável, temos a missão de deixar um legado transformador para as futuras gerações. Trabalhamos diariamente para construir um futuro mais verde, consciente e alinhado com os valores de inovação e sustentabilidade."
+    ]
+  },
   "ui": {
     "tituloProposta": "Nova Proposta Comercial",
     "tituloPlaybook": "Playbook Comercial + Operacional",

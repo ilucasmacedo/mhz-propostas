@@ -291,6 +291,7 @@ function montarDadosProposta() {
       nome: planoInfo.nome,
       faixa: planoInfo.faixa,
     },
+    comparativoPlanos: precosComparativoPlanos(data.usina.kwp),
     resultado,
     vendedor: getVendedorPadrao(),
   };

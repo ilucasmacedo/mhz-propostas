@@ -41,6 +41,15 @@ export function getNomeCurto() {
   return cliente.nomeCurto || cliente.nome || 'Cliente';
 }
 
+export function getCapaPdfImagem() {
+  return cliente.pdf?.capaImagem || '';
+}
+
+export function getCapaPdfParagrafos() {
+  const paragrafos = cliente.pdf?.capaParagrafos;
+  return Array.isArray(paragrafos) ? paragrafos : [];
+}
+
 export function getSistemaNome() {
   return cliente.produto?.sistemaNome || `${getNomeCurto()} Propostas`;
 }
