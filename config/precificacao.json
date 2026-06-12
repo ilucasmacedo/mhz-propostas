@@ -172,7 +172,8 @@
       "codigo": "PREMIUM",
       "nome": "Plano Premium",
       "tagline": "Prioridade e suporte ampliado",
-      "desconto_avulso": true
+      "desconto_avulso": true,
+      "recomendado": true
     }
   },
 
@@ -320,8 +321,8 @@
 
   "casos_teste": [
     { "id": 1, "kwp": 4,  "plano": "ACESSO",  "km": 30,  "plano_ativo": false, "mensalidade_esperada": 9.9,   "deslocamento_esperado": 0    },
-    { "id": 2, "kwp": 7,  "plano": "PADRAO",  "km": 100, "plano_ativo": false, "mensalidade_esperada": 49.9,  "deslocamento_esperado": 120  },
-    { "id": 3, "kwp": 25, "plano": "PREMIUM", "km": 250, "plano_ativo": true,  "mensalidade_esperada": 179.9, "deslocamento_esperado": 640  },
+    { "id": 2, "kwp": 7,  "plano": "PADRAO",  "km": 100, "plano_ativo": false, "mensalidade_esperada": 169.9, "deslocamento_esperado": 120  },
+    { "id": 3, "kwp": 25, "plano": "PREMIUM", "km": 250, "plano_ativo": true,  "mensalidade_esperada": 819.9, "deslocamento_esperado": 640  },
     { "id": 4, "kwp": 55, "plano": "PADRAO",  "km": 40,  "plano_ativo": false, "mensalidade_esperada": null,  "deslocamento_esperado": 0    },
     { "id": 5, "kwp": 10, "plano": "ACESSO",  "km": 650, "plano_ativo": false, "mensalidade_esperada": 19.9,  "deslocamento_esperado": 2400 },
     { "id": 6, "servico": "MANUT_PREVENTIVA", "placas": 20, "com_plano": false, "esperado": 640 },

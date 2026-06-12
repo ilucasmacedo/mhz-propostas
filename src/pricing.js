@@ -168,6 +168,33 @@ export function calcularMensalidade(kwp, plano) {
   };
 }
 
+/** Adicional embutido na mensalidade (distância acima do raio base), sem expor como item avulso */
+export function adicionalMensalidadeDistancia(distanciaKm, incluirDeslocamentoGlobal = true) {
+  if (!incluirDeslocamentoGlobal) return 0;
+  const { raio_base_km } = getConstantes();
+  if ((Number(distanciaKm) || 0) <= raio_base_km) return 0;
+  const d = calcularDeslocamento(distanciaKm);
+  if (d.a_combinar) return 0;
+  return d.valor;
+}
+
+export function mensalidadeRecorrenteComDistancia(
+  kwp,
+  plano,
+  distanciaKm,
+  incluirDeslocamentoGlobal = true,
+) {
+  const base = calcularMensalidade(kwp, plano);
+  if (base.sob_consulta || base.mensalidade == null) {
+    return { ...base, mensalidadeRecorrente: null };
+  }
+  const adicional = adicionalMensalidadeDistancia(distanciaKm, incluirDeslocamentoGlobal);
+  return {
+    ...base,
+    mensalidadeRecorrente: arredondar(base.mensalidade + adicional),
+  };
+}
+
 export function calcularServico(servico, opts) {
   const { temPlanoAtivo, qtdPlacas, valorContrato, distanciaKm, incluirDeslocamento } = opts;
   const precoBase = temPlanoAtivo ? servico.com : servico.fora;
@@ -240,6 +267,14 @@ export function calcularProposta(input) {
 
   if (deslocamento.a_combinar) motivos.push('DISTANCIA_ACIMA_600');
 
+  const mensalidadeRecorrente =
+    temPlanoContratado(plano) && !mensalidadeResult.sob_consulta && mensalidadeResult.mensalidade != null
+      ? arredondar(
+          mensalidadeResult.mensalidade +
+            adicionalMensalidadeDistancia(distanciaKm, incluirDeslocamentoGlobal),
+        )
+      : mensalidadeResult.mensalidade;
+
   const itens = [];
 
   if (temPlanoContratado(plano) && !mensalidadeResult.sob_consulta && PLANOS[plano]) {
@@ -247,7 +282,7 @@ export function calcularProposta(input) {
       tipo: 'MENSALIDADE',
       codigo: plano,
       descricao: `${PLANOS[plano].nome} — faixa ${labelFaixaKwp(mensalidadeResult.faixa)}`,
-      subtotal: mensalidadeResult.mensalidade,
+      subtotal: mensalidadeRecorrente,
     });
   }
 
@@ -272,21 +307,6 @@ export function calcularProposta(input) {
     totalAvulsos += result.subtotal;
   }
 
-  if (
-    incluirDeslocamentoGlobal &&
-    distanciaKm > constantes.raio_base_km &&
-    !deslocamento.a_combinar &&
-    deslocamento.valor > 0
-  ) {
-    itens.push({
-      tipo: 'DESLOCAMENTO',
-      codigo: 'DESLOCAMENTO',
-      descricao: `Taxa de deslocamento (${deslocamento.km_excedente} km × R$ ${deslocamento.taxa.toFixed(2).replace('.', ',')}/km)`,
-      subtotal: deslocamento.valor,
-    });
-    totalAvulsos += deslocamento.valor;
-  }
-
   if (valorInvestimento > 0) {
     const taxaInv = arredondar(valorInvestimento * (percentualInvestimento / 100));
     itens.push({
@@ -299,35 +319,40 @@ export function calcularProposta(input) {
   }
 
   totalAvulsos = arredondar(totalAvulsos);
-  const mensalidade = mensalidadeResult.mensalidade;
   const sobConsultaPlano = temPlanoContratado(plano) && mensalidadeResult.sob_consulta;
   const primeiraCobranca =
     sobConsultaPlano && deslocamento.a_combinar
       ? null
-      : arredondar((mensalidade || 0) + totalAvulsos);
+      : arredondar((mensalidadeRecorrente || 0) + totalAvulsos);
 
   return {
     sob_consulta: sobConsultaPlano || deslocamento.a_combinar,
     motivos_sob_consulta: motivos,
-    mensalidade,
+    mensalidade: mensalidadeRecorrente,
     faixa_kwp: mensalidadeResult.faixa,
     plano,
     itens,
     deslocamento,
     totais: {
-      recorrente_mensal: mensalidade,
+      recorrente_mensal: mensalidadeRecorrente,
       avulsos: totalAvulsos,
       primeira_cobranca: primeiraCobranca,
     },
   };
 }
 
-export function precosComparativoPlanos(kwp) {
+export function precosComparativoPlanos(kwp, distanciaKm = 0) {
+  const adicional = adicionalMensalidadeDistancia(distanciaKm);
+
   return Object.keys(PLANOS).map((codigo) => {
     const result = calcularMensalidade(kwp, codigo);
+    let mensalidade = result.mensalidade;
+    if (mensalidade != null && adicional > 0 && !result.sob_consulta) {
+      mensalidade = arredondar(mensalidade + adicional);
+    }
     return {
       ...PLANOS[codigo],
-      mensalidade: result.mensalidade,
+      mensalidade,
       sob_consulta: result.sob_consulta,
       faixa: labelFaixaKwp(result.faixa),
     };
@@ -353,4 +378,8 @@ export function rotuloPlanoPdf(codigo) {
   if (codigo === 'ACESSO' && p.alias) return String(p.alias).toUpperCase();
   if (codigo === 'PADRAO') return 'PADRÃO';
   return (p.nome || codigo).replace(/^Plano\s+/i, '').toUpperCase();
+}
+
+export function isPlanoRecomendado(codigo) {
+  return Boolean(PLANOS[codigo]?.recomendado);
 }

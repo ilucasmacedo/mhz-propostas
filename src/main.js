@@ -9,6 +9,7 @@ import {
   planoTemDescontoAvulso,
   temPlanoContratado,
   precosComparativoPlanos,
+  isPlanoRecomendado,
   formatarMoeda,
   gerarNumeroProposta,
 } from './pricing.js';
@@ -120,7 +121,7 @@ function formatarMensalidadeResumo(valor, plano) {
 
 function renderPlanos() {
   const data = getFormData();
-  const comparativo = precosComparativoPlanos(data.usina.kwp);
+  const comparativo = precosComparativoPlanos(data.usina.kwp, data.usina.distanciaKm);
   const selecionado = els.planoSelecionado.value;
 
   const cardSemPlano = `
@@ -146,7 +147,7 @@ function renderPlanos() {
     comparativo
       .map((plano) => {
         const isSelected = plano.codigo === selecionado;
-        const isRecomendado = plano.codigo === 'PADRAO';
+        const isRecomendado = isPlanoRecomendado(plano.codigo);
         const precoHtml = plano.sob_consulta
           ? '<p class="plano-preco sob-consulta">Sob consulta</p>'
           : `<p class="plano-preco">${formatarMoeda(plano.mensalidade)}<small>/mês</small></p>`;
@@ -221,12 +222,7 @@ function renderAlertas(resultado) {
     alertas.push('Usina acima de 50 kWp — mensalidade sob consulta comercial.');
   }
   if (resultado.motivos_sob_consulta.includes('DISTANCIA_ACIMA_600')) {
-    alertas.push('Distância acima de 600 km — taxa de deslocamento a combinar.');
-  }
-  if (resultado.deslocamento.valor > 0) {
-    alertas.push(
-      `Deslocamento: ${resultado.deslocamento.km_excedente} km excedentes × ${formatarMoeda(resultado.deslocamento.taxa)}/km = ${formatarMoeda(resultado.deslocamento.valor)}`,
-    );
+    alertas.push('Distância acima de 600 km — mensalidade sob consulta comercial.');
   }
 
   els.alertas.innerHTML = alertas.map((a) => `<div class="alerta">${a}</div>`).join('');
@@ -266,7 +262,7 @@ function montarDadosProposta() {
 
   let planoInfo;
   if (temPlanoContratado(data.plano)) {
-    planoInfo = precosComparativoPlanos(data.usina.kwp).find(
+    planoInfo = precosComparativoPlanos(data.usina.kwp, data.usina.distanciaKm).find(
       (p) => p.codigo === data.plano,
     );
   } else {
@@ -291,7 +287,7 @@ function montarDadosProposta() {
       nome: planoInfo.nome,
       faixa: planoInfo.faixa,
     },
-    comparativoPlanos: precosComparativoPlanos(data.usina.kwp),
+    comparativoPlanos: precosComparativoPlanos(data.usina.kwp, data.usina.distanciaKm),
     resultado,
     vendedor: getVendedorPadrao(),
   };

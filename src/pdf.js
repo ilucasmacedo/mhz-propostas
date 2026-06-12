@@ -11,6 +11,7 @@ import {
   getMatrizCoberturasPlanos,
   getOrdemPlanosPdf,
   rotuloPlanoPdf,
+  isPlanoRecomendado,
 } from './pricing.js';
 
 const PDF_RENDER_ID = 'pdf-render-host';
@@ -179,7 +180,7 @@ export function montarHtmlProposta(dados) {
                     <th class="pdf-matriz-recurso-head" scope="col"></th>
                     ${ordemPlanos
                       .map((cod) => {
-                        const destaque = cod === 'PADRAO';
+                        const destaque = isPlanoRecomendado(cod);
                         const selecionado = plano.codigo === cod;
                         return `<th scope="col" class="pdf-matriz-col-head ${destaque ? 'pdf-matriz-col-head--dark' : ''} ${selecionado ? 'pdf-matriz-col-head--sel' : ''}">${rotuloPlanoPdf(cod)}</th>`;
                       })
@@ -222,7 +223,7 @@ export function montarHtmlProposta(dados) {
               ${planosOrdenados
                 .map((p) => {
                   const selecionado = plano.codigo === p.codigo;
-                  const recomendado = p.codigo === 'PADRAO';
+                  const recomendado = isPlanoRecomendado(p.codigo);
                   const preco = p.sob_consulta
                     ? 'Sob consulta'
                     : `${formatMoeda(p.mensalidade)}<span>/mês</span>`;
@@ -364,8 +365,7 @@ export function montarHtmlProposta(dados) {
         <section class="pdf-section pdf-obs">
           <h2>Condições</h2>
           <ul>
-            <li>Valores de mensalidade válidos para usinas em raio de até 50 km da base operacional.</li>
-            <li>Deslocamento acima de 50 km conforme tabela comercial vigente.</li>
+            <li>Valores de mensalidade conforme potência da usina e localização.</li>
             <li>Proposta válida por ${validadeDias} dias a partir da emissão.</li>
             <li>Usinas acima de 50 kWp ou clientes comerciais/industriais podem requerer negociação personalizada.</li>
           </ul>
