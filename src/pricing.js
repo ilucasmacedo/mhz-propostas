@@ -341,18 +341,24 @@ export function calcularProposta(input) {
   };
 }
 
-export function precosComparativoPlanos(kwp, distanciaKm = 0) {
+export function precosComparativoPlanos(kwp, distanciaKm = 0, planoSelecionado = null) {
   const adicional = adicionalMensalidadeDistancia(distanciaKm);
 
   return Object.keys(PLANOS).map((codigo) => {
     const result = calcularMensalidade(kwp, codigo);
     let mensalidade = result.mensalidade;
-    if (mensalidade != null && adicional > 0 && !result.sob_consulta) {
+    const incluirKm =
+      codigo === 'PREMIUM' || (planoSelecionado && codigo === planoSelecionado);
+    if (mensalidade != null && adicional > 0 && !result.sob_consulta && incluirKm) {
       mensalidade = arredondar(mensalidade + adicional);
     }
+    const parcelas = getParcelasCartaoPlano(codigo);
     return {
       ...PLANOS[codigo],
       mensalidade,
+      parcelas_cartao: parcelas,
+      parcela_cartao:
+        parcelas && mensalidade != null ? arredondar(mensalidade / parcelas) : null,
       sob_consulta: result.sob_consulta,
       faixa: labelFaixaKwp(result.faixa),
     };
@@ -382,4 +388,23 @@ export function rotuloPlanoPdf(codigo) {
 
 export function isPlanoRecomendado(codigo) {
   return Boolean(PLANOS[codigo]?.recomendado);
+}
+
+export function getParcelasCartaoPlano(codigo) {
+  const n = Number(PLANOS[codigo]?.parcelas_cartao);
+  return n > 1 ? n : null;
+}
+
+/** Como exibir preço na UI/PDF: mensal ou parcelas no cartão (Premium) */
+export function exibicaoPrecoPlano(codigo, mensalidade) {
+  const parcelas = getParcelasCartaoPlano(codigo);
+  if (parcelas && mensalidade != null && mensalidade !== undefined) {
+    return {
+      modo: 'parcelas',
+      parcelas,
+      valorParcela: arredondar(mensalidade / parcelas),
+      mensalidade,
+    };
+  }
+  return { modo: 'mensal', mensalidade };
 }

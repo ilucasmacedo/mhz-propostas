@@ -173,7 +173,8 @@
       "nome": "Plano Premium",
       "tagline": "Prioridade e suporte ampliado",
       "desconto_avulso": true,
-      "recomendado": true
+      "recomendado": true,
+      "parcelas_cartao": 12
     }
   },
 

@@ -12,6 +12,7 @@ import {
   getOrdemPlanosPdf,
   rotuloPlanoPdf,
   isPlanoRecomendado,
+  exibicaoPrecoPlano,
 } from './pricing.js';
 
 const PDF_RENDER_ID = 'pdf-render-host';
@@ -142,6 +143,39 @@ export function montarHtmlProposta(dados) {
       ? 'Sob consulta'
       : new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
 
+  const htmlPrecoComparativo = (codigo, mensalidade, sobConsulta) => {
+    if (sobConsulta) return { preco: 'Sob consulta', rodape: 'Pagamento mensal' };
+    const exib = exibicaoPrecoPlano(codigo, mensalidade);
+    if (exib.modo === 'parcelas') {
+      return {
+        preco: `12x de ${formatMoeda(exib.valorParcela)}`,
+        rodape: 'no cartão',
+      };
+    }
+    return {
+      preco: `${formatMoeda(exib.mensalidade)}<span>/mês</span>`,
+      rodape: 'Pagamento mensal',
+    };
+  };
+
+  const htmlPrecoPlanoSelecionado = (codigo, mensalidade, semPlano) => {
+    if (semPlano) return '—';
+    const exib = exibicaoPrecoPlano(codigo, mensalidade);
+    if (exib.modo === 'parcelas') {
+      return `12x de ${formatMoeda(exib.valorParcela)}<span> no cartão</span>`;
+    }
+    return `${formatMoeda(mensalidade)}<span>/mês</span>`;
+  };
+
+  const labelMensalidadeResumo = () => {
+    if (plano.nome === 'Sem plano') return '—';
+    const exib = exibicaoPrecoPlano(plano.codigo, resultado.totais.recorrente_mensal);
+    if (exib.modo === 'parcelas') {
+      return `12x de ${formatMoeda(exib.valorParcela)} (cartão)`;
+    }
+    return formatMoeda(resultado.totais.recorrente_mensal);
+  };
+
   const itensHtml = resultado.itens
     .map(
       (item) => `
@@ -224,9 +258,11 @@ export function montarHtmlProposta(dados) {
                 .map((p) => {
                   const selecionado = plano.codigo === p.codigo;
                   const recomendado = isPlanoRecomendado(p.codigo);
-                  const preco = p.sob_consulta
-                    ? 'Sob consulta'
-                    : `${formatMoeda(p.mensalidade)}<span>/mês</span>`;
+                  const { preco, rodape: rodapePreco } = htmlPrecoComparativo(
+                    p.codigo,
+                    p.mensalidade,
+                    p.sob_consulta,
+                  );
                   const badges = [
                     recomendado ? '<span class="pdf-plano-badge pdf-plano-badge-rec">Recomendado</span>' : '',
                     selecionado ? '<span class="pdf-plano-badge pdf-plano-badge-sel">Desta proposta</span>' : '',
@@ -242,8 +278,8 @@ export function montarHtmlProposta(dados) {
                   </div>
                   <div class="pdf-plano-card-body">
                     <p class="pdf-plano-card-tagline">${p.tagline || ''}</p>
-                    <p class="pdf-plano-card-preco">${preco}</p>
-                    <p class="pdf-plano-card-foot">Pagamento mensal</p>
+                <p class="pdf-plano-card-preco">${preco}</p>
+                <p class="pdf-plano-card-foot">${rodapePreco}</p>
                   </div>
                 </article>`;
                 })
@@ -327,7 +363,7 @@ export function montarHtmlProposta(dados) {
           <h2>${planoSelecionadoTitulo}</h2>
           <div class="pdf-plano-box ${plano.codigo && plano.codigo !== 'NENHUM' ? 'pdf-plano-box--selected' : ''}">
             <h3>${plano.nome}</h3>
-            <p class="pdf-plano-valor">${plano.nome === 'Sem plano' ? '—' : `${formatMoeda(resultado.totais.recorrente_mensal)}<span>/mês</span>`}</p>
+            <p class="pdf-plano-valor">${htmlPrecoPlanoSelecionado(plano.codigo, resultado.totais.recorrente_mensal, plano.nome === 'Sem plano')}</p>
             <p class="pdf-plano-faixa">${plano.nome === 'Sem plano' ? 'Contratação apenas de serviços avulsos' : `Faixa: ${plano.faixa}`}</p>
           </div>
         </section>
@@ -350,7 +386,7 @@ export function montarHtmlProposta(dados) {
         <section class="pdf-totais">
           <div class="pdf-total-row">
             <span>Mensalidade recorrente</span>
-            <strong>${plano.nome === 'Sem plano' ? '—' : formatMoeda(resultado.totais.recorrente_mensal)}</strong>
+            <strong>${labelMensalidadeResumo()}</strong>
           </div>
           <div class="pdf-total-row">
             <span>Serviços e taxas (avulsos)</span>

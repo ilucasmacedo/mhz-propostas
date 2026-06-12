@@ -10,6 +10,7 @@ import {
   temPlanoContratado,
   precosComparativoPlanos,
   isPlanoRecomendado,
+  exibicaoPrecoPlano,
   formatarMoeda,
   gerarNumeroProposta,
 } from './pricing.js';
@@ -114,14 +115,42 @@ function getResultado() {
   });
 }
 
-function formatarMensalidadeResumo(valor, plano) {
-  if (!temPlanoContratado(plano)) return 'Sem plano';
+function formatarMensalidadeResumo(valor, planoCodigo) {
+  if (!temPlanoContratado(planoCodigo)) return 'Sem plano';
+  const exib = exibicaoPrecoPlano(planoCodigo, valor);
+  if (exib.modo === 'parcelas') {
+    return `12x de ${formatarMoeda(exib.valorParcela)} no cartão`;
+  }
   return formatarMoeda(valor);
+}
+
+function htmlPrecoPlanoCard(plano) {
+  if (plano.sob_consulta) {
+    return {
+      preco: '<p class="plano-preco sob-consulta">Sob consulta</p>',
+      rodape: '',
+    };
+  }
+  const exib = exibicaoPrecoPlano(plano.codigo, plano.mensalidade);
+  if (exib.modo === 'parcelas') {
+    return {
+      preco: `<p class="plano-preco plano-preco--parcelas">12x de ${formatarMoeda(exib.valorParcela)}</p>`,
+      rodape: '<p class="plano-parcelas-hint">no cartão</p>',
+    };
+  }
+  return {
+    preco: `<p class="plano-preco">${formatarMoeda(exib.mensalidade)}<small>/mês</small></p>`,
+    rodape: '',
+  };
 }
 
 function renderPlanos() {
   const data = getFormData();
-  const comparativo = precosComparativoPlanos(data.usina.kwp, data.usina.distanciaKm);
+  const comparativo = precosComparativoPlanos(
+    data.usina.kwp,
+    data.usina.distanciaKm,
+    data.plano,
+  );
   const selecionado = els.planoSelecionado.value;
 
   const cardSemPlano = `
@@ -148,9 +177,7 @@ function renderPlanos() {
       .map((plano) => {
         const isSelected = plano.codigo === selecionado;
         const isRecomendado = isPlanoRecomendado(plano.codigo);
-        const precoHtml = plano.sob_consulta
-          ? '<p class="plano-preco sob-consulta">Sob consulta</p>'
-          : `<p class="plano-preco">${formatarMoeda(plano.mensalidade)}<small>/mês</small></p>`;
+        const { preco: precoHtml, rodape: rodapePreco } = htmlPrecoPlanoCard(plano);
 
         const coberturas = (COBERTURAS[plano.codigo] || [])
           .map((c) => `<li>${c}</li>`)
@@ -167,6 +194,7 @@ function renderPlanos() {
           <h3 class="plano-nome">${plano.nome}</h3>
           <p class="plano-tagline">${plano.tagline}</p>
           ${precoHtml}
+          ${rodapePreco}
           <p class="plano-faixa">Faixa ${plano.faixa}</p>
           <ul class="plano-coberturas">${coberturas}</ul>
         </article>`;
@@ -262,7 +290,7 @@ function montarDadosProposta() {
 
   let planoInfo;
   if (temPlanoContratado(data.plano)) {
-    planoInfo = precosComparativoPlanos(data.usina.kwp, data.usina.distanciaKm).find(
+    planoInfo = precosComparativoPlanos(data.usina.kwp, data.usina.distanciaKm, data.plano).find(
       (p) => p.codigo === data.plano,
     );
   } else {
@@ -287,7 +315,7 @@ function montarDadosProposta() {
       nome: planoInfo.nome,
       faixa: planoInfo.faixa,
     },
-    comparativoPlanos: precosComparativoPlanos(data.usina.kwp, data.usina.distanciaKm),
+    comparativoPlanos: precosComparativoPlanos(data.usina.kwp, data.usina.distanciaKm, data.plano),
     resultado,
     vendedor: getVendedorPadrao(),
   };
