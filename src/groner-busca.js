@@ -98,8 +98,14 @@ export function aplicarFormularioGroner(payload) {
   const badge = document.getElementById('badge-groner');
   if (badge && groner) {
     const extra = usina?.consumoKwh ? ` · ${usina.consumoKwh} kWh/mês` : '';
+    const fonteProposta =
+      groner.propostaFonte === 'aceita'
+        ? ' · proposta aceita'
+        : groner.propostaFonte === 'ultima'
+          ? ' · última pré-proposta'
+          : '';
     badge.textContent = groner.projetoId
-      ? `Groner: ${groner.projetoNome || 'Projeto'} (#${groner.projetoId})${extra}`
+      ? `Groner: ${groner.projetoNome || 'Projeto'} (#${groner.projetoId})${fonteProposta}${extra}`
       : `Groner: Lead #${groner.leadId}${extra}`;
     badge.classList.remove('hidden');
   }

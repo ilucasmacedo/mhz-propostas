@@ -178,6 +178,19 @@ export function adicionalMensalidadeDistancia(distanciaKm, incluirDeslocamentoGl
   return d.valor;
 }
 
+/**
+ * Adicional de distância na mensalidade conforme o plano.
+ * Premium (12x no cartão): deslocamento total ÷ parcelas (ex.: 1500 ÷ 12 = 125).
+ * Demais planos: deslocamento integral na mensalidade.
+ */
+export function adicionalDistanciaEmbutido(planoCodigo, distanciaKm, incluirDeslocamentoGlobal = true) {
+  const total = adicionalMensalidadeDistancia(distanciaKm, incluirDeslocamentoGlobal);
+  if (total <= 0) return 0;
+  const parcelas = getParcelasCartaoPlano(planoCodigo);
+  if (parcelas) return arredondar(total / parcelas);
+  return total;
+}
+
 export function mensalidadeRecorrenteComDistancia(
   kwp,
   plano,
@@ -188,7 +201,7 @@ export function mensalidadeRecorrenteComDistancia(
   if (base.sob_consulta || base.mensalidade == null) {
     return { ...base, mensalidadeRecorrente: null };
   }
-  const adicional = adicionalMensalidadeDistancia(distanciaKm, incluirDeslocamentoGlobal);
+  const adicional = adicionalDistanciaEmbutido(plano, distanciaKm, incluirDeslocamentoGlobal);
   return {
     ...base,
     mensalidadeRecorrente: arredondar(base.mensalidade + adicional),
@@ -271,7 +284,7 @@ export function calcularProposta(input) {
     temPlanoContratado(plano) && !mensalidadeResult.sob_consulta && mensalidadeResult.mensalidade != null
       ? arredondar(
           mensalidadeResult.mensalidade +
-            adicionalMensalidadeDistancia(distanciaKm, incluirDeslocamentoGlobal),
+            adicionalDistanciaEmbutido(plano, distanciaKm, incluirDeslocamentoGlobal),
         )
       : mensalidadeResult.mensalidade;
 
@@ -342,13 +355,12 @@ export function calcularProposta(input) {
 }
 
 export function precosComparativoPlanos(kwp, distanciaKm = 0, planoSelecionado = null) {
-  const adicional = adicionalMensalidadeDistancia(distanciaKm);
-
   return Object.keys(PLANOS).map((codigo) => {
     const result = calcularMensalidade(kwp, codigo);
     let mensalidade = result.mensalidade;
     const incluirKm =
       codigo === 'PREMIUM' || (planoSelecionado && codigo === planoSelecionado);
+    const adicional = adicionalDistanciaEmbutido(codigo, distanciaKm);
     if (mensalidade != null && adicional > 0 && !result.sob_consulta && incluirKm) {
       mensalidade = arredondar(mensalidade + adicional);
     }
@@ -357,8 +369,7 @@ export function precosComparativoPlanos(kwp, distanciaKm = 0, planoSelecionado =
       ...PLANOS[codigo],
       mensalidade,
       parcelas_cartao: parcelas,
-      parcela_cartao:
-        parcelas && mensalidade != null ? arredondar(mensalidade / parcelas) : null,
+      parcela_cartao: parcelas && mensalidade != null ? mensalidade : null,
       sob_consulta: result.sob_consulta,
       faixa: labelFaixaKwp(result.faixa),
     };
@@ -402,7 +413,8 @@ export function exibicaoPrecoPlano(codigo, mensalidade) {
     return {
       modo: 'parcelas',
       parcelas,
-      valorParcela: arredondar(mensalidade / parcelas),
+      // mensalidade já inclui plano + (deslocamento ÷ parcelas) — é o valor de cada parcela
+      valorParcela: arredondar(mensalidade),
       mensalidade,
     };
   }
