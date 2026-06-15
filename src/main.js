@@ -10,7 +10,6 @@ import {
   temPlanoContratado,
   precosComparativoPlanos,
   isPlanoRecomendado,
-  exibicaoPrecoPlano,
   formatarMoeda,
   gerarNumeroProposta,
 } from './pricing.js';
@@ -117,10 +116,6 @@ function getResultado() {
 
 function formatarMensalidadeResumo(valor, planoCodigo) {
   if (!temPlanoContratado(planoCodigo)) return 'Sem plano';
-  const exib = exibicaoPrecoPlano(planoCodigo, valor);
-  if (exib.modo === 'parcelas') {
-    return `12x de ${formatarMoeda(exib.valorParcela)} no cartão`;
-  }
   return formatarMoeda(valor);
 }
 
@@ -131,15 +126,8 @@ function htmlPrecoPlanoCard(plano) {
       rodape: '',
     };
   }
-  const exib = exibicaoPrecoPlano(plano.codigo, plano.mensalidade);
-  if (exib.modo === 'parcelas') {
-    return {
-      preco: `<p class="plano-preco plano-preco--parcelas">12x de ${formatarMoeda(exib.valorParcela)}</p>`,
-      rodape: '<p class="plano-parcelas-hint">no cartão</p>',
-    };
-  }
   return {
-    preco: `<p class="plano-preco">${formatarMoeda(exib.mensalidade)}<small>/mês</small></p>`,
+    preco: `<p class="plano-preco">${formatarMoeda(plano.mensalidade)}<small>/mês</small></p>`,
     rodape: '',
   };
 }

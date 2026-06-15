@@ -180,14 +180,14 @@ export function adicionalMensalidadeDistancia(distanciaKm, incluirDeslocamentoGl
 
 /**
  * Adicional de distância na mensalidade conforme o plano.
- * Premium (12x no cartão): deslocamento total ÷ parcelas (ex.: 1500 ÷ 12 = 125).
+ * Premium: deslocamento total ÷ parcelas (ex.: 1500 ÷ 12 = 125) + valor do plano.
  * Demais planos: deslocamento integral na mensalidade.
  */
 export function adicionalDistanciaEmbutido(planoCodigo, distanciaKm, incluirDeslocamentoGlobal = true) {
   const total = adicionalMensalidadeDistancia(distanciaKm, incluirDeslocamentoGlobal);
   if (total <= 0) return 0;
-  const parcelas = getParcelasCartaoPlano(planoCodigo);
-  if (parcelas) return arredondar(total / parcelas);
+  const divisor = getDivisorDeslocamentoPlano(planoCodigo);
+  if (divisor) return arredondar(total / divisor);
   return total;
 }
 
@@ -364,12 +364,9 @@ export function precosComparativoPlanos(kwp, distanciaKm = 0, planoSelecionado =
     if (mensalidade != null && adicional > 0 && !result.sob_consulta && incluirKm) {
       mensalidade = arredondar(mensalidade + adicional);
     }
-    const parcelas = getParcelasCartaoPlano(codigo);
     return {
       ...PLANOS[codigo],
       mensalidade,
-      parcelas_cartao: parcelas,
-      parcela_cartao: parcelas && mensalidade != null ? mensalidade : null,
       sob_consulta: result.sob_consulta,
       faixa: labelFaixaKwp(result.faixa),
     };
@@ -401,22 +398,8 @@ export function isPlanoRecomendado(codigo) {
   return Boolean(PLANOS[codigo]?.recomendado);
 }
 
-export function getParcelasCartaoPlano(codigo) {
+/** Divisor do deslocamento na mensalidade (Premium: parcelas_cartao = 12 → km ÷ 12) */
+export function getDivisorDeslocamentoPlano(codigo) {
   const n = Number(PLANOS[codigo]?.parcelas_cartao);
   return n > 1 ? n : null;
-}
-
-/** Como exibir preço na UI/PDF: mensal ou parcelas no cartão (Premium) */
-export function exibicaoPrecoPlano(codigo, mensalidade) {
-  const parcelas = getParcelasCartaoPlano(codigo);
-  if (parcelas && mensalidade != null && mensalidade !== undefined) {
-    return {
-      modo: 'parcelas',
-      parcelas,
-      // mensalidade já inclui plano + (deslocamento ÷ parcelas) — é o valor de cada parcela
-      valorParcela: arredondar(mensalidade),
-      mensalidade,
-    };
-  }
-  return { modo: 'mensal', mensalidade };
 }
