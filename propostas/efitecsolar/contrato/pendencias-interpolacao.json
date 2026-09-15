@@ -1,0 +1,16 @@
+{
+  "documento": "propostas/efitecsolar/contrato",
+  "atualizado_em": "2026-09-15",
+  "resumo": "Harvest do HTML Grapes do contrato Efitec. 17 códigos já no catálogo (visto_em atualizado). 7 códigos novos cadastrados a partir do markup enviado.",
+  "conhecidos": 17,
+  "novos_cadastrados": [
+    "[[RGLead]]",
+    "[[RGOrgaoExpedidorLead]]",
+    "[[ComplementoEnderecoProjeto]]",
+    "[[ValorProdutoSimulacao]]",
+    "[[ValorSemProdutoSimulacao]]",
+    "[[CampoformadepagamentooficialProjeto]]",
+    "[[CampodetalhescomplementaresdopagamentoProjeto]]"
+  ],
+  "pendencias": []
+}

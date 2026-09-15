@@ -1,0 +1,244 @@
+/* Contrato Efitec Solar — A4 793×1122 — Grapes / Groner */
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  background: #fff;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  color: #111;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.38;
+}
+
+.documento {
+  display: block;
+  width: 793px;
+  margin: 0;
+  padding: 0;
+}
+
+.page {
+  position: relative;
+  display: block;
+  width: 793px;
+  height: 1122px;
+  max-width: 793px;
+  max-height: 1122px;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: #fff;
+  background-image: url("https://arquivos-groner.s3.us-east-2.amazonaws.com/safeleadsfiles/efitecsolar/efiteclogomarcadagua_d7bc.jpg");
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: contain;
+  break-before: page;
+  break-after: page;
+  break-inside: avoid;
+  page-break-before: always;
+  page-break-after: always;
+  page-break-inside: avoid;
+}
+
+.page:first-child {
+  break-before: auto;
+  page-break-before: auto;
+}
+
+.page:last-child {
+  break-after: auto;
+  page-break-after: auto;
+}
+
+.page + .page {
+  break-before: page;
+  page-break-before: always;
+}
+
+.page-conteudo {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 22px 42px 26px;
+}
+
+.logo-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  margin: 0 0 6px;
+}
+
+.logo {
+  width: 168px;
+  height: auto;
+  display: block;
+}
+
+.titulo-doc {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: underline;
+  margin: 4px 0 12px;
+  line-height: 1.3;
+}
+
+.clausula {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 10px 0 6px;
+  line-height: 1.25;
+}
+
+.clausula:first-of-type {
+  margin-top: 8px;
+}
+
+p {
+  margin: 0 0 8px;
+  font-size: 13.5px;
+  text-align: justify;
+}
+
+.kit {
+  margin: 2px 0;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.lista-servicos {
+  margin: 0 0 8px;
+  padding: 0;
+  text-align: justify;
+}
+
+.lista-servicos span {
+  display: block;
+}
+
+.data-assinatura {
+  text-align: left;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 16px 0 10px;
+}
+
+.rotulo-ass {
+  margin: 8px 0 0;
+  font-size: 14px;
+  text-align: left;
+}
+
+.assinatura-img {
+  margin: 0 0 -8px;
+  padding: 0;
+}
+
+.assinatura-img img {
+  width: 320px;
+  height: auto;
+  display: block;
+}
+
+.nome-ass {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.linha-ass {
+  margin: 28px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+@media print {
+  html,
+  body {
+    width: 210mm !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  .documento {
+    display: block !important;
+    width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .page {
+    display: block !important;
+    float: none !important;
+    filter: none !important;
+    outline: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    max-width: 210mm !important;
+    max-height: 297mm !important;
+    min-height: 297mm !important;
+    overflow: hidden !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .page + .page {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  .page:first-child {
+    page-break-before: auto !important;
+    break-before: auto !important;
+  }
+
+  .page:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  .page-conteudo {
+    display: block !important;
+    width: 100% !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
+    overflow: hidden !important;
+  }
+
+  .slot-imagem {
+    display: block;
+    height: auto;
+    min-height: 0;
+    page-break-after: auto;
+    break-after: auto;
+  }
+}
