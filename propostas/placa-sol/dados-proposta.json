@@ -1,0 +1,303 @@
+{
+  "fonte": {
+    "arquivo_original": "[PLACA SOL] Proposta Vinculante (1).pdf",
+    "paginas": 6,
+    "texto_selecionavel": false,
+    "observacao": "Cada página é uma imagem. O texto foi lido por OCR e conferido em recortes. Nada foi gravado em API.",
+    "metadados_arquivo": {
+      "creator": "Adobe Acrobat 13.0",
+      "producer": "Adobe Acrobat 13.0 Image Conversion Plug-in",
+      "creation_date": "2026-09-25T15:15:12Z",
+      "observacao": "Data de criação do arquivo PDF. Não é uma data impressa na proposta."
+    }
+  },
+  "documento": {
+    "tipo": "Contrato / Proposta",
+    "numero": "00.0000",
+    "numero_e_placeholder": true,
+    "titulo_cliente_impresso": "[NOME DO CLIENTE]",
+    "subtitulo": "SISTEMA SOLAR CONECTADO À REDE - ON GRID",
+    "data_emissao": null,
+    "validade": "00/00/2026",
+    "validade_e_placeholder": true,
+    "validade_ocorrencias": [
+      "VALIDADE DA PROPOSTA: 00/00/2026",
+      "Proposta válida até: 00/00/2026 - VALOR TOTAL FECHADO R$ 10.678,45",
+      "Esta proposta é válida até 00/00/2026."
+    ]
+  },
+  "empresa": {
+    "nome": "Placa Sol",
+    "nome_na_fachada_da_foto": "Placa Solar",
+    "site": "placasol.com.br",
+    "email_contato": "contato@placasol.com.br",
+    "email_comercial": "comercial@placasol.com.br",
+    "telefone_na_linha_de_icones": null,
+    "telefone_observacao": "Os ícones de WhatsApp e telefone no rodapé estão ao lado do texto placasol.com.br. Não há número de telefone da empresa nesse rodapé.",
+    "cnpj": "X",
+    "cnpj_e_placeholder": true,
+    "responsavel_tecnico": "X",
+    "crea": "X",
+    "endereco": {
+      "logradouro": "Av. Joaquim Constantino",
+      "numero": "4883",
+      "bairro": "Res. Florenza",
+      "cidade": "Presidente Prudente",
+      "uf": null,
+      "cep": null,
+      "texto": "Av. Joaquim Constantino, 4883 – Res. Florenza, Presidente Prudente"
+    }
+  },
+  "cliente": {
+    "nome": "Xxxx",
+    "nome_e_placeholder": true,
+    "documento": "X",
+    "documento_tipo_rotulo": "CNPJ/CPF",
+    "documento_e_placeholder": true,
+    "endereco": "Rua, nº 00",
+    "endereco_e_placeholder": true,
+    "bairro": "X",
+    "cidade": "X",
+    "cep": "X",
+    "telefone": "X",
+    "email": "X",
+    "observacao": "O bloco INFORMAÇÕES está preenchido com placeholders literais do modelo."
+  },
+  "consultora": {
+    "rotulo": "CONSULTORA",
+    "nome": "Stephanie Ferraz",
+    "telefone": "(18) 99124-6093",
+    "email": "comercial@placasol.com.br"
+  },
+  "dados_tecnicos": {
+    "historico_consumo": "600,00 kWh/mês",
+    "geracao_estimada_mensal": "537,13 kWh/mês",
+    "potencia": "4,34 kWp",
+    "tipo_instalacao": "X",
+    "posicao_solar": "X",
+    "telhado_estrutura": "Telha Colonial",
+    "classificacao": "X",
+    "concessionaria": "X",
+    "area_minima": "18,90 m²",
+    "nota": "Geração estimada de acordo com as características consideradas no dimensionamento do projeto. A geração real pode variar conforme as condições da instalação."
+  },
+  "geracao": {
+    "mensal": "537,13 kWh",
+    "anual": "6.445,56 kWh",
+    "grafico_geracao_consumo": {
+      "titulo": "Geração x Consumo",
+      "subtitulo": "Comparativo mensal e média",
+      "legenda": ["Geração", "Consumo"],
+      "eixo_x": ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez", "Média"],
+      "eixo_y": ["0", "100", "200", "300", "400", "500", "600"],
+      "valores_mensais": null,
+      "nota": "Valores aproximados, reproduzidos a partir da imagem de referência.",
+      "arquivo": "assets/grafico-geracao-consumo.jpg"
+    },
+    "grafico_com_sem_solar": {
+      "titulo": "Com Solar x Sem Solar",
+      "subtitulo": "Comparativo de valores • 2026 a 2050",
+      "legenda": ["Com Solar", "Sem Solar"],
+      "eixo_y": ["R$ 0,00", "R$ 500,00", "R$ 1.000,00", "R$ 1.500,00", "R$ 2.000,00", "R$ 2.500,00"],
+      "eixo_x_de": 2026,
+      "eixo_x_ate": 2050,
+      "valores_da_curva": null,
+      "nota": "Curvas reproduzidas a partir da imagem de referência; valores intermediários aproximados.",
+      "arquivo": "assets/grafico-com-sem-solar.jpg"
+    }
+  },
+  "economia_estimada": {
+    "05_anos": "R$ X",
+    "10_anos": "R$ X",
+    "15_anos": "R$ X",
+    "20_anos": "R$ X",
+    "25_anos": "R$ X",
+    "valores_sao_placeholder": true,
+    "nota": "Valores estimados com base nas condições consideradas no projeto."
+  },
+  "payback": {
+    "texto": "2,01 ANOS",
+    "anos": 2.01,
+    "frase": "O RETORNO DO INVESTIMENTO (PAYBACK) É ESTIMADO EM: 2,01 ANOS"
+  },
+  "itens": [
+    {
+      "descricao": "painéis fotovoltaicos Bedin de 620 Wp",
+      "quantidade": 7,
+      "preco_unitario": null,
+      "preco": null
+    },
+    {
+      "descricao": "inversor Bedin 4kW-220V-O50 - AFCI",
+      "quantidade": 1,
+      "preco_unitario": null,
+      "preco": null
+    },
+    {
+      "descricao": "Estrutura de montagem para Telha Colonial em retrato",
+      "quantidade": null,
+      "preco_unitario": null,
+      "preco": null
+    },
+    {
+      "descricao": "Serviços de instalação e montagem",
+      "quantidade": null,
+      "preco_unitario": null,
+      "preco": null
+    },
+    {
+      "descricao": "Projeto personalizado",
+      "quantidade": null,
+      "preco_unitario": null,
+      "preco": null
+    },
+    {
+      "descricao": "Homologação junto à concessionária",
+      "quantidade": null,
+      "preco_unitario": null,
+      "preco": null
+    },
+    {
+      "descricao": "Monitoramento do sistema",
+      "quantidade": null,
+      "preco_unitario": null,
+      "preco": null
+    },
+    {
+      "descricao": "Suporte e pós-venda",
+      "quantidade": null,
+      "preco_unitario": null,
+      "preco": null
+    }
+  ],
+  "quantidade_itens_kit": 8,
+  "totais": {
+    "investimento_total": "R$ 10.678,45",
+    "investimento_total_numero": 10678.45,
+    "valor_total_fechado": "R$ 10.678,45",
+    "valor_total_fechado_numero": 10678.45,
+    "moeda": "BRL",
+    "observacao": "O mesmo valor aparece como INVESTIMENTO TOTAL e como VALOR TOTAL FECHADO. Não há preço unitário por item."
+  },
+  "simulacao_bancaria": {
+    "linhas": [
+      {"descricao": "Xx", "valor": "R$ X", "e_placeholder": true},
+      {"descricao": "Xx", "valor": "R$ X", "e_placeholder": true}
+    ],
+    "textos": [
+      "Esta é uma simulação genérica com base na taxa média de juros utilizada pelos bancos parceiros.",
+      "Para simulação do financiamento, será necessário submeter os dados pessoais ou empresariais à análise de crédito da instituição financeira.",
+      "Valores, taxas, parcelas e condições estão sujeitos à análise e aprovação de crédito."
+    ]
+  },
+  "opcoes_financiamento": ["Santander", "BV", "Sicredi", "Banco do Brasil"],
+  "importante": [
+    "Configuração sujeita a alterações devido a análises técnicas de campo e estoque.",
+    "Valores sujeitos à variação cambial (Dólar) e estoque dos fabricantes."
+  ],
+  "garantias_e_prazos": [
+    {"item": "Inversor", "prazo": "10 anos de garantia de fabricação"},
+    {"item": "Painel Fotovoltaico", "prazo": "12 anos contra defeito de fabricação"},
+    {"item": "Painel Fotovoltaico", "prazo": "25 anos de eficiência"},
+    {"item": "Instalação Energia Solar", "prazo": "1 ano"},
+    {"item": "Prazo para instalação", "prazo": "X", "e_placeholder": true}
+  ],
+  "garantias_nota": "As garantias dos equipamentos seguem as condições estabelecidas pelos respectivos fabricantes.",
+  "incluso": [
+    "Equipamentos descritos nesta proposta",
+    "Estrutura de montagem",
+    "Serviços de instalação e montagem",
+    "Projeto personalizado",
+    "Homologação junto à concessionária",
+    "Monitoramento do sistema",
+    "Suporte e pós-venda"
+  ],
+  "nao_faz_parte": ["X", "X", "X", "X"],
+  "observacoes": "[escreva aqui]",
+  "observacoes_e_placeholder": true,
+  "condicoes_pagamento": {
+    "financiamento_bancario": "X",
+    "pagamento_a_vista": "X",
+    "outras_condicoes": "X",
+    "duvidas_financeiras_dados_bancarios": "X",
+    "todas_sao_placeholder": true
+  },
+  "termo_aceite": {
+    "texto": "Declaro estar de acordo com os valores, equipamentos, serviços e condições apresentados nesta proposta e autorizo o início do projeto.",
+    "campos_assinatura": ["Data do aceite", "Cliente", "Consultor Placa Sol"],
+    "data_aceite": null
+  },
+  "opcoes_kits": [
+    {
+      "opcao": 1,
+      "resumo": "X módulos | X inversor | X kWh | X kWp | X",
+      "valor_a_vista": "R$ X",
+      "linhas": ["Xx: R$ X", "Xx: R$ X", "Xx cartão: R$ X"],
+      "entradas": [
+        "X% de entrada: R$ X + Xx de R$ X",
+        "X% de entrada: R$ X + Xx de R$ X"
+      ],
+      "e_placeholder": true,
+      "assinaturas": ["Cliente", "Consultor Placa Sol"]
+    },
+    {
+      "opcao": 2,
+      "resumo": "X módulos | X inversor | X kWh | X kWp | X",
+      "valor_a_vista": "R$ X",
+      "linhas": ["Xx: R$ X", "Xx: R$ X", "Xx cartão: R$ X"],
+      "entradas": [
+        "X% de entrada: R$ X + Xx de R$ X",
+        "X% de entrada: R$ X + Xx de R$ X"
+      ],
+      "e_placeholder": true,
+      "assinaturas": ["Cliente", "Consultor Placa Sol"]
+    },
+    {
+      "opcao": 3,
+      "resumo": "X módulos | X inversor | X kWh | X kWp | X",
+      "valor_a_vista": "R$ X",
+      "linhas": ["Xx: R$ X", "Xx: R$ X", "Xx cartão: R$ X"],
+      "entradas": [
+        "X% de entrada: R$ X + Xx de R$ X",
+        "X% de entrada: R$ X + Xx de R$ X"
+      ],
+      "e_placeholder": true,
+      "assinaturas": ["Cliente", "Consultor Placa Sol"]
+    }
+  ],
+  "opcoes_kits_fechamento": {
+    "data_do_fechamento": null,
+    "validade": "00/00/2026",
+    "declaracao": "Declaro estar de acordo com a opção selecionada acima e autorizo o início do projeto."
+  },
+  "marcas": [
+    {"nome": "SOFAR", "arquivo": "assets/logo-sofar.png"},
+    {"nome": "Deye", "arquivo": "assets/logo-deye.png"},
+    {"nome": "RCNMA Solar", "arquivo": "assets/logo-marca-3.png", "leitura_incerta": true},
+    {"nome": "nansen", "arquivo": "assets/logo-nansen.png"},
+    {"nome": "Bedin SAT", "arquivo": "assets/logo-bedin.png"}
+  ],
+  "jornada": [
+    {"passo": "01", "titulo": "ENTENDIMENTO DA NECESSIDADE", "texto": "Analisamos seu perfil de consumo e as características do imóvel para entender a necessidade do projeto."},
+    {"passo": "02", "titulo": "PROJETO PERSONALIZADO", "texto": "Realizamos o dimensionamento do sistema de acordo com o perfil de consumo e as características do imóvel."},
+    {"passo": "03", "titulo": "NEGOCIAÇÃO", "texto": "Definimos os equipamentos, o investimento e as condições para realização do projeto."},
+    {"passo": "04", "titulo": "HOMOLOGAÇÃO", "texto": "A Placa Sol acompanha o processo necessário junto à concessionária de energia."},
+    {"passo": "05", "titulo": "INSTALAÇÃO", "texto": "Nossa equipe realiza a montagem e instalação dos equipamentos previstos no projeto."},
+    {"passo": "06", "titulo": "GERAÇÃO E MONITORAMENTO", "texto": "Com o sistema em funcionamento, você consegue acompanhar a geração e visualizar o desempenho do seu projeto."},
+    {"passo": "07", "titulo": "SUPORTE E PÓS-VENDA", "texto": "Depois da instalação, a Placa Sol continua ao seu lado para orientar e dar suporte ao projeto."}
+  ],
+  "incertezas": [
+    "O PDF não tem camada de texto. A leitura depende de OCR e da conferência visual dos recortes.",
+    "Número da proposta (00.0000), validade (00/00/2026), nome do cliente no título ([NOME DO CLIENTE]), bloco INFORMAÇÕES, parte dos dados técnicos, economia em reais, simulação bancária, condições de pagamento, observações, itens fora da proposta, prazo de instalação, CNPJ, responsável técnico e CREA estão impressos como placeholder.",
+    "Não há data de emissão nem data de aceite preenchidas. A data 2026-09-25 é só metadado do arquivo.",
+    "UF e CEP da empresa não aparecem. A cidade nos rodapés compactos às vezes sai junta: PresidentePrudente.",
+    "O terceiro logotipo foi lido como RCNMA Solar (monograma vermelho RC, palavra NMA e a palavra Solar). Não há esse nome em texto corrido; a leitura do monograma pode variar.",
+    "No modelo do inversor, o glifo depois de 220V- é uma oval mais larga e redonda que o zero de 220. Foi gravado como letra O: 4kW-220V-O50. O Tesseract na mesma linha leu 050.",
+    "O fundo raster do PDF amostra 241,241,241 (#f1f1f1). A página no editor foi definida como #ffffff, como pedido na rejeição, para não herdar o cinza #eeeeee/#cfcfcf do shell.",
+    "Nos rodapés compactos das páginas 4, 5 e 6 o OCR e a imagem leem PresidentePrudente, sem espaço. Na página 1 o nome quebra em duas linhas: Presidente / Prudente.",
+    "Os separadores entre os bancos (Santander, BV, Sicredi, Banco do Brasil) foram lidos como ponto médio. O OCR também viu « e hífen.",
+    "As curvas e as barras não foram transcritas ponto a ponto. Os gráficos foram recortados do PDF e o próprio documento diz que os valores são aproximados ou reproduzidos de uma imagem de referência.",
+    "As opções 1, 2 e 3 de kit são o mesmo modelo de placeholder. A diferença visível entre os cartões é o número da opção.",
+    "Preço unitário dos 8 componentes do kit não consta. O único valor monetário preenchido do investimento é R$ 10.678,45."
+  ]
+}
