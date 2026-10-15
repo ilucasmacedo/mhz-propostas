@@ -128,7 +128,7 @@
       "preco": null
     },
     {
-      "descricao": "inversor Bedin 4kW-220V-050 - AFCI",
+      "descricao": "inversor Bedin 4kW-220V-O50 - AFCI",
       "quantidade": 1,
       "preco_unitario": null,
       "preco": null
@@ -292,7 +292,9 @@
     "Não há data de emissão nem data de aceite preenchidas. A data 2026-09-25 é só metadado do arquivo.",
     "UF e CEP da empresa não aparecem. A cidade nos rodapés compactos às vezes sai junta: PresidentePrudente.",
     "O terceiro logotipo foi lido como RCNMA Solar (monograma vermelho RC, palavra NMA e a palavra Solar). Não há esse nome em texto corrido; a leitura do monograma pode variar.",
-    "No modelo do inversor, 4kW-220V-050, o caractere central de 050 foi lido como zero. Há chance pequena de ser a letra O.",
+    "No modelo do inversor, o glifo depois de 220V- é uma oval mais larga e redonda que o zero de 220. Foi gravado como letra O: 4kW-220V-O50. O Tesseract na mesma linha leu 050.",
+    "O fundo raster do PDF amostra 241,241,241 (#f1f1f1). A página no editor foi definida como #ffffff, como pedido na rejeição, para não herdar o cinza #eeeeee/#cfcfcf do shell.",
+    "Nos rodapés compactos das páginas 4, 5 e 6 o OCR e a imagem leem PresidentePrudente, sem espaço. Na página 1 o nome quebra em duas linhas: Presidente / Prudente.",
     "Os separadores entre os bancos (Santander, BV, Sicredi, Banco do Brasil) foram lidos como ponto médio. O OCR também viu « e hífen.",
     "As curvas e as barras não foram transcritas ponto a ponto. Os gráficos foram recortados do PDF e o próprio documento diz que os valores são aproximados ou reproduzidos de uma imagem de referência.",
     "As opções 1, 2 e 3 de kit são o mesmo modelo de placeholder. A diferença visível entre os cartões é o número da opção.",
