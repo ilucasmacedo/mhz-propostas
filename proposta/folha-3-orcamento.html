@@ -1,190 +1,128 @@
-<!--
-  Folha 3 — Orçamento
-  Cole este bloco no editor da proposta 23
-  (https://mhzenergiasolar.marketing.groner.app/editor/proposal/23)
-  logo depois da segunda folha (fecha </section> de #ivrfs) e antes de #icxhx5.
-
-  Mantém capa e institucional. Valores saem da simulação:
-  - preço: [[PrecoSimulacao]]
-  - desconto da linha: [[PorcentagemDescontoSimulacao]]
-  - cartão: 4x sem juros sobre o preço (igual ao exemplo 700,75 → 4 x 175,19)
-  - à vista: 10% sobre o preço (700,75 → 630,68), com 50% na entrada
--->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css" type="text/css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-  #iorcamento.page {
-    height: auto;
-    min-height: 1122px;
-    background-image: none;
-    background-color: #ffffff;
-    display: block;
-    padding: 36px 40px 28px;
-    box-sizing: border-box;
-  }
-
-  #iorcamento * {
+  body, html {
+    margin: 0 auto !important;
+    overflow-x: auto !important;
+    width: 100% !important;
+    background-color: #eeeeee !important;
     font-family: Montserrat, sans-serif;
-    box-sizing: border-box;
   }
-
-  #iorcamento .orc-titulo {
+  * { box-sizing: border-box; }
+  body {
+    background-color: #ffffff !important;
     color: #1b2340;
-    font-size: 28px;
-    font-weight: 500;
-    margin: 0 0 22px;
-    padding: 0;
+    max-width: 21cm;
+    margin: 16px auto !important;
+    padding: 28px 32px 24px;
+    box-shadow: rgba(0,0,0,0.08) 0 4px 8px;
   }
-
-  #iorcamento .orc-titulo b {
-    font-weight: 700;
+  .header-section img { max-width: 210px; height: auto; display: block; }
+  .recipient-info { margin: 16px 0 8px; font-size: 13px; line-height: 1.45; }
+  .recipient-info .name { font-weight: 700; font-size: 16px; }
+  .recipient-info .date-location { float: right; font-style: italic; }
+  .orc-titulo { clear: both; color: #1b2340; font-size: 28px; font-weight: 500; margin: 18px 0 8px; }
+  .orc-titulo b { font-weight: 800; }
+  .orc-secao {
+    color: #8a8f98; font-size: 13px; font-weight: 600;
+    margin: 18px 0 8px; padding-bottom: 6px; border-bottom: 1px solid #e6e6e6;
   }
-
-  #iorcamento .orc-secao {
-    color: #8a8f98;
-    font-size: 13px;
-    font-weight: 600;
-    margin: 18px 0 8px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid #e6e6e6;
+  table.orc-servicos, table.orc-pay { width: 100%; border-collapse: collapse; }
+  table.orc-servicos th {
+    text-align: left; font-size: 13px; font-weight: 700; color: #1b2340;
+    padding: 8px 10px; border-bottom: 1px solid #1b2340;
   }
-
-  #iorcamento table {
-    width: 100%;
-    border-collapse: collapse;
+  table.orc-servicos th:nth-child(2),
+  table.orc-servicos th:nth-child(3),
+  table.orc-servicos td:nth-child(2),
+  table.orc-servicos td:nth-child(3) { text-align: right; width: 22%; }
+  table.orc-servicos td {
+    font-size: 13px; color: #1b2340; padding: 10px; border-bottom: 1px solid #eeeeee;
   }
-
-  #iorcamento .orc-servicos th {
-    text-align: left;
-    font-size: 13px;
-    font-weight: 700;
-    color: #1b2340;
-    padding: 8px 10px;
-    border-bottom: 1px solid #1b2340;
+  .orc-soma { margin-top: 14px; text-align: right; font-size: 14px; }
+  .orc-soma b { font-size: 16px; }
+  .orc-badge {
+    margin: 12px 0 8px auto; width: fit-content; background: #111111; color: #ffffff;
+    border-radius: 8px; padding: 8px 16px; display: flex; align-items: center; gap: 28px;
+    font-size: 14px; font-weight: 700;
   }
-
-  #iorcamento .orc-servicos th:nth-child(2),
-  #iorcamento .orc-servicos th:nth-child(3),
-  #iorcamento .orc-servicos td:nth-child(2),
-  #iorcamento .orc-servicos td:nth-child(3) {
-    text-align: right;
-    width: 22%;
+  .orc-badge strong { color: #f9bf27; font-size: 18px; font-weight: 800; }
+  table.orc-pay { margin-top: 8px; border: 1px solid #e6d48a; }
+  table.orc-pay td {
+    border: 1px solid #f3e7b0; padding: 10px 14px; font-size: 14px;
+    color: #1b2340; background: #fffdf6;
   }
-
-  #iorcamento .orc-servicos td {
-    font-size: 13px;
-    color: #1b2340;
-    padding: 10px;
-    border-bottom: 1px solid #eeeeee;
+  table.orc-pay td:last-child { text-align: right; font-weight: 700; white-space: nowrap; width: 42%; }
+  table.orc-pay .orc-pay-head td {
+    background: #f9bf27; color: #1b2340; font-weight: 800; font-size: 16px; text-align: center;
   }
-
-  #iorcamento .orc-soma {
-    margin-top: 14px;
-    text-align: right;
-    font-size: 14px;
-    color: #1b2340;
-  }
-
-  #iorcamento .orc-soma b {
-    font-size: 16px;
-  }
-
-  #iorcamento .orc-badge {
-    margin: 12px 0 8px auto;
-    width: fit-content;
-    background: #111111;
-    color: #ffffff;
-    border-radius: 8px;
-    padding: 8px 16px;
-    display: flex;
-    align-items: center;
-    gap: 28px;
-    font-size: 14px;
-    font-weight: 700;
-  }
-
-  #iorcamento .orc-badge strong {
-    color: #f9bf27;
-    font-size: 18px;
-    font-weight: 800;
-  }
-
-  #iorcamento .orc-pay {
-    margin-top: 8px;
-    border: 1px solid #e6d48a;
-  }
-
-  #iorcamento .orc-pay td {
-    border: 1px solid #f3e7b0;
-    padding: 10px 14px;
-    font-size: 14px;
-    color: #1b2340;
-    background: #fffdf6;
-  }
-
-  #iorcamento .orc-pay td:last-child {
-    text-align: right;
-    font-weight: 700;
-    white-space: nowrap;
-    width: 38%;
-  }
-
-  #iorcamento .orc-pay-head td {
-    background: #f9bf27;
-    color: #1b2340;
-    font-weight: 800;
-    font-size: 16px;
-    text-align: center !important;
-  }
-
-  #iorcamento .orc-pay-avista td {
-    background: #ffe9a3;
-    font-weight: 700;
-  }
-
-  #iorcamento .orc-nota {
-    margin-top: 10px;
-    font-size: 12px;
-    color: #333333;
-    line-height: 1.4;
-  }
+  table.orc-pay .orc-pay-avista td { background: #ffe9a3; font-weight: 700; }
+  .orc-nota { margin-top: 10px; font-size: 12px; color: #333333; line-height: 1.4; }
+  .footer-section { margin-top: 28px; text-align: center; font-size: 12px; font-weight: 700; color: #1b2340; }
 </style>
-
-<section id="iorcamento" class="page">
-  <h2 class="orc-titulo">SUA <b>PROPOSTA</b></h2>
-
-  <div class="orc-secao">Serviços</div>
-  <table class="orc-servicos">
-    <thead>
-      <tr>
-        <th>Descrição</th>
-        <th>Desconto</th>
-        <th>Valor total</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Manutenção Preventiva</td>
-        <td>[[PorcentagemDescontoSimulacao]]%</td>
-        <td>R$ [[PrecoSimulacao]]</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="orc-soma">Total da proposta: <b>R$ [[PrecoSimulacao]]</b></div>
-  <div class="orc-badge"><span>Total:</span><strong>R$ [[PrecoSimulacao]]</strong></div>
-
-  <div class="orc-secao">Condições comerciais</div>
-  <table class="orc-pay">
-    <tr class="orc-pay-head">
-      <td colspan="2">Forma de Pagamento:</td>
-    </tr>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+<script type="module">
+  import ChecklistForm from 'https://cdn.jsdelivr.net/npm/groner-checklist-form@1.0.73/index.js';
+  window.ChecklistForm = ChecklistForm;
+</script>
+<script type="module">
+  import CryptoJS from 'https://cdn.jsdelivr.net/npm/crypto-js@4.2.0/+esm';
+  window.CryptoJS = CryptoJS;
+</script>
+<div class="header-section">
+  <img src="https://arquivos-groner.s3.us-east-2.amazonaws.com/safeleadsfiles/mhzenergiasolar/5100_f4b373c9-a479-4222-9113-b10031412a94.png" alt="GRUPO MHZ">
+</div>
+<div class="recipient-info">
+  <div class="date-location">[[CidadeEnderecoLoja]], [[DataSimulacao]]</div>
+  <div class="name">Prezado(a) Sr.(a) [[NomeLead]]</div>
+  <p><strong>CPF/CNPJ:</strong> [[DocumentoLead]]</p>
+  <p><strong>E-mail:</strong> [[EmailLead]]</p>
+  <p><strong>Celular:</strong> [[CelularLead]]</p>
+  <p><strong>Proposta:</strong> [[IdPreProposta]]</p>
+</div>
+<h1 class="orc-titulo">SUA <b>PROPOSTA</b></h1>
+<div class="orc-secao">Serviços</div>
+<table class="orc-servicos">
+  <thead>
     <tr>
-      <td>Cartão de Crédito</td>
-      <td>4 x R$ FORMATAR({0:N2};CALCULAR([[PrecoSimulacao]]/4))</td>
+      <th>Descrição</th>
+      <th>Desconto</th>
+      <th>Valor total</th>
     </tr>
-    <tr class="orc-pay-avista">
-      <td>À vista (Boleto ou Pix)</td>
-      <td>R$ FORMATAR({0:N2};CALCULAR([[PrecoSimulacao]]*0.9))</td>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Manutenção Preventiva</td>
+      <td>[[PorcentagemDescontoSimulacao]]%</td>
+      <td>R$ [[PrecoSimulacao]]</td>
     </tr>
-  </table>
-  <p class="orc-nota">Em caso de pagamento a vista, será necessário o pagamento de 50% na entrada.</p>
-</section>
+  </tbody>
+</table>
+<div class="orc-soma">Total da proposta: <b>R$ [[PrecoSimulacao]]</b></div>
+<div class="orc-badge"><span>Total:</span><strong>R$ [[PrecoSimulacao]]</strong></div>
+<div class="orc-secao">Condições comerciais</div>
+<table class="orc-pay">
+  <tr class="orc-pay-head"><td colspan="2">Forma de Pagamento:</td></tr>
+  <tr>
+    <td>Cartão de Crédito</td>
+    <td>4 x R$ FORMATAR({0:N2};CALCULAR([[PrecoSimulacao]]/4))</td>
+  </tr>
+  <tr class="orc-pay-avista">
+    <td>À vista (Boleto ou Pix)</td>
+    <td>R$ FORMATAR({0:N2};CALCULAR([[PrecoSimulacao]]*0.9))</td>
+  </tr>
+</table>
+<p class="orc-nota">Em caso de pagamento a vista, será necessário o pagamento de 50% na entrada.</p>
+<div class="footer-section">GRUPO MHZ</div>
+</body>
+</html>
