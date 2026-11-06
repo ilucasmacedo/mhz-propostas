@@ -82,29 +82,35 @@
   <div class="head"><b>MHZ SIGN</b><span>Proposta comercial - Energia por assinatura</span></div>
   <div class="linha"></div>
   <div class="miolo">
-    <div class="total"><span>DESCONTO ESTIMADO</span><b><span>[[CampoDescontoProjeto]]</span>%</b></div>
+    <div class="total"><span>DESCONTO ESTIMADO</span><b><span>[[AssinaturaDescontoPercentualSimulacao]]</span>%</b></div>
     <h2>ESTIMATIVA DE ECONOMIA<u></u></h2>
     <div class="cards">
-      <div class="card"><div class="ck">Gasto atual</div><div class="cv">R$ <span>[[ValorTotalContaEnergiaProjeto]]</span>/mês</div></div>
-      <div class="card"><div class="ck">Nova conta</div><div class="cv">R$ <span>[[CampoContacomdescontoProjeto]]</span>/mês</div></div>
-      <div class="card"><div class="ck">Consumo médio</div><div class="cv"><span>[[ConsumoProjeto]]</span> kWh/mês</div></div>
+      <div class="card"><div class="ck">Gasto atual</div><div class="cv">R$ <span>[[ContaAtualMesSimulacao]]</span>/mês</div></div>
+      <div class="card"><div class="ck">Nova conta</div><div class="cv">R$ <span>[[ContaGeradorMesSimulacao]]</span>/mês</div></div>
+      <div class="card"><div class="ck">Consumo médio</div><div class="cv"><span>[[ConsumoSimulacao]]</span> kWh/mês</div></div>
     </div>
     <h3>RESUMO</h3>
     <table>
       <thead><tr><th><span>Indicador</span></th><th><span>Resultado</span></th></tr></thead>
       <tbody>
-        <tr><td><span>Gasto atual</span></td><td class="n"><span>R$ [[ValorTotalContaEnergiaProjeto]]/mês</span></td></tr>
-        <tr><td><span>Nova conta com desconto</span></td><td class="n"><span>R$ [[CampoContacomdescontoProjeto]]/mês</span></td></tr>
-        <tr><td><span>Consumo médio</span></td><td class="n"><span>[[ConsumoProjeto]] kWh/mês</span></td></tr>
-        <tr><td><span>Desconto estimado</span></td><td class="n"><span>[[CampoDescontoProjeto]]%</span></td></tr>
+        <tr><td><span>Gasto atual</span></td><td class="n"><span>R$ [[ContaAtualMesSimulacao]]/mês</span></td></tr>
+        <tr><td><span>Nova conta com desconto</span></td><td class="n"><span>R$ [[ContaGeradorMesSimulacao]]/mês</span></td></tr>
+        <tr><td><span>Consumo médio</span></td><td class="n"><span>[[ConsumoSimulacao]] kWh/mês</span></td></tr>
+        <tr><td><span>Desconto estimado</span></td><td class="n"><span>[[AssinaturaDescontoPercentualSimulacao]]%</span></td></tr>
       </tbody>
     </table>
     <h3>ECONOMIA</h3>
     <table>
       <thead><tr><th><span>Indicador</span></th><th><span>Resultado</span></th></tr></thead>
       <tbody>
-        <tr><td><span>Economia mensal estimada</span></td><td class="n"><span>R$ [[CampoEconomiaMensalProjeto]]</span></td></tr>
-        <tr><td><span>Economia anual estimada</span></td><td class="n"><span>R$ [[CampoEconomiaAnualProjeto]]</span></td></tr>
+        <tr><td><span>Economia mensal estimada</span></td><td class="n"><span>R$ [[AssinaturaEconomiaTotalMesSimulacao]]</span></td></tr>
+        <tr><td><span>Economia anual estimada</span></td><td class="n"><span>R$ [[ContaEconomiaAnoSimulacao]]</span></td></tr>
+        <tr><td><span>Economia total no contrato</span></td><td class="n"><span>R$ [[AssinaturaEconomiaProjetadaContratoSimulacao]]</span></td></tr>
+        <tr><td><span>Tarifa atual da distribuidora</span></td><td class="n"><span>R$ [[AssinaturaTarifaOriginalSimulacao]]/kWh</span></td></tr>
+        <tr><td><span>Assinatura por kWh de crédito</span></td><td class="n"><span>R$ [[AssinaturaTarifaComDescontoSimulacao]]/kWh</span></td></tr>
+        <tr><td><span>Energia compensável por mês</span></td><td class="n"><span>[[AssinaturaKwhCompensavelSimulacao]] kWh</span></td></tr>
+        <tr><td><span>Taxa de disponibilidade</span></td><td class="n"><span>[[AssinaturaTaxaDisponibilidadeKwhSimulacao]] kWh</span></td></tr>
+        <tr><td><span>Prazo do contrato</span></td><td class="n"><span>[[AssinaturaPrazoContratoMesesSimulacao]] meses</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -120,7 +126,7 @@
     <div class="par"><span class="k">Número da proposta</span><span class="v">[[IdPreProposta]]</span></div>
     <div class="par"><span class="k">Cliente</span><span class="v">[[NomeLead]]</span></div>
     <div class="par"><span class="k">Unidade consumidora</span><span class="v">[[UnidadeConsumidoraProjeto]]</span></div>
-    <div class="par"><span class="k">Desconto estimado</span><span class="v"><span>[[CampoDescontoProjeto]]</span>%</span></div>
+    <div class="par"><span class="k">Desconto estimado</span><span class="v"><span>[[AssinaturaDescontoPercentualSimulacao]]</span>%</span></div>
     <p>Venho por meio deste formalizar meu aceite às condições estabelecidas e apresentadas nesta proposta. Declaro estar ciente de que a implantação e o faturamento condicionam-se à viabilidade do projeto e à aprovação junto à concessionária.</p>
     <div class="signs">
       <div class="sign"><b>Mhz Energia Solar LTDA</b><br>CNPJ 28.664.003/0001-49<br>MHZ SIGN</div>
