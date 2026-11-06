@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+#mob,#mob *{box-sizing:border-box;font-family:Montserrat,Arial,sans-serif;}
+#mob{width:794px;margin:0 auto;background:#fff;color:#1a1a1a;}
+#mob .folha{width:794px;height:1123px;position:relative;overflow:hidden;background:#fff;}
+#mob .capa{background-repeat:no-repeat;background-position:top left;background-size:794px 1123px;background-image:url("https://arquivos-groner.s3.us-east-2.amazonaws.com/safeleadsfiles/mhzenergiasolar/proposta1_e1411483-61d9-4909-af5a-485fb2d4ff3f.png");}
+#mob .capa-dados{position:absolute;left:48px;top:800px;width:440px;background:#f6f6f6;border-left:4px solid #f5b400;padding:4px 8px 8px;}
+#mob .capa-dados div{font-size:13px;font-weight:700;line-height:1.35;color:#1a1a1a;}
+#mob .head{background:#141414;color:#fff;padding:16px 28px 12px;display:flex;align-items:baseline;gap:16px;}
+#mob .head b{color:#f5b400;font-size:16px;letter-spacing:.04em;}
+#mob .head span{font-size:13px;font-weight:500;}
+#mob .linha{height:4px;background:#f5b400;}
+#mob .miolo{padding:14px 26px 0;}
+#mob h2{color:#f5a400;font-size:14px;font-weight:800;letter-spacing:.03em;margin:10px 0 6px;}
+#mob h2 u{display:block;width:34px;height:3px;background:#f5b400;text-decoration:none;margin-top:2px;}
+#mob h3{font-size:11px;font-weight:700;margin:10px 0 4px;letter-spacing:.03em;}
+#mob .par{display:flex;justify-content:space-between;gap:12px;padding:4px 10px;font-size:12px;}
+#mob .par:nth-of-type(odd){background:#f3f4f6;}
+#mob .k{color:#4b5563;}
+#mob .v{font-weight:700;text-align:right;}
+#mob table{width:100%;border-collapse:collapse;font-size:10.5px;}
+#mob th{background:#141414 !important;color:#f5b400 !important;text-align:center;padding:6px 3px;font-size:10px;line-height:1.15;font-weight:700;}
+#mob th:first-child{color:#fff !important;text-align:left;}
+#mob td{padding:4px 6px;background:#fff;}
+#mob tr:nth-child(even) td{background:#f6f6f6;}
+#mob td.n{text-align:right;white-space:nowrap;width:42%;}
+#mob table,#mob table th,#mob table td,#mob tr{border:none !important;border-color:transparent !important;outline:none !important;box-shadow:none !important;}
+#mob .total{background:#f5b400;color:#141414;display:flex;justify-content:space-between;align-items:center;padding:9px 14px;font-weight:800;font-size:14px;margin-bottom:8px;}
+#mob .total b{font-size:18px;}
+#mob .cards{display:flex;gap:12px;margin:10px 0;}
+#mob .card{flex:1;border:1px solid #eeeeee;border-radius:10px;padding:10px 12px;background:#fbfbfb;}
+#mob .card .ck{font-size:11px;color:#6b7280;font-weight:600;}
+#mob .card .cv{font-size:16px;font-weight:800;margin-top:4px;color:#141414;}
+#mob .card.verde{background:#fff7df;border-color:#f5b400;}
+#mob .card.verde .cv{color:#a97600;}
+#mob .aviso{position:absolute;left:26px;right:26px;bottom:16px;border-top:1px solid #e5e7eb;padding-top:6px;font-size:9px;color:#6b7280;display:flex;justify-content:space-between;gap:10px;line-height:1.35;}
+#mob .aceite p{font-size:12.5px;line-height:1.45;margin:0 0 8px;}
+#mob .signs{display:flex;gap:36px;margin-top:48px;}
+#mob .sign{flex:1;border-top:1px solid #222;padding-top:8px;font-size:12px;line-height:1.35;}
+#mob .contato{margin-top:18px;border-top:3px solid #f5b400;padding-top:12px;font-size:11px;color:#1a1a1a;display:flex;gap:22px;align-items:flex-start;}
+#mob .contato b{color:#141414;}
+</style>
+</head>
+<body>
+<div id="mob">
+
+<section class="folha capa" id="in9i">
+  <div class="capa-dados" id="ixss">
+    <div id="i6mv">Proposta nº [[IdPreProposta]]</div>
+    <div id="igyx1">[[NomeLead]]</div>
+    <div id="iazcv">[[CidadeEnderecoProjeto]] · <span data-interpolation="DataSimulacao" id="ig2dm">[[DataSimulacao]]</span></div>
+  </div>
+</section>
+
+<section class="folha">
+  <div class="head"><b>MHZ SIGN</b><span>Proposta comercial - Energia por assinatura</span></div>
+  <div class="linha"></div>
+  <div class="miolo">
+    <h2>DADOS DO FORNECEDOR<u></u></h2>
+    <div class="par"><span class="k">Razão social</span><span class="v">Mhz Energia Solar LTDA</span></div>
+    <div class="par"><span class="k">CNPJ</span><span class="v">28.664.003/0001-49</span></div>
+    <div class="par"><span class="k">Documento emitido por</span><span class="v">MHZ SIGN</span></div>
+    <h2>DADOS DO CLIENTE<u></u></h2>
+    <div class="par"><span class="k">Código da proposta</span><span class="v">[[IdPreProposta]]</span></div>
+    <div class="par"><span class="k">Nome / Razão social</span><span class="v">[[NomeLead]]</span></div>
+    <div class="par"><span class="k">CPF / CNPJ</span><span class="v">[[DocumentoLead]]</span></div>
+    <div class="par"><span class="k">Unidade consumidora</span><span class="v">[[UnidadeConsumidoraProjeto]]</span></div>
+    <div class="par"><span class="k">Cidade</span><span class="v">[[CidadeEnderecoProjeto]]</span></div>
+    <div class="par"><span class="k">Data da proposta</span><span class="v">[[DataSimulacao]]</span></div>
+    <div class="par"><span class="k">Validade</span><span class="v">[[DataValidadePropostaSimulacao]]</span></div>
+    <h2>SOBRE A ASSINATURA<u></u></h2>
+    <p style="font-size:12px;line-height:1.45;margin:4px 0 0;">A energia por assinatura da <b>MHZ Sign</b> reduz o custo da conta de luz sem investimento em painéis solares e sem obra. O desconto é aplicado sobre a tarifa da concessionária e a economia aparece já na primeira fatura.</p>
+    <h2>ESTIMATIVA DE ECONOMIA<u></u></h2>
+    <div class="total"><span>DESCONTO ESTIMADO</span><b><span>[[AssinaturaDescontoPercentualSimulacao]]</span>%</b></div>
+    <div class="cards">
+      <div class="card"><div class="ck">Gasto atual</div><div class="cv">R$ <span>[[ContaAtualMesSimulacao]]</span>/mês</div></div>
+      <div class="card"><div class="ck">Nova conta</div><div class="cv">R$ <span>[[ContaGeradorMesSimulacao]]</span>/mês</div></div>
+      <div class="card"><div class="ck">Consumo médio</div><div class="cv"><span>[[ConsumoSimulacao]]</span> kWh/mês</div></div>
+    </div>
+    <table>
+      <thead><tr><th><span>Indicador</span></th><th><span>Resultado</span></th></tr></thead>
+      <tbody>
+        <tr><td><span>Economia mensal estimada</span></td><td class="n"><span>R$ [[AssinaturaEconomiaTotalMesSimulacao]]</span></td></tr>
+        <tr><td><span>Economia anual estimada</span></td><td class="n"><span>R$ [[ContaEconomiaAnoSimulacao]]</span></td></tr>
+        <tr><td><span>Economia total no contrato</span></td><td class="n"><span>R$ [[AssinaturaEconomiaProjetadaContratoSimulacao]]</span></td></tr>
+        <tr><td><span>Tarifa atual da distribuidora</span></td><td class="n"><span>R$ [[AssinaturaTarifaOriginalSimulacao]]/kWh</span></td></tr>
+        <tr><td><span>Assinatura por kWh de crédito</span></td><td class="n"><span>R$ [[AssinaturaTarifaComDescontoSimulacao]]/kWh</span></td></tr>
+        <tr><td><span>Energia compensável por mês</span></td><td class="n"><span>[[AssinaturaKwhCompensavelSimulacao]] kWh</span></td></tr>
+        <tr><td><span>Taxa de disponibilidade</span></td><td class="n"><span>[[AssinaturaTaxaDisponibilidadeKwhSimulacao]] kWh</span></td></tr>
+        <tr><td><span>Prazo do contrato</span></td><td class="n"><span>[[AssinaturaPrazoContratoMesesSimulacao]] meses</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="aviso"><span>Valores estimados com base nas premissas informadas. Não constituem garantia de resultado. O desconto incide conforme as condições comerciais da proposta.</span><span>2/3</span></div>
+</section>
+
+<section class="folha">
+  <div class="head"><b>MHZ SIGN</b><span>Proposta comercial - Energia por assinatura</span></div>
+  <div class="linha"></div>
+  <div class="miolo aceite">
+    <h2>TERMO DE ACEITE<u></u></h2>
+    <p>Proposta comercial nº <b>[[IdPreProposta]]</b>, emitida por Mhz Energia Solar LTDA (CNPJ 28.664.003/0001-49) em <b>[[DataSimulacao]]</b> e válida até <b>[[DataValidadePropostaSimulacao]]</b>.</p>
+    <div class="par"><span class="k">Número da proposta</span><span class="v">[[IdPreProposta]]</span></div>
+    <div class="par"><span class="k">Cliente</span><span class="v">[[NomeLead]]</span></div>
+    <div class="par"><span class="k">Unidade consumidora</span><span class="v">[[UnidadeConsumidoraProjeto]]</span></div>
+    <div class="par"><span class="k">Desconto estimado</span><span class="v"><span>[[AssinaturaDescontoPercentualSimulacao]]</span>%</span></div>
+    <p>Venho por meio deste formalizar meu aceite às condições estabelecidas e apresentadas nesta proposta. Declaro estar ciente de que a implantação e o faturamento condicionam-se à viabilidade do projeto e à aprovação junto à concessionária.</p>
+    <div class="signs">
+      <div class="sign"><b>Mhz Energia Solar LTDA</b><br>CNPJ 28.664.003/0001-49<br>MHZ SIGN</div>
+      <div class="sign"><b>Nome / Razão social: [[NomeLead]]</b><br>CPF / CNPJ: [[DocumentoLead]]<br>[[CidadeEnderecoProjeto]]</div>
+    </div>
+    <div class="contato">
+      <div><b>[[NomeUsuario]]</b><br><span>[[FuncaoUsuario]]</span><br><span>[[EmailUsuario]]</span><br><span>[[CelularUsuario]]</span></div>
+      <div><b>Mhz Energia Solar LTDA</b><br>mhzenergiasolar.com.br<br>contato@mhzenergiasolar.com.br<br>(62) 3575-3915</div>
+    </div>
+  </div>
+  <div class="aviso"><span>Valores estimados com base nas premissas informadas. Não constituem garantia de resultado. O desconto incide conforme as condições comerciais da proposta.</span><span>3/3</span></div>
+</section>
+
+</div>
+</body>
+</html>
