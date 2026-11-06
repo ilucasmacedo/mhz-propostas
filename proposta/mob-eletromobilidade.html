@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  #mobroot, #mobroot * { box-sizing: border-box; font-family: Montserrat, sans-serif; }
+  #mobroot { width: 794px; max-width: 794px; margin: 0 auto; color: #1d1d1b; background: #fff; }
+  #mobroot .folha {
+    width: 794px; min-height: 1122px; background: #fff; position: relative;
+    padding: 36px 40px 48px; page-break-after: always; overflow: hidden;
+  }
+  #mobroot .capa {
+    background: #1b2340; color: #fff; padding: 0; display: flex; flex-direction: column; justify-content: space-between;
+  }
+  #mobroot .capa-top { padding: 48px 48px 0; }
+  #mobroot .marca { font-size: 14px; letter-spacing: .22em; font-weight: 700; color: #f9bf27; }
+  #mobroot .capa h1 { font-size: 42px; line-height: 1.05; font-weight: 800; margin: 18px 0 8px; color: #fff; }
+  #mobroot .capa h1 span { color: #f9bf27; }
+  #mobroot .capa .sub { font-size: 16px; font-weight: 500; color: #f3f4f6; }
+  #mobroot .faixa { height: 8px; background: #f9bf27; margin-top: 28px; }
+  #mobroot .capa-foot { padding: 0 48px 56px; }
+  #mobroot .capa-num { font-size: 13px; letter-spacing: .08em; color: #f9bf27; font-weight: 700; }
+  #mobroot .capa-nome { font-size: 32px; font-weight: 800; margin-top: 8px; }
+  #mobroot .capa-meta { margin-top: 10px; font-size: 14px; color: #e5e7eb; }
+  #mobroot .topo { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px solid #1b2340; padding-bottom: 10px; margin-bottom: 18px; }
+  #mobroot .topo .marca { font-size: 18px; }
+  #mobroot .topo .doc { text-align: right; font-size: 12px; color: #1b2340; font-weight: 600; }
+  #mobroot h2 { font-size: 15px; letter-spacing: .04em; font-weight: 800; color: #1b2340; margin: 16px 0 8px; }
+  #mobroot .grade { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
+  #mobroot .campo .rot { font-size: 11px; color: #6b7280; font-weight: 600; }
+  #mobroot .campo .val { font-size: 14px; font-weight: 700; color: #1d1d1b; }
+  #mobroot table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  #mobroot th { background: #1b2340 !important; color: #fff !important; text-align: left; padding: 7px 6px; font-weight: 700; border: none; }
+  #mobroot td { padding: 7px 6px; border-bottom: 1px solid #e5e7eb; vertical-align: top; color: #1d1d1b; background: #fff; }
+  #mobroot tr:nth-child(even) td { background: #f8f8f6; }
+  #mobroot .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  #mobroot .total {
+    margin-top: 14px; background: #1b2340; color: #fff; border-radius: 8px;
+    display: flex; justify-content: space-between; align-items: center; padding: 14px 18px;
+  }
+  #mobroot .total b { color: #f9bf27; font-size: 26px; }
+  #mobroot .aviso { margin-top: 12px; font-size: 10px; color: #4b5563; line-height: 1.4; }
+  #mobroot .rodape { position: absolute; left: 40px; right: 40px; bottom: 16px; font-size: 10px; color: #9ca3af; display: flex; justify-content: space-between; }
+  #mobroot .assinaturas { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 36px; }
+  #mobroot .assinatura { border-top: 1px solid #1b2340; padding-top: 8px; min-height: 72px; font-size: 12px; }
+  #mobroot .kit table { font-size: 12px; }
+  #mobroot .cen td, #mobroot .cen th { font-size: 10px; padding: 5px 4px; }
+  #mobroot .cen th:first-child, #mobroot .cen td:first-child { width: 28%; }
+</style>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cleave.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+<script type="module">
+  import ChecklistForm from 'https://cdn.jsdelivr.net/npm/groner-checklist-form@1.0.73/index.js';
+  window.ChecklistForm = ChecklistForm;
+</script>
+<script type="module">
+  import CryptoJS from 'https://cdn.jsdelivr.net/npm/crypto-js@4.2.0/+esm';
+  window.CryptoJS = CryptoJS;
+</script>
+<div id="mobroot">
+
+<section class="folha capa">
+  <div class="capa-top">
+    <div class="marca">MHZ MOB</div>
+    <h1>Proposta comercial<br><span>Eletroposto de recarga</span></h1>
+    <div class="sub">Estação de recarga veicular · investimento e operação</div>
+    <div class="faixa"></div>
+  </div>
+  <div class="capa-foot">
+    <div class="capa-num">PROPOSTA Nº [[IdPreProposta]]</div>
+    <div class="capa-nome">[[NomeLead]]</div>
+    <div class="capa-meta">[[CidadeEnderecoProjeto]] · [[DataSimulacao]]</div>
+  </div>
+</section>
+
+<section class="folha">
+  <div class="topo"><div class="marca">MHZ MOB</div><div class="doc">Proposta comercial · Eletroposto de recarga</div></div>
+  <h2>DADOS DO FORNECEDOR</h2>
+  <div class="grade">
+    <div class="campo"><div class="rot">Razão social</div><div class="val">Mhz Energia Solar LTDA</div></div>
+    <div class="campo"><div class="rot">CNPJ</div><div class="val">28.664.003/0001-49</div></div>
+    <div class="campo"><div class="rot">Documento emitido por</div><div class="val">MHZ MOB</div></div>
+    <div class="campo"><div class="rot">Consultor</div><div class="val">[[NomeUsuario]]</div></div>
+  </div>
+  <h2>DADOS DO INVESTIDOR</h2>
+  <div class="grade">
+    <div class="campo"><div class="rot">Código da proposta</div><div class="val">[[IdPreProposta]]</div></div>
+    <div class="campo"><div class="rot">Nome do investidor / Razão social</div><div class="val">[[NomeLead]]</div></div>
+    <div class="campo"><div class="rot">CPF / CNPJ</div><div class="val">[[DocumentoLead]]</div></div>
+    <div class="campo"><div class="rot">Telefone</div><div class="val">[[CelularLead]]</div></div>
+    <div class="campo"><div class="rot">E-mail</div><div class="val">[[EmailLead]]</div></div>
+    <div class="campo"><div class="rot">Cidade</div><div class="val">[[CidadeEnderecoProjeto]]</div></div>
+    <div class="campo"><div class="rot">Data da proposta</div><div class="val">[[DataSimulacao]]</div></div>
+    <div class="campo"><div class="rot">Validade</div><div class="val">Proposta válida por 10 dias</div></div>
+  </div>
+  <h2>COMPOSIÇÃO DA PROPOSTA</h2>
+  <div class="kit">[[ItensKitSimulacao]]</div>
+  <p class="aviso">Entrega e instalação consideradas até 2 m do ponto de conexão, quando o item for eletroposto. Estrutura, adequação de padrão e serviços adicionais seguem a descrição de cada item do kit. Valores estimados com base em premissas informadas e estudos de viabilidade. Não constituem garantia de resultado.</p>
+  <div class="rodape"><span>MHZ MOB · Mhz Energia Solar LTDA</span><span>2</span></div>
+</section>
+
+<section class="folha">
+  <div class="topo"><div class="marca">MHZ MOB</div><div class="doc">Proposta comercial · Eletroposto de recarga</div></div>
+  <h2>VALOR TOTAL DA PROPOSTA</h2>
+  <div class="total"><span>Investimento</span><b>R$ [[PrecoSimulacao]]</b></div>
+  <h2>DRE COMPARATIVA · MODELO</h2>
+  <table class="cen">
+    <thead>
+      <tr>
+        <th>Indicador</th>
+        <th>Conservador<br>10,8 recargas/dia</th>
+        <th>Moderado<br>16,2 recargas/dia</th>
+        <th>Realista<br>21,6 recargas/dia</th>
+        <th>Otimista<br>32,4 recargas/dia</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Investimento de referência do estudo</td><td class="num">R$ 223.000,00</td><td class="num">R$ 223.000,00</td><td class="num">R$ 223.000,00</td><td class="num">R$ 223.000,00</td></tr>
+    </tbody>
+  </table>
+  <h2>PREMISSAS</h2>
+  <table class="cen">
+    <thead>
+      <tr><th>Indicador</th><th>Conservador</th><th>Moderado</th><th>Realista</th><th>Otimista</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Preço médio cobrado por kWh</td><td class="num">R$ 2,50 / kWh</td><td class="num">R$ 2,50 / kWh</td><td class="num">R$ 2,50 / kWh</td><td class="num">R$ 2,50 / kWh</td></tr>
+      <tr><td>Custo de energia</td><td class="num">R$ 0,85 / kWh</td><td class="num">R$ 0,85 / kWh</td><td class="num">R$ 0,85 / kWh</td><td class="num">R$ 0,85 / kWh</td></tr>
+      <tr><td>Horas de uso / dia</td><td class="num">4,0 h</td><td class="num">6,0 h</td><td class="num">8,0 h</td><td class="num">12,0 h</td></tr>
+      <tr><td>Quantidade de recargas / dia</td><td class="num">10,8</td><td class="num">16,2</td><td class="num">21,6</td><td class="num">32,4</td></tr>
+      <tr><td>Faturamento bruto mensal</td><td class="num">R$ 20.220,00</td><td class="num">R$ 30.330,00</td><td class="num">R$ 40.440,00</td><td class="num">R$ 60.660,00</td></tr>
+      <tr><td>Locação do ponto</td><td class="num">5,0%</td><td class="num">5,0%</td><td class="num">5,0%</td><td class="num">5,0%</td></tr>
+    </tbody>
+  </table>
+  <p class="aviso">Premissas do estudo de viabilidade MHZ MOB (potência de referência 67,4 kW, 30 dias no mês). O valor fechado com o cliente é o da proposta, R$ [[PrecoSimulacao]].</p>
+  <div class="rodape"><span>MHZ MOB · Mhz Energia Solar LTDA</span><span>3</span></div>
+</section>
+
+<section class="folha">
+  <div class="topo"><div class="marca">MHZ MOB</div><div class="doc">Proposta comercial · Eletroposto de recarga</div></div>
+  <h2>DESPESAS TOTAIS</h2>
+  <table class="cen">
+    <thead>
+      <tr><th>Indicador</th><th>Conservador</th><th>Moderado</th><th>Realista</th><th>Otimista</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Energia</td><td class="num">R$ 6.874,80</td><td class="num">R$ 10.312,20</td><td class="num">R$ 13.749,60</td><td class="num">R$ 20.624,40</td></tr>
+      <tr><td>Gestão de app e Rede</td><td class="num">R$ 3.033,00</td><td class="num">R$ 4.549,50</td><td class="num">R$ 6.066,00</td><td class="num">R$ 9.099,00</td></tr>
+      <tr><td>Gateway de pagamento</td><td class="num">R$ 0,00</td><td class="num">R$ 0,00</td><td class="num">R$ 0,00</td><td class="num">R$ 0,00</td></tr>
+      <tr><td>Imposto</td><td class="num">R$ 1.213,20</td><td class="num">R$ 0,00</td><td class="num">R$ 0,00</td><td class="num">R$ 0,00</td></tr>
+      <tr><td>O&amp;M</td><td class="num">R$ 100,00</td><td class="num">R$ 100,00</td><td class="num">R$ 100,00</td><td class="num">R$ 100,00</td></tr>
+      <tr><td>Internet</td><td class="num">R$ 100,00</td><td class="num">R$ 100,00</td><td class="num">R$ 100,00</td><td class="num">R$ 100,00</td></tr>
+      <tr><td>Locação</td><td class="num">R$ 1.011,00</td><td class="num">R$ 1.516,50</td><td class="num">R$ 2.022,00</td><td class="num">R$ 3.033,00</td></tr>
+      <tr><td>Outros custos</td><td class="num">R$ 0,00</td><td class="num">R$ 0,00</td><td class="num">R$ 0,00</td><td class="num">R$ 0,00</td></tr>
+      <tr><td>Custo operacional total</td><td class="num">R$ 12.332,00</td><td class="num">R$ 16.578,20</td><td class="num">R$ 22.037,60</td><td class="num">R$ 32.956,40</td></tr>
+    </tbody>
+  </table>
+  <h2>LUCRO</h2>
+  <table class="cen">
+    <thead>
+      <tr><th>Indicador</th><th>Conservador</th><th>Moderado</th><th>Realista</th><th>Otimista</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Resultado líquido</td><td class="num">R$ 7.888,00</td><td class="num">R$ 13.751,80</td><td class="num">R$ 18.402,40</td><td class="num">R$ 27.703,60</td></tr>
+      <tr><td>Rentabilidade</td><td class="num">3,54%</td><td class="num">6,17%</td><td class="num">8,25%</td><td class="num">12,42%</td></tr>
+      <tr><td>Payback</td><td class="num">28,3 meses</td><td class="num">16,2 meses</td><td class="num">12,1 meses</td><td class="num">8,0 meses</td></tr>
+    </tbody>
+  </table>
+  <p class="aviso">Valores estimados com base em premissas informadas e estudos de viabilidade. Não constituem garantia de resultado. Valores podem variar conforme condições reais de instalação e operação.</p>
+  <div class="rodape"><span>MHZ MOB · Mhz Energia Solar LTDA</span><span>4</span></div>
+</section>
+
+<section class="folha">
+  <div class="topo"><div class="marca">MHZ MOB</div><div class="doc">Proposta comercial · Eletroposto de recarga</div></div>
+  <h2>TERMO DE ACEITE</h2>
+  <p style="font-size:13px;line-height:1.5;">Proposta comercial nº <b>[[IdPreProposta]]</b>, emitida por Mhz Energia Solar LTDA (CNPJ 28.664.003/0001-49) em <b>[[DataSimulacao]]</b> e válida por 10 dias.</p>
+  <div class="grade">
+    <div class="campo"><div class="rot">Número da proposta</div><div class="val">[[IdPreProposta]]</div></div>
+    <div class="campo"><div class="rot">Cliente</div><div class="val">[[NomeLead]]</div></div>
+    <div class="campo"><div class="rot">Valor total do investimento</div><div class="val">R$ [[PrecoSimulacao]]</div></div>
+    <div class="campo"><div class="rot">Cidade</div><div class="val">[[CidadeEnderecoProjeto]]</div></div>
+  </div>
+  <p style="font-size:13px;line-height:1.5;margin-top:16px;">Eu, <b>[[NomeLead]]</b>, residente/domiciliado(a) em <b>[[CidadeEnderecoProjeto]]</b>, declaro estar de acordo com os termos da proposta comercial acima descrita.</p>
+  <div class="assinaturas">
+    <div class="assinatura">
+      <b>Mhz Energia Solar LTDA</b><br>CNPJ 28.664.003/0001-49<br>MHZ MOB
+    </div>
+    <div class="assinatura">
+      <b>[[NomeLead]]</b><br>CPF / CNPJ: [[DocumentoLead]]<br>[[CidadeEnderecoProjeto]]
+    </div>
+  </div>
+  <p class="aviso">Valores estimados com base em premissas informadas e estudos de viabilidade. Não constituem garantia de resultado. Valores podem variar conforme condições reais de instalação e operação.</p>
+  <div class="rodape"><span>MHZ MOB · Mhz Energia Solar LTDA</span><span>5</span></div>
+</section>
+
+<section class="folha">
+  <div class="topo"><div class="marca">MHZ MOB</div><div class="doc">Estudo de viabilidade · Eletroposto de recarga</div></div>
+  <h2>DADOS DO INVESTIDOR</h2>
+  <div class="grade">
+    <div class="campo"><div class="rot">Nome do investidor / Razão social</div><div class="val">[[NomeLead]]</div></div>
+    <div class="campo"><div class="rot">CPF / CNPJ</div><div class="val">[[DocumentoLead]]</div></div>
+    <div class="campo"><div class="rot">E-mail</div><div class="val">[[EmailLead]]</div></div>
+    <div class="campo"><div class="rot">Telefone</div><div class="val">[[CelularLead]]</div></div>
+    <div class="campo"><div class="rot">Cidade</div><div class="val">[[CidadeEnderecoProjeto]]</div></div>
+    <div class="campo"><div class="rot">Consultor responsável</div><div class="val">[[NomeUsuario]]</div></div>
+    <div class="campo"><div class="rot">Data do estudo</div><div class="val">[[DataSimulacao]]</div></div>
+    <div class="campo"><div class="rot">Cenário definido</div><div class="val">Conservador</div></div>
+  </div>
+  <h2>DADOS DO ELETROPOSTO E PREMISSAS</h2>
+  <div class="grade">
+    <div class="campo"><div class="rot">Número de carregadores</div><div class="val">2</div></div>
+    <div class="campo"><div class="rot">Potência total dos eletropostos</div><div class="val">67,4 kW</div></div>
+    <div class="campo"><div class="rot">Horas de recarga por dia</div><div class="val">4,0 h</div></div>
+    <div class="campo"><div class="rot">Valor de venda ao cliente</div><div class="val">R$ 2,50 / kWh</div></div>
+    <div class="campo"><div class="rot">Valor de compra do kWh</div><div class="val">R$ 0,85 / kWh</div></div>
+    <div class="campo"><div class="rot">Dias considerados no mês</div><div class="val">30</div></div>
+    <div class="campo"><div class="rot">Energia vendida por dia</div><div class="val">270 kWh</div></div>
+    <div class="campo"><div class="rot">Consumo de energia mensal</div><div class="val">8.088 kWh</div></div>
+    <div class="campo"><div class="rot">Faturamento bruto diário</div><div class="val">R$ 674,00</div></div>
+    <div class="campo"><div class="rot">Faturamento bruto mensal</div><div class="val">R$ 20.220,00</div></div>
+    <div class="campo"><div class="rot">Faturamento bruto anual</div><div class="val">R$ 242.640,00</div></div>
+  </div>
+  <div class="rodape"><span>MHZ MOB · estudo de viabilidade</span><span>6</span></div>
+</section>
+
+<section class="folha">
+  <div class="topo"><div class="marca">MHZ MOB</div><div class="doc">Estudo de viabilidade · cenário conservador</div></div>
+  <h2>CUSTOS OPERACIONAIS MENSAIS</h2>
+  <table>
+    <tbody>
+      <tr><td>Faturamento bruto mensal</td><td class="num">R$ 20.220,00</td></tr>
+      <tr><td>Custo de energia (R$ 0,85/kWh)</td><td class="num">- R$ 6.874,80</td></tr>
+      <tr><td>Gestão de app e Rede (15,0%)</td><td class="num">- R$ 3.033,00</td></tr>
+      <tr><td>Gateway de pagamento (0,0%)</td><td class="num">- R$ 0,00</td></tr>
+      <tr><td>Imposto (6,0%)</td><td class="num">- R$ 1.213,20</td></tr>
+      <tr><td>O&amp;M (manutenção)</td><td class="num">- R$ 100,00</td></tr>
+      <tr><td>Internet</td><td class="num">- R$ 100,00</td></tr>
+      <tr><td>Aluguel da vaga (5,0% do faturamento)</td><td class="num">- R$ 1.011,00</td></tr>
+      <tr><td>Outros custos</td><td class="num">- R$ 0,00</td></tr>
+      <tr><td>Custo operacional total</td><td class="num">- R$ 12.332,00</td></tr>
+      <tr><td>Margem líquida</td><td class="num">39,0%</td></tr>
+      <tr><td>Faturamento líquido mensal</td><td class="num">R$ 7.888,00</td></tr>
+    </tbody>
+  </table>
+  <h2>RESUMO EXECUTIVO</h2>
+  <p style="font-size:13px;line-height:1.45;">Cenário definido: Conservador (67,4 kW, 4,0 h/dia, R$ 2,50/kWh). Faturamento bruto de R$ 20.220,00 por mês e líquido de R$ 7.888,00 por mês, com retorno anual de 42,45% e payback em 28,3 meses. Investimento de referência do estudo: R$ 223.000,00. Valor desta proposta: R$ [[PrecoSimulacao]].</p>
+  <div class="grade">
+    <div class="campo"><div class="rot">Retorno mensal</div><div class="val">3,54%</div></div>
+    <div class="campo"><div class="rot">Retorno anual</div><div class="val">42,45% · R$ 94.656,00</div></div>
+    <div class="campo"><div class="rot">Payback</div><div class="val">28,3 meses</div></div>
+    <div class="campo"><div class="rot">Faturamento líquido mensal</div><div class="val">R$ 7.888,00</div></div>
+  </div>
+  <p class="aviso">Valores estimados com base em premissas informadas e estudos de viabilidade. Não constituem garantia de resultado. Valores podem variar conforme condições reais de instalação e operação.</p>
+  <div class="rodape"><span>MHZ MOB · estudo de viabilidade</span><span>7</span></div>
+</section>
+
+</div>
+<script>
+  window.fetch = function() {
+    console.warn("fetch is disabled for security reasons");
+    return Promise.reject(new Error("fetch is disabled"));
+  };
+</script>
+</body>
+</html>
